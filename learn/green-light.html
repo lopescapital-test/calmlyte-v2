@@ -29,20 +29,18 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 <style>
-  :root{--bark:#0F1712;--gold:#D9B368;--gold-soft:#E7CE9B;--cream:#EDE8DC;--sage:#8A9B84;--mist:#C6CFC4}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
   body{font-family:'IBM Plex Sans',sans-serif;background:var(--bark);color:var(--cream);line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   .serif{font-family:'Fraunces',serif}
-  a{color:inherit}
   nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:linear-gradient(to bottom,rgba(15,23,18,.85),transparent)}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
   .brand-name{font-family:'Fraunces',serif;font-size:21px;letter-spacing:.5px;color:var(--cream)}
   .navlinks{display:flex;gap:24px;align-items:center}
   .navlinks a{color:var(--mist);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:color .25s}
   .navlinks a:hover{color:var(--gold-soft)}
+  .navsep{width:1px;height:14px;background:rgba(198,207,196,.25)}
   .wrap{max-width:760px;margin:0 auto;padding:130px 6vw 40px}
   .crumbs{font-size:12px;letter-spacing:1px;color:var(--sage);margin-bottom:26px}
   .crumbs a{color:var(--sage);text-decoration:none}
@@ -53,13 +51,15 @@
   .spectrum-bar{height:26px;border-radius:6px;margin:10px 0 6px;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 14%,#00a2c7 30%,#37b84a 46%,#7ec81f 52%,#e8d21a 62%,#f0921a 76%,#d62828 100%)}
   .spectrum-caption{font-size:12px;color:var(--sage);display:flex;justify-content:space-between;max-width:64ch}
   .green-marker{font-size:13px;color:var(--gold-soft);margin-top:8px}
-  .counsel{background:rgba(217,179,104,.08);border:1px dashed rgba(217,179,104,.6);border-radius:8px;color:var(--gold-soft);font-size:13px;padding:10px 14px;margin:14px 0;max-width:64ch;display:block}
   .disclaimer{max-width:64ch;margin:50px auto 0;color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
   footer{padding:50px 6vw;background:var(--bark);text-align:center;border-top:1px solid rgba(198,207,196,.1);margin-top:60px}
   footer .fbrand{font-family:'Fraunces',serif;font-size:18px;color:var(--cream);margin-bottom:6px}
   footer .fnote{font-size:11px;color:var(--sage);font-weight:300;max-width:60ch;margin:12px auto 0;line-height:1.6;opacity:.75}
   @media(max-width:760px){nav{padding:14px 20px}.navlinks{gap:12px}.navlinks a{font-size:10px;letter-spacing:1px}}
 </style>
+<!-- Internal review view: append ?debug to the URL to reveal FACTS/counsel notes.
+     Normal visitors (and JS-off) never see them. -->
+<script>if(/(?:^|[?&])debug(?:[=&]|$)/.test(location.search))document.documentElement.className+=" debug";</script>
 </head>
 <body>
 
@@ -74,6 +74,10 @@
     <a href="../index.html#/focus">Focus</a>
     <a href="../index.html#/stillness">Stillness</a>
     <a href="../index.html#/dusk">Dusk</a>
+    <span class="navsep"></span>
+    <a href="../products/index.html">Shop</a>
+    <a href="faq.html">Learn</a>
+    <a href="../index.html#shop">Cart</a>
   </div>
 </nav>
 

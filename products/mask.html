@@ -47,20 +47,18 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 <style>
-  :root{--bark:#0F1712;--gold:#D9B368;--gold-soft:#E7CE9B;--cream:#EDE8DC;--sage:#8A9B84;--mist:#C6CFC4}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
   body{font-family:'IBM Plex Sans',sans-serif;background:var(--bark);color:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   .serif{font-family:'Fraunces',serif}
-  a{color:inherit}
   nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:linear-gradient(to bottom,rgba(15,23,18,.85),transparent)}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
   .brand-name{font-family:'Fraunces',serif;font-size:21px;letter-spacing:.5px;color:var(--cream)}
   .navlinks{display:flex;gap:24px;align-items:center}
   .navlinks a{color:var(--mist);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:color .25s}
   .navlinks a:hover{color:var(--gold-soft)}
+  .navsep{width:1px;height:14px;background:rgba(198,207,196,.25)}
   .pdp{max-width:1100px;margin:0 auto;padding:120px 6vw 40px}
   .crumbs{font-size:12px;letter-spacing:1px;color:var(--sage);margin-bottom:30px}
   .crumbs a{color:var(--sage);text-decoration:none}
@@ -84,7 +82,6 @@
   .spectable th,.spectable td{text-align:left;padding:12px 0;border-bottom:1px solid rgba(198,207,196,.14);font-size:14px;font-weight:300}
   .spectable th{color:var(--sage);letter-spacing:1px;text-transform:uppercase;font-size:11px;width:40%}
   .spectable td{color:var(--cream)}
-  .facts{background:rgba(217,179,104,.08);border:1px dashed rgba(217,179,104,.5);border-radius:8px;color:var(--gold-soft);font-size:13px;padding:2px 8px}
   .faq-q{font-family:'Fraunces',serif;font-size:18px;color:var(--cream);margin:24px 0 8px}
   .faq-a{font-size:15px;color:var(--mist);font-weight:300;line-height:1.7;max-width:70ch}
   .disclaimer{max-width:70ch;margin:40px auto 0;padding:0 6vw;color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
@@ -94,6 +91,9 @@
   @media(max-width:760px){.pdp-top{grid-template-columns:1fr}nav{padding:14px 20px}.navlinks{gap:12px}.navlinks a{font-size:10px;letter-spacing:1px}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+<!-- Internal review view: append ?debug to the URL to reveal FACTS/counsel notes.
+     Normal visitors (and JS-off) never see them. -->
+<script>if(/(?:^|[?&])debug(?:[=&]|$)/.test(location.search))document.documentElement.className+=" debug";</script>
 </head>
 <body>
 
@@ -108,6 +108,10 @@
     <a href="../index.html#/focus">Focus</a>
     <a href="../index.html#/stillness">Stillness</a>
     <a href="../index.html#/dusk">Dusk</a>
+    <span class="navsep"></span>
+    <a href="index.html">Shop</a>
+    <a href="../learn/faq.html">Learn</a>
+    <a href="../index.html#shop">Cart</a>
   </div>
 </nav>
 
@@ -122,8 +126,8 @@
       <h1 class="pdp-title serif">Calmlyte Mask</h1>
       <p class="pdp-lede">The Calmlyte Mask brings a warm, low-intensity green-and-amber light close for a personal evening ritual. Built around 520–530 nm green with 590 nm amber, it is designed for reading, resting, and transitioning out of the day.</p>
       <div class="pdp-price serif">$400</div>
-      <span class="soonbtn" aria-disabled="true">Coming soon</span>
-      <div class="pdp-ship">Shipping details available at launch.</div>
+      <button class="buybtn" data-sku="mask">Add to cart</button>
+      <div class="pdp-ship">Ships in 10–14 business days.</div>
     </div>
   </div>
 </div>
@@ -144,8 +148,8 @@
     <tr><th>Dimensions</th><td>25.2 × 8.7 × 0.2 in</td></tr>
     <tr><th>Power</th><td>USB rechargeable (1800 mAh)</td></tr>
     <tr><th>Weight</th><td>0.375 kg (approx. 0.83 lb)</td></tr>
-    <tr><th>Materials / finish</th><td><span class="facts">[FACTS: confirm housing material for the rigid visor mask]</span></td></tr>
-    <tr><th>In the box</th><td><span class="facts">[FACTS: confirm box contents — mask, remote, charging cable, manual; protective glasses?]</span></td></tr>
+    <tr class="facts-row"><th>Materials / finish</th><td><span class="facts">[FACTS: confirm housing material for the rigid visor mask]</span></td></tr>
+    <tr class="facts-row"><th>In the box</th><td><span class="facts">[FACTS: confirm box contents — mask, remote, charging cable, manual; protective glasses?]</span></td></tr>
     <tr><th>Suggested session</th><td>Use the Mask for warm, low-light evening sessions. Start with lower brightness and shorter sessions, then adjust based on comfort and preference.</td></tr>
     <tr><th>Warranty</th><td>1-year limited warranty</td></tr>
   </table>
