@@ -137,7 +137,7 @@
     <span class="brand-name">Calmlyte</span>
   </a>
   <div class="navlinks">
-    <a href="products/index.html">Shop</a>
+    <a href="#top">Shop</a>
     <span class="navsep"></span>
     <a href="#haven" data-mode-link="haven">Haven</a>
     <a href="#focus" data-mode-link="focus" class="hide-m">Focus</a>
@@ -442,13 +442,29 @@
   });
 
   /* initial route: a mode hash (internal nav from product/learn pages) skips the gate */
+  /* Jump to a section on arrival. Handles both timings: load still pending, or
+     already fired on a cached revisit. Deliberately no requestAnimationFrame —
+     rAF is starved in background/throttled tabs and this only needs to run once. */
+  function jumpTo(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var go = function(){ el.scrollIntoView({behavior:"auto"}); };
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go);
+  }
+
   var initial = modeFromHash();
+  var anchor = location.hash.replace(/^#\/?/, "");
   if (initial){
     dropGate(true);
     setMode(initial, true);
-    window.addEventListener("load", function(){
-      document.getElementById("when").scrollIntoView({behavior: "auto"});
-    });
+    jumpTo("when");
+  } else if (anchor && document.getElementById(anchor)) {
+    /* Deep link to a section (Shop -> #top, Cart -> #shop, Learn -> #learn):
+       skip the intro gate, the visitor asked for a specific place. */
+    dropGate(true);
+    setMode("haven", false);
+    jumpTo(anchor);
   } else {
     setMode("haven", false);
   }
