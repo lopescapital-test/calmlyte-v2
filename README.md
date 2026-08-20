@@ -6,28 +6,49 @@ Production-prepped static storefront. No backend required. Payments are stubbed
 
 ## Structure
 ```
-index.html          Hero storefront: intro gate + interactive mode-switcher
-                    (Haven/Focus/Stillness/Dusk), rooms, family grid, learn teaser
-products/           Shop index + 5 product pages (signature-panel, belt, mask,
-                    handheld, panel-pro)
+index.html          Intro gate + interactive mode-switcher hero
+                    (Haven/Focus/Stillness/Dusk), two-form product grid, learn teaser
+products/           Shop index + 2 product pages (handheld, mask)
 learn/              green-light.html (counsel-cleared spectrum article), faq.html
 assets/
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
-  sig-*.webp        3 Signature Panel room shots (day / still / dusk)
-  panel-<mode>.webp 4 per-mode Signature Panel scenes (hero stage + PDP use haven)
-  belt/mask/handheld/panel-pro.webp  product scene shots
+  handheld.webp     Handheld product scene shot
+  mask.webp         Mask product scene shot
 ```
-Total payload: ~1.5 MB, fully cacheable. The homepage accepts both #haven and
-legacy #/haven hashes; arriving on a mode hash skips the intro gate.
+Orphaned assets from the retired 5-SKU lineup (belt / panel-pro / panel-<mode> /
+sig-*) were deleted 2026-07-06 — recoverable from git history if the lineup returns.
 
-## Naming
-The $600 panel is the **Signature Panel** site-wide (renamed from "Small Panel",
-2026-07-04). The Stripe SKU stays `small-panel` and the asset file stays
-`product-small-panel.webp` — display name and URLs only. NOTE: the Legal Review
-drafts still say "Small Panel"; apply the rename there via Emma/counsel during
-the copy re-review (do not edit those drafts directly). The redesign also
-rearranges cleared copy and adds new mode-blurb language — counsel pass required
-before go-live.
+## Internal review view
+`[FACTS]` notes and the counsel banner on `learn/green-light.html` are hidden from
+visitors. Append `?debug` to any URL to reveal them (e.g.
+`products/handheld.html?debug`). Spec rows whose only value is a `[FACTS]` note carry
+`class="facts-row"` and hide the entire row, so no empty cell is ever shown.
+The homepage accepts both #haven and legacy #/haven hashes; arriving on a mode
+hash skips the intro gate.
+
+## Product lineup (2026-07-06)
+The line is **Handheld ($450) and Mask ($400) only.** Signature Panel, Belt, and
+Panel Pro were retired and their pages deleted — recoverable from git history if
+the lineup changes back.
+
+**Mode → product mapping** comes straight from each PDP's spec table and must not
+be widened without supplier confirmation:
+- **Handheld** — Focus, Haven (spectrum: 520–530 nm green; no amber/cyan confirmed)
+- **Mask** — Dusk, Stillness (spectrum: 520–530 nm green + 590 nm amber)
+
+The hero presents the four modes as *environment*, not hardware channels, so the
+homepage makes no per-device spectrum claims; those live on the PDPs behind their
+existing `[FACTS]` flags. Haven's character line had its "gentle amber tone" clause
+removed because Haven now ships only on the Handheld, whose amber channel is
+unconfirmed — see the comment in the `MODES` block.
+
+## Counsel / launch list
+- The Legal Review drafts still list all five SKUs and their prices (Terms §2,
+  questionnaire A15). **Do not edit those drafts directly** — route the lineup
+  change through Emma/counsel with the copy re-review.
+- Checkout remains stubbed (`CHECKOUT_LINKS` all null) — Handheld and Mask show
+  add-to-cart with a "checkout opens soon" toast; no Stripe links pasted.
+- Whole site is `noindex,nofollow` on every page, parked pre-launch.
 
 ## Deploy (GitHub Pages — same flow as NeuroHome)
 ```powershell

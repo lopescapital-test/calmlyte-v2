@@ -50,46 +50,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
-  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bark);color:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  .serif{font-family:'Fraunces',serif}
-  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:linear-gradient(to bottom,rgba(15,23,18,.85),transparent)}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
-  .brand-name{font-family:'Fraunces',serif;font-size:21px;letter-spacing:.5px;color:var(--cream)}
-  .navlinks{display:flex;gap:24px;align-items:center}
-  .navlinks a{color:var(--mist);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:color .25s}
-  .navlinks a:hover{color:var(--gold-soft)}
-  .navsep{width:1px;height:14px;background:rgba(198,207,196,.25)}
-  .pdp{max-width:1100px;margin:0 auto;padding:120px 6vw 40px}
-  .crumbs{font-size:12px;letter-spacing:1px;color:var(--sage);margin-bottom:30px}
-  .crumbs a{color:var(--sage);text-decoration:none}
-  .crumbs a:hover{color:var(--gold-soft)}
-  .pdp-top{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:60px}
-  .pdp-img{background:linear-gradient(135deg,#20302A,#101813);border:1px solid rgba(217,179,104,.25);border-radius:16px;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .pdp-img img{width:100%;height:100%;object-fit:cover}
-  .pdp-info{padding:10px 0}
-  .pdp-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-soft);margin-bottom:14px}
-  .pdp-title{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(30px,4vw,44px);line-height:1.05;color:var(--cream);margin-bottom:18px}
-  .pdp-lede{font-size:16px;color:var(--mist);font-weight:300;line-height:1.7;margin-bottom:28px}
-  .pdp-price{font-family:'Fraunces',serif;font-size:34px;color:var(--gold-soft);margin-bottom:20px}
-  .buybtn{display:inline-block;background:var(--gold);color:var(--bark);border:none;border-radius:10px;padding:15px 40px;font-weight:500;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .25s}
-  .buybtn:hover{background:var(--gold-soft)}
-  .soonbtn{display:inline-block;background:none;border:1px solid rgba(198,207,196,.3);border-radius:10px;padding:15px 40px;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--sage);font-weight:500;cursor:default;user-select:none}
-  .pdp-ship{font-size:13px;color:var(--sage);margin-top:16px}
-  .sec{max-width:1100px;margin:0 auto 50px;padding:0 6vw}
-  .sec h2{font-family:'Fraunces',serif;font-weight:300;font-size:26px;color:var(--cream);margin-bottom:20px}
-  .sec p{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;margin-bottom:16px;max-width:70ch}
-  .spectable{width:100%;max-width:640px;border-collapse:collapse}
-  .spectable th,.spectable td{text-align:left;padding:12px 0;border-bottom:1px solid rgba(198,207,196,.14);font-size:14px;font-weight:300}
-  .spectable th{color:var(--sage);letter-spacing:1px;text-transform:uppercase;font-size:11px;width:40%}
-  .spectable td{color:var(--cream)}
-  .faq-q{font-family:'Fraunces',serif;font-size:18px;color:var(--cream);margin:24px 0 8px}
-  .faq-a{font-size:15px;color:var(--mist);font-weight:300;line-height:1.7;max-width:70ch}
-  .disclaimer{max-width:70ch;margin:40px auto 0;padding:0 6vw;color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
-  footer{padding:50px 6vw;background:var(--bark);text-align:center;border-top:1px solid rgba(198,207,196,.1);margin-top:60px}
-  footer .fbrand{font-family:'Fraunces',serif;font-size:18px;color:var(--cream);margin-bottom:6px}
-  footer .fnote{font-size:11px;color:var(--sage);font-weight:300;max-width:60ch;margin:12px auto 0;line-height:1.6;opacity:.75}
-  @media(max-width:760px){.pdp-top{grid-template-columns:1fr}nav{padding:14px 20px}.navlinks{gap:12px}.navlinks a{font-size:10px;letter-spacing:1px}}
-  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* All styling for this page comes from assets/site.css. */
 </style>
 <!-- Internal review view: append ?debug to the URL to reveal FACTS/counsel notes.
      Normal visitors (and JS-off) never see them. -->
@@ -103,42 +64,45 @@
     <span class="brand-name">Calmlyte</span>
   </a>
   <div class="navlinks">
-    <a href="../index.html">The Forest</a>
+    <a href="../index.html" class="hide-m">The Forest</a>
     <a href="../index.html#/haven">Haven</a>
-    <a href="../index.html#/focus">Focus</a>
-    <a href="../index.html#/stillness">Stillness</a>
+    <a href="../index.html#/focus" class="hide-m">Focus</a>
+    <a href="../index.html#/stillness" class="hide-m">Stillness</a>
     <a href="../index.html#/dusk">Dusk</a>
     <span class="navsep"></span>
     <a href="index.html">Shop</a>
-    <a href="../learn/faq.html">Learn</a>
+    <a href="../learn/faq.html" class="hide-m">Learn</a>
     <a href="../index.html#shop">Cart</a>
   </div>
 </nav>
 
-<div class="pdp">
+<div class="pdp-hero">
+  <div class="pdp-inner">
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Products &nbsp;/&nbsp; Mask</div>
-  <div class="pdp-top">
-    <div class="pdp-img">
+  <div class="pdp-grid reveal">
+    <figure class="pdp-figure">
       <img src="../assets/mask.webp" alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it" loading="eager" decoding="async">
-    </div>
+    </figure>
     <div class="pdp-info">
-      <div class="pdp-eyebrow">Personal evening light</div>
-      <h1 class="pdp-title serif">Calmlyte Mask</h1>
-      <p class="pdp-lede">The Calmlyte Mask brings a warm, low-intensity green-and-amber light close for a personal evening ritual. Built around 520–530 nm green with 590 nm amber, it is designed for reading, resting, and transitioning out of the day.</p>
-      <div class="pdp-price serif">$400</div>
-      <button class="buybtn" data-sku="mask">Add to cart</button>
+      <p class="eyebrow">Personal evening light</p>
+      <h1 class="h1">Calmlyte Mask</h1>
+      <p class="lede" style="margin-bottom:28px">The Calmlyte Mask brings a warm, low-intensity green-and-amber light close for a personal evening ritual. Built around 520–530 nm green with 590 nm amber, it is designed for reading, resting, and transitioning out of the day.</p>
+      <div class="pdp-price">$400</div>
+      <div class="pdp-cta"><button class="buybtn" data-sku="mask">Add to cart</button></div>
       <div class="pdp-ship">Ships in 10–14 business days.</div>
+      </div>
     </div>
   </div>
 </div>
 
-<section class="sec">
-  <h2 class="serif">Overview</h2>
+<section class="pdp-sec reveal">
+  <h3 class="h3">Overview</h3>
   <p>Wear the Mask during evening wind-down, reading, or quiet time when you want a warm, low-intensity light experience up close. It offers adjustable brightness with remote control. Calmlyte is designed as ambient wellness lighting, not as a medical treatment or therapeutic device.</p>
 </section>
 
-<section class="sec">
-  <h2 class="serif">Specifications</h2>
+<section class="pdp-sec reveal">
+  <h3 class="h3">Specifications</h3>
+  <div class="pdp-panel">
   <table class="spectable">
     <tr><th>Light spectrum</th><td>520–530 nm green with 590 nm amber<span class="facts"> [FACTS: do NOT add 490–500 nm cyan-green unless the supplier confirms that channel physically exists]</span></td></tr>
     <tr><th>Adjustable wavelengths</th><td>520–530 nm green · 590 nm amber</td></tr>
@@ -153,11 +117,12 @@
     <tr><th>Suggested session</th><td>Use the Mask for warm, low-light evening sessions. Start with lower brightness and shorter sessions, then adjust based on comfort and preference.</td></tr>
     <tr><th>Warranty</th><td>1-year limited warranty</td></tr>
   </table>
-  <p style="margin-top:16px">Do not stare directly into the LEDs. Use the included protective glasses when using the device at close range or higher brightness. Discontinue use if light feels uncomfortable. Individuals with photosensitivity, eye conditions, migraines triggered by light, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.</p>
+  <p class="pdp-safety">Do not stare directly into the LEDs. Use the included protective glasses when using the device at close range or higher brightness. Discontinue use if light feels uncomfortable. Individuals with photosensitivity, eye conditions, migraines triggered by light, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.</p>
+  </div>
 </section>
 
-<section class="sec">
-  <h2 class="serif">Questions</h2>
+<section class="pdp-sec reveal">
+  <h3 class="h3">Questions</h3>
   <div class="faq-q serif">What is the light spectrum?</div>
   <div class="faq-a">The Mask uses 520–530 nm green with 590 nm amber, adjustable brightness, and remote control.</div>
   <div class="faq-q serif">Where is it meant to be used?</div>
@@ -182,14 +147,32 @@
     const link = CHECKOUT_LINKS[btn.dataset.sku];
     if(link){ window.location.href = link; }
     else {
+      /* uses the shared .toast component from assets/site.css */
       let t=document.getElementById('cl-toast');
-      if(!t){t=document.createElement('div');t.id='cl-toast';t.setAttribute('role','status');
-        t.style.cssText='position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#16211B;border:1px solid rgba(217,179,104,.5);color:#EDE8DC;font-size:13px;padding:12px 20px;border-radius:10px;z-index:99';
+      if(!t){t=document.createElement('div');t.id='cl-toast';t.className='toast';
+        t.setAttribute('role','status');t.setAttribute('aria-live','polite');
         document.body.appendChild(t);}
       t.textContent='Checkout opens soon. Write us at '+CONTACT_EMAIL;
-      clearTimeout(t._h); t._h=setTimeout(()=>t.remove(),3200);
+      requestAnimationFrame(()=>t.classList.add('show'));
+      clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),3200);
     }
   });
+</script>
+
+<script>
+  /* scroll reveals — same observer threshold and easing as the homepage */
+  (function(){
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, {threshold:.14});
+      els.forEach(function(el){ io.observe(el); });
+    } else {
+      els.forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
 </script>
 
 </body>
