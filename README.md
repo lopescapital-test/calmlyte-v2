@@ -51,33 +51,50 @@ existing `[FACTS]` flags. Haven's character line had its "gentle amber tone" cla
 removed because Haven now ships only on the Handheld, whose amber channel is
 unconfirmed — see the comment in the `MODES` block.
 
-## Supplier photography — unresolved (2026-08-20)
-Images the supplier sent do not all show the product the site describes. This is
-blocking for launch, not cosmetic.
+## Supplier photography (2026-08-20)
+All four Mask images are the same mould — single pinched eye aperture, round
+temple puck, perforated cheek band. `mask-package.webp` corroborates it: its
+640 x 220 mm callouts match the spec table's 25.2 x 8.7 in exactly. All four are
+in the gallery.
 
-- **assets/mask/mask-package.webp is ours.** Its 640 x 220 mm callouts match the
-  Mask spec table's 25.2 x 8.7 in exactly. It is in the gallery.
-- **assets/mask/mask-worn.webp is not ours.** The mask in it has two separate eye
-  openings where our mould has one continuous slot, and it carries a third-party
-  wordmark on the cheek. Kept in the repo, deliberately not shown — see the
-  comment in `products/mask.html`. A worn shot needs our own mould.
-- **Two handheld photos were not added at all.** Both show the device aimed at a
-  person (knees, then face) with green light on skin, which the copy rule forbids
-  outright, and both have a "light therapy" history timeline poster legible in the
-  background plus a family-with-children poster. They also show a **different
-  handheld**: a thin folding paddle with a hinged neck, where `handheld.webp`
-  shows a thick wand with an LCD timer and a four-button grip. Confirm which
-  device is actually shipping before either image or the render is trusted.
-- **Protective glasses.** The package shot lists mask, USB cable, manual, remote,
-  storage bag — no glasses. Both PDPs say "Use the included protective glasses."
-  Either the glasses ship or that sentence is false; it is counsel-cleared safety
-  copy, so route the correction through Emma rather than editing it here.
-- **Control row.** Mask specs say "Bluetooth app"; the box ships a physical
-  remote and lists no app. Confirm whether both exist.
-- Still open from the supplier sheet (model TLM300PRO-L): **236 LEDs vs the site's
-  72**, and **408 g vs 375 g**. Dimensions and battery do match. The user reports
-  green is being made custom, which resolves the sheet's 460/665/850/1064 nm
-  spectrum but not the LED count or the weight.
+Placeholders to replace before launch:
+- **mask-worn.webp** shows the **red** unit. Re-shoot once the green custom build
+  exists.
+- **mask-held.webp** is a marketplace-style composite on a coral background, off
+  the forest palette. **Counsel:** it renders the light as beams travelling into a
+  face, which is exactly what the copy rule forbids showing. It is in the gallery
+  at the owner's explicit direction — Emma signs off or it comes out. Removing it
+  is one button block in `products/mask.html`.
+- The package graphic carries its contents as baked-in image text, so the
+  "In the box" spec row still needs that list as real text. It is also the one
+  image that must not be cropped, which is what `data-fit="square"` on its thumb
+  and `.pdp-figure.fit-square` in site.css are for.
+
+## Handheld photography — blocking (2026-08-20)
+Two supplier photos sit untracked in `assets/handheld/` and were **not** added:
+- Both aim the device at a person (knees, then face) with green light on skin,
+  which the copy rule forbids outright.
+- Both have a "light therapy" history timeline poster legible in the background,
+  plus a family-with-children poster. That is claim text baked into the image, so
+  no copy change fixes it.
+- **They show a different handheld.** The photos are a thin folding paddle with a
+  hinged neck; `handheld.webp` is a thick wand with an LCD timer and a
+  four-button grip. Confirm which device ships before either the photos or the
+  render is trusted.
+
+## Specs still unresolved with the supplier
+From the sheet for model TLM300PRO-L: **236 LEDs vs the site's 72**, and
+**408 g vs 375 g**. Dimensions and battery do match. Green is being made custom,
+which resolves the sheet's 460/665/850/1064 nm spectrum but not the count or
+the weight.
+
+Two contradictions the package shot exposes:
+- **Protective glasses.** The box holds mask, USB cable, manual, remote, storage
+  bag — no glasses. Both PDPs say "Use the included protective glasses." Either
+  the glasses ship or that sentence is false; it is counsel-cleared safety copy,
+  so route the correction through Emma rather than editing it here.
+- **Control row.** Mask specs say "Bluetooth app"; the box ships a physical remote
+  and lists no app. Confirm whether both exist.
 
 ## Counsel / launch list
 - The Legal Review drafts still list all five SKUs and their prices (Terms §2,

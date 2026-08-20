@@ -24,6 +24,7 @@
      Thumbnails swap the main image. Progressive: with JS off, or on a page with a
      single image, the main image still renders and the thumb strip is simply inert. */
   var main = document.getElementById("pdpMain");
+  var figure = main && main.closest(".pdp-figure");
   var thumbs = document.querySelectorAll(".pdp-thumb");
   if (main && thumbs.length > 1) {
     thumbs.forEach(function (btn) {
@@ -33,6 +34,8 @@
         if (!src || main.getAttribute("src") === src) return;
         main.setAttribute("src", src);
         main.setAttribute("alt", alt);
+        /* diagrams are contained rather than cropped — see .fit-square in site.css */
+        if (figure) figure.classList.toggle("fit-square", btn.getAttribute("data-fit") === "square");
         thumbs.forEach(function (t) { t.setAttribute("aria-current", t === btn ? "true" : "false"); });
       });
     });
