@@ -80,9 +80,36 @@
   <div class="pdp-inner">
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Products &nbsp;/&nbsp; Handheld</div>
   <div class="pdp-grid reveal">
-    <figure class="pdp-figure">
-      <img id="pdpMain" src="../assets/handheld/handheld.webp" alt="Calmlyte Handheld standing on a wood table, round green LED head lit" loading="eager" decoding="async">
-    </figure>
+    <div class="pdp-gallery">
+      <figure class="pdp-figure">
+        <img id="pdpMain" src="../assets/handheld/handheld.webp" alt="Calmlyte Handheld standing on a wood table, round green LED head lit" loading="eager" decoding="async">
+      </figure>
+      <!-- PHOTOGRAPHY NOTES
+           handheld-inuse.webp is cropped from a supplier photo. The crop is not
+           cosmetic: the original frames a trade-show booth whose back wall carries a
+           "light therapy" history timeline poster with legible dated claims, plus a
+           family-with-children marketing poster. Both sit above the counter line, so
+           the crop clears them. Do not re-crop wider.
+           COUNSEL: it still shows green light on skin, which the copy rule forbids
+           depicting. Added at the owner's explicit direction, same standing as
+           mask-held.webp. Emma signs off or it comes out — removing it is one button
+           block and the gallery degrades back to a plain figure.
+           NOT added: the second supplier photo (dce274c3-....png, untracked). The
+           poster child sits directly behind the device, so every crop that keeps the
+           product also keeps the child. It cannot be salvaged by cropping.
+           Still wanted: our own in-use photography, shot against the brand's own
+           surfaces rather than a booth. -->
+      <div class="pdp-thumbs" role="group" aria-label="Calmlyte Handheld images">
+        <button type="button" class="pdp-thumb" aria-current="true"
+                data-full="../assets/handheld/handheld.webp" data-alt="Calmlyte Handheld standing on a wood table, round green LED head lit">
+          <img src="../assets/handheld/handheld.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/handheld/handheld-inuse.webp" data-alt="Calmlyte Handheld held against a knee with its green light on">
+          <img src="../assets/handheld/handheld-inuse.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+      </div>
+    </div>
     <div class="pdp-info">
       <p class="eyebrow">Portable green light</p>
       <h1 class="h1">Calmlyte Handheld</h1>

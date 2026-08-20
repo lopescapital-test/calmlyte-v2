@@ -74,17 +74,32 @@ callouts match the spec table's 25.2 x 8.7 in exactly.
 Unused source renders sit untracked in `assets/mask/`: `mask 2.0.png`,
 `mask3.0.png`, `mask4.0.png`, `mask5.0.png`, `1b093d0d-….png`.
 
-## Handheld photography — blocking (2026-08-20)
-Two supplier photos sit untracked in `assets/handheld/` and were **not** added:
-- Both aim the device at a person (knees, then face) with green light on skin,
-  which the copy rule forbids outright.
-- Both have a "light therapy" history timeline poster legible in the background,
-  plus a family-with-children poster. That is claim text baked into the image, so
-  no copy change fixes it.
-- **They show a different handheld.** The photos are a thin folding paddle with a
-  hinged neck; `handheld.webp` is a thick wand with an LCD timer and a
-  four-button grip. Confirm which device ships before either the photos or the
-  render is trusted.
+## Handheld photography (2026-08-20)
+- **handheld.webp** — hero. Product render.
+- **handheld-inuse.webp** — cropped from supplier photo `7eee2cc2-….png`. The crop
+  is load-bearing, not cosmetic: the original frames a trade-show booth whose back
+  wall carries a "light therapy" history timeline poster with legible dated claims
+  and a family-with-children marketing poster. Both sit above the counter line, so
+  the crop clears them. **Do not re-crop wider.**
+  **Counsel:** it still shows green light on skin, which the copy rule forbids
+  depicting. In the gallery at the owner's explicit direction, same standing as
+  `mask-held.webp`. Emma signs off or it comes out.
+- **Not added:** `dce274c3-….png` (untracked). The poster child sits directly
+  behind the device, so every crop that keeps the product also keeps the child.
+  It cannot be salvaged by cropping.
+- **Still wanted:** our own in-use photography, shot against the brand's surfaces
+  rather than a booth.
+
+### Retracted: the "different handheld" claim
+An earlier note here said the supplier photos showed a different device from
+`handheld.webp` — "a thin folding paddle" versus "a thick wand with an LCD timer."
+That was wrong, and wrong the same way the `mask-worn.webp` call was: over-reading
+detail from one angle. The photos show the **back** of the device — vent cutouts and
+the hinge bracket — while the render shows the **front**, where the LCD and buttons
+live. Round thick-rimmed head and rectangular slab grip in both. The two views are
+compatible with one device. Nothing here establishes a mismatch.
+
+The LED count and weight discrepancies below are unaffected and still open.
 
 ## Specs still unresolved with the supplier
 From the sheet for model TLM300PRO-L: **236 LEDs vs the site's 72**, and
