@@ -13,10 +13,17 @@ products/           2 product pages (handheld, mask). The separate shop index wa
                     Nav Shop now points at index.html#top.
 learn/              green-light.html (counsel-cleared spectrum article), faq.html
 assets/
+  site.css          Shared design system: tokens, nav, footer, PDP + learn layout
+  site.js           Shared page behaviour: reveal observer + PDP image gallery
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
-  handheld.webp     Handheld product scene shot
-  mask.webp         Mask product scene shot
+  handheld/         Handheld photography (handheld.webp)
+  mask/             Mask photography (mask.webp hero, mask-package.webp contents)
 ```
+Product photography moved into per-product folders on 2026-08-20 so each SKU's
+shots sit together. The PDP gallery is markup-only: give the main image
+`id="pdpMain"` and add `.pdp-thumb` buttons carrying `data-full` + `data-alt`.
+site.js wires the swap and needs more than one thumb to activate, so a
+single-image PDP degrades to a plain figure.
 Orphaned assets from the retired 5-SKU lineup (belt / panel-pro / panel-<mode> /
 sig-*) were deleted 2026-07-06 — recoverable from git history if the lineup returns.
 
@@ -43,6 +50,34 @@ homepage makes no per-device spectrum claims; those live on the PDPs behind thei
 existing `[FACTS]` flags. Haven's character line had its "gentle amber tone" clause
 removed because Haven now ships only on the Handheld, whose amber channel is
 unconfirmed — see the comment in the `MODES` block.
+
+## Supplier photography — unresolved (2026-08-20)
+Images the supplier sent do not all show the product the site describes. This is
+blocking for launch, not cosmetic.
+
+- **assets/mask/mask-package.webp is ours.** Its 640 x 220 mm callouts match the
+  Mask spec table's 25.2 x 8.7 in exactly. It is in the gallery.
+- **assets/mask/mask-worn.webp is not ours.** The mask in it has two separate eye
+  openings where our mould has one continuous slot, and it carries a third-party
+  wordmark on the cheek. Kept in the repo, deliberately not shown — see the
+  comment in `products/mask.html`. A worn shot needs our own mould.
+- **Two handheld photos were not added at all.** Both show the device aimed at a
+  person (knees, then face) with green light on skin, which the copy rule forbids
+  outright, and both have a "light therapy" history timeline poster legible in the
+  background plus a family-with-children poster. They also show a **different
+  handheld**: a thin folding paddle with a hinged neck, where `handheld.webp`
+  shows a thick wand with an LCD timer and a four-button grip. Confirm which
+  device is actually shipping before either image or the render is trusted.
+- **Protective glasses.** The package shot lists mask, USB cable, manual, remote,
+  storage bag — no glasses. Both PDPs say "Use the included protective glasses."
+  Either the glasses ship or that sentence is false; it is counsel-cleared safety
+  copy, so route the correction through Emma rather than editing it here.
+- **Control row.** Mask specs say "Bluetooth app"; the box ships a physical
+  remote and lists no app. Confirm whether both exist.
+- Still open from the supplier sheet (model TLM300PRO-L): **236 LEDs vs the site's
+  72**, and **408 g vs 375 g**. Dimensions and battery do match. The user reports
+  green is being made custom, which resolves the sheet's 460/665/850/1064 nm
+  spectrum but not the LED count or the weight.
 
 ## Counsel / launch list
 - The Legal Review drafts still list all five SKUs and their prices (Terms §2,
