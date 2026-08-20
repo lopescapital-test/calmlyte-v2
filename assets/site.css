@@ -28,7 +28,7 @@
   --w-wide:1440px;    /* sections, grids, panels, non-text blocks */
   --w-mid:1120px;     /* text-led interior pages */
   --w-prose:68ch;     /* body copy measure — keep 60-72ch */
-  --w-read:840px;     /* text-led section column: text fills it edge to edge */
+  --w-read:840px;     /* body-copy measure on PDPs (~93ch at 15px) */
   --w-prose-sm:78ch;  /* fine print / captions at 11-13px */
   --gutter:clamp(24px,5vw,88px);
 
@@ -182,7 +182,7 @@ html.debug .counsel{display:block}
 .crumbs a:hover{color:var(--gold-soft)}
 
 .pdp-hero{padding:var(--space-nav) var(--gutter) var(--space-block)}
-.pdp-inner{max-width:var(--w-wide);margin:0 auto}
+.pdp-inner{max-width:var(--w-mid);margin:0 auto}
 .pdp-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4vw,72px);align-items:start}
 
 .pdp-figure{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:border-color .35s ease}
@@ -195,12 +195,12 @@ html.debug .counsel{display:block}
 .pdp-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .pdp-ship{font-size:13px;color:var(--sage);font-weight:300;margin-top:16px}
 
-/* Text-led sections cap at --w-read and their copy fills the column, so nothing
-   sits left-aligned against dead space. Sections that hold a table or a grid take
-   .wide and use the full page width. */
-.pdp-sec{max-width:calc(var(--w-read) + var(--gutter)*2);margin:0 auto var(--space-section);padding:0 var(--gutter)}
-.pdp-sec.wide{max-width:calc(var(--w-wide) + var(--gutter)*2)}
-.pdp-sec p{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;margin-bottom:16px;max-width:none}
+/* Every block on the PDP — hero, Overview, Specifications, Questions, disclaimer —
+   shares one container width and one gutter, so all headings and content start on the
+   same left rail. Copy is capped at --w-read for readability; the trailing space to
+   its right is deliberate editorial rhythm, not a misalignment. */
+.pdp-sec{max-width:calc(var(--w-mid) + var(--gutter)*2);margin:0 auto var(--space-section);padding:0 var(--gutter)}
+.pdp-sec p{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;margin-bottom:16px;max-width:var(--w-read)}
 .pdp-panel{background:var(--bark2);border:1px solid var(--line);border-radius:14px;padding:clamp(22px,3vw,40px)}
 
 .spectable{width:100%;border-collapse:collapse}
@@ -218,7 +218,7 @@ html.debug .counsel{display:block}
 .faq-grid{display:grid;grid-template-columns:1fr;gap:var(--space-block) clamp(32px,4vw,72px)}
 .faq-item .faq-q{margin-top:0}
 @media(min-width:900px){.faq-grid{grid-template-columns:1fr 1fr}}
-.disclaimer{max-width:calc(var(--w-prose-sm) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter) var(--space-section);color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
+.disclaimer{max-width:calc(var(--w-mid) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter) var(--space-section);color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
 
 @media(max-width:900px){
   .pdp-grid{grid-template-columns:1fr;gap:32px}
