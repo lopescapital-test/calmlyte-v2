@@ -28,6 +28,7 @@
   --w-wide:1440px;    /* sections, grids, panels, non-text blocks */
   --w-mid:1120px;     /* text-led interior pages */
   --w-prose:68ch;     /* body copy measure — keep 60-72ch */
+  --w-read:840px;     /* text-led section column: text fills it edge to edge */
   --w-prose-sm:78ch;  /* fine print / captions at 11-13px */
   --gutter:clamp(24px,5vw,88px);
 
@@ -194,8 +195,12 @@ html.debug .counsel{display:block}
 .pdp-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .pdp-ship{font-size:13px;color:var(--sage);font-weight:300;margin-top:16px}
 
-.pdp-sec{max-width:calc(var(--w-wide) + var(--gutter)*2);margin:0 auto var(--space-section);padding:0 var(--gutter)}
-.pdp-sec p{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;margin-bottom:16px;max-width:var(--w-prose)}
+/* Text-led sections cap at --w-read and their copy fills the column, so nothing
+   sits left-aligned against dead space. Sections that hold a table or a grid take
+   .wide and use the full page width. */
+.pdp-sec{max-width:calc(var(--w-read) + var(--gutter)*2);margin:0 auto var(--space-section);padding:0 var(--gutter)}
+.pdp-sec.wide{max-width:calc(var(--w-wide) + var(--gutter)*2)}
+.pdp-sec p{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;margin-bottom:16px;max-width:none}
 .pdp-panel{background:var(--bark2);border:1px solid var(--line);border-radius:14px;padding:clamp(22px,3vw,40px)}
 
 .spectable{width:100%;border-collapse:collapse}
@@ -203,10 +208,16 @@ html.debug .counsel{display:block}
 .spectable tr:last-child th,.spectable tr:last-child td{border-bottom:0}
 .spectable th{color:var(--sage);letter-spacing:1.5px;text-transform:uppercase;font-size:10px;width:38%;padding-right:20px}
 .spectable td{color:var(--cream)}
-.pdp-safety{font-size:13px;color:var(--sage);font-weight:300;line-height:1.7;margin-top:var(--space-el);padding-top:var(--space-el);border-top:1px solid var(--line);max-width:var(--w-prose-sm)}
+/* border spans the full panel (it read as a line stopping halfway when the
+   element itself was capped); the inner span keeps the text measure */
+.pdp-safety{font-size:13px;color:var(--sage);font-weight:300;line-height:1.7;margin-top:var(--space-el);padding-top:var(--space-el);border-top:1px solid var(--line);max-width:none}
+.pdp-safety > span{display:block;max-width:var(--w-prose-sm)}
 
 .faq-q{font-family:var(--font-serif);font-weight:300;font-size:18px;color:var(--cream);margin:var(--space-el) 0 8px}
-.faq-a{font-size:15px;color:var(--mist);font-weight:300;line-height:1.7;max-width:var(--w-prose)}
+.faq-a{font-size:15px;color:var(--mist);font-weight:300;line-height:1.7;max-width:none}
+.faq-grid{display:grid;grid-template-columns:1fr;gap:var(--space-block) clamp(32px,4vw,72px)}
+.faq-item .faq-q{margin-top:0}
+@media(min-width:900px){.faq-grid{grid-template-columns:1fr 1fr}}
 .disclaimer{max-width:calc(var(--w-prose-sm) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter) var(--space-section);color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
 
 @media(max-width:900px){
