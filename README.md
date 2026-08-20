@@ -51,24 +51,28 @@ existing `[FACTS]` flags. Haven's character line had its "gentle amber tone" cla
 removed because Haven now ships only on the Handheld, whose amber channel is
 unconfirmed — see the comment in the `MODES` block.
 
-## Supplier photography (2026-08-20)
-All four Mask images are the same mould — single pinched eye aperture, round
-temple puck, perforated cheek band. `mask-package.webp` corroborates it: its
-640 x 220 mm callouts match the spec table's 25.2 x 8.7 in exactly. All four are
-in the gallery.
+## Mask photography (2026-08-20)
+Three images, all the same mould — single pinched eye aperture, temple pucks,
+perforated cheek band. `mask-package.webp` corroborates it: its 640 x 220 mm
+callouts match the spec table's 25.2 x 8.7 in exactly.
 
-Placeholders to replace before launch:
-- **mask-worn.webp** shows the **red** unit. Re-shoot once the green custom build
-  exists.
-- **mask-held.webp** is a marketplace-style composite on a coral background, off
-  the forest palette. **Counsel:** it renders the light as beams travelling into a
+- **mask.webp** — hero. Rendered from `mask6.png`, which supersedes the 2.0 and
+  5.0 renders. Kept at this filename so the homepage product card, the PDP hero
+  and the first gallery thumb all track it with no markup change.
+- **mask-held.webp** — marketplace-style composite on a coral background, off the
+  forest palette. **Counsel:** it renders the light as beams travelling into a
   face, which is exactly what the copy rule forbids showing. It is in the gallery
   at the owner's explicit direction — Emma signs off or it comes out. Removing it
   is one button block in `products/mask.html`.
-- The package graphic carries its contents as baked-in image text, so the
+- **mask-package.webp** — carries its contents as baked-in image text, so the
   "In the box" spec row still needs that list as real text. It is also the one
   image that must not be cropped, which is what `data-fit="square"` on its thumb
   and `.pdp-figure.fit-square` in site.css are for.
+- **Still wanted:** a worn shot of our own mould in green. `mask-worn.webp` was
+  removed 2026-08-20 because it showed the red unit; recoverable from git history.
+
+Unused source renders sit untracked in `assets/mask/`: `mask 2.0.png`,
+`mask3.0.png`, `mask4.0.png`, `mask5.0.png`, `1b093d0d-….png`.
 
 ## Handheld photography — blocking (2026-08-20)
 Two supplier photos sit untracked in `assets/handheld/` and were **not** added:
