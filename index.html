@@ -427,9 +427,11 @@
       b.classList.toggle("on", on);
       b.setAttribute("aria-selected", on ? "true" : "false");
     });
-    document.querySelectorAll("[data-mode-link]").forEach(function(b){
-      b.classList.toggle("on", b.getAttribute("data-mode-link") === id);
-    });
+    /* The nav mode links are jump links to the switcher, not page-location
+       indicators. They deliberately carry no "current" highlight: setMode("haven")
+       runs on every load, so highlighting it left Haven permanently lit even while
+       the visitor was looking at the products block. The switcher tab is the single
+       source of truth for which setting is active. */
     if (retitle) document.title = TITLES[id] || HOME_TITLE;
   }
 

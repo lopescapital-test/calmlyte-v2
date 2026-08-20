@@ -8,7 +8,9 @@ Production-prepped static storefront. No backend required. Payments are stubbed
 ```
 index.html          Intro gate + interactive mode-switcher hero
                     (Haven/Focus/Stillness/Dusk), two-form product grid, learn teaser
-products/           Shop index + 2 product pages (handheld, mask)
+products/           2 product pages (handheld, mask). The separate shop index was
+                    removed 2026-08-20: it duplicated the homepage products block.
+                    Nav Shop now points at index.html#top.
 learn/              green-light.html (counsel-cleared spectrum article), faq.html
 assets/
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
