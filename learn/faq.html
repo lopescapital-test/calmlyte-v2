@@ -38,31 +38,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
-  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bark);color:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  .serif{font-family:'Fraunces',serif}
-  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:linear-gradient(to bottom,rgba(15,23,18,.85),transparent)}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
-  .brand-name{font-family:'Fraunces',serif;font-size:21px;letter-spacing:.5px;color:var(--cream)}
-  .navlinks{display:flex;gap:24px;align-items:center}
-  .navlinks a{color:var(--mist);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:color .25s}
-  .navlinks a:hover{color:var(--gold-soft)}
-  .navsep{width:1px;height:14px;background:rgba(198,207,196,.25)}
-  .wrap{max-width:820px;margin:0 auto;padding:130px 6vw 40px}
-  .crumbs{font-size:12px;letter-spacing:1px;color:var(--sage);margin-bottom:26px}
-  .crumbs a{color:var(--sage);text-decoration:none}
-  .crumbs a:hover{color:var(--gold-soft)}
-  h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(32px,5vw,48px);line-height:1.05;color:var(--cream);margin-bottom:16px}
-  .intro{font-size:17px;color:var(--mist);font-weight:300;margin-bottom:48px;max-width:65ch}
-  .faq-group{margin-bottom:44px}
-  .faq-group h2{font-family:'Fraunces',serif;font-weight:300;font-size:22px;color:var(--gold-soft);margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid rgba(217,179,104,.25)}
-  .q{font-family:'Fraunces',serif;font-size:19px;color:var(--cream);margin:26px 0 8px}
-  .a{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;max-width:68ch}
+  /* .wrap comes from site.css: gutter outside a --w-mid cap */
+  h1{font-family:var(--font-serif);font-weight:300;font-size:clamp(32px,5vw,48px);line-height:1.05;color:var(--cream);margin-bottom:var(--space-el)}
+  .intro{font-size:17px;color:var(--mist);font-weight:300;margin-bottom:var(--space-block);max-width:var(--w-prose)}
+  .faq-group{margin-bottom:var(--space-section)}
+  .faq-group h2{font-family:var(--font-serif);font-weight:300;font-size:clamp(20px,2.4vw,26px);color:var(--gold-soft);margin-bottom:var(--space-el);padding-bottom:12px;border-bottom:1px solid rgba(217,179,104,.25)}
+  .q{font-family:var(--font-serif);font-size:19px;color:var(--cream);margin:var(--space-el) 0 10px}
+  .a{font-size:15px;color:var(--mist);font-weight:300;line-height:1.75;max-width:var(--w-prose)}
   .a a{color:var(--gold-soft);text-decoration:none}
-  .disclaimer{max-width:68ch;margin:50px auto 0;color:var(--sage);font-size:11px;font-weight:300;line-height:1.6;opacity:.85}
-  footer{padding:50px 6vw;background:var(--bark);text-align:center;border-top:1px solid rgba(198,207,196,.1);margin-top:60px}
-  footer .fbrand{font-family:'Fraunces',serif;font-size:18px;color:var(--cream);margin-bottom:6px}
-  footer .fnote{font-size:11px;color:var(--sage);font-weight:300;max-width:60ch;margin:12px auto 0;line-height:1.6;opacity:.75}
-  @media(max-width:760px){nav{padding:14px 20px}.navlinks{gap:12px}.navlinks a{font-size:10px;letter-spacing:1px}}
+  /* .disclaimer comes from site.css */
 </style>
 <!-- Internal review view: append ?debug to the URL to reveal FACTS/counsel notes.
      Normal visitors (and JS-off) never see them. -->
@@ -70,7 +54,7 @@
 </head>
 <body>
 
-<nav>
+<nav class="solid">
   <a class="brand" href="../index.html">
     <svg width="34" height="34" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#1C2E24" stroke="#D9B368" stroke-width="3"/><g fill="#2E4636"><path d="M30 78 L34 54 L38 78Z"/><path d="M40 80 L45 46 L50 80Z"/><path d="M52 80 L58 42 L64 80Z"/><path d="M64 78 L68 52 L72 78Z"/></g></svg>
     <span class="brand-name">Calmlyte</span>

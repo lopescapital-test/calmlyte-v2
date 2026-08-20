@@ -30,35 +30,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
-  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bark);color:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  .serif{font-family:'Fraunces',serif}
-  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:linear-gradient(to bottom,rgba(15,23,18,.85),transparent)}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
-  .brand-name{font-family:'Fraunces',serif;font-size:21px;letter-spacing:.5px;color:var(--cream)}
-  .navlinks{display:flex;gap:22px;align-items:center}
-  .navlinks a,.navlinks button{background:none;border:none;cursor:pointer;color:var(--mist);font-family:'IBM Plex Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:color .25s}
-  .navlinks a:hover,.navlinks button:hover{color:var(--gold-soft)}
-  .navsep{width:1px;height:14px;background:rgba(198,207,196,.25)}
-  .wrap{max-width:1180px;margin:0 auto;padding:130px 6vw 60px}
-  .crumbs{font-size:12px;letter-spacing:1px;color:var(--sage);margin-bottom:26px}
-  .crumbs a{color:var(--sage);text-decoration:none}
-  h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,5vw,52px);line-height:1.05;color:var(--cream);margin-bottom:14px}
-  .intro{font-size:17px;color:var(--mist);font-weight:300;margin-bottom:46px;max-width:60ch}
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:820px}
-  .card{background:#16211B;border:1px solid rgba(217,179,104,.25);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;transition:border-color .25s,transform .25s}
-  .card:hover{border-color:rgba(217,179,104,.6);transform:translateY(-3px)}
-  .card-img{background:linear-gradient(135deg,#20302A,#101813);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;border-top-left-radius:16px;border-top-right-radius:16px}
+  /* .wrap.wide comes from site.css: gutter outside a --w-wide cap */
+  h1{font-family:var(--font-serif);font-weight:300;font-size:clamp(34px,5vw,52px);line-height:1.05;color:var(--cream);margin-bottom:var(--space-el)}
+  .intro{font-size:17px;color:var(--mist);font-weight:300;margin-bottom:var(--space-block);max-width:var(--w-prose)}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,2.4vw,34px);max-width:980px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;transition:border-color .25s,transform .25s}
+  .card:hover{border-color:var(--line-gold);transform:translateY(-5px)}
+  .card-img{background:var(--panel);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;border-top-left-radius:16px;border-top-right-radius:16px}
   .card-img img{width:100%;height:100%;object-fit:cover;border-top-left-radius:16px;border-top-right-radius:16px}
-  .card-body{padding:22px 24px 26px}
+  .card-body{padding:clamp(20px,2vw,26px) clamp(22px,2.2vw,28px) clamp(24px,2.4vw,30px)}
   .card-name{font-family:'Fraunces',serif;font-weight:300;font-size:22px;color:var(--cream);margin-bottom:6px}
   .card-desc{font-size:13px;color:var(--sage);font-weight:300;margin-bottom:14px;min-height:2.6em}
   .card-price{font-family:'Fraunces',serif;font-size:22px;color:var(--gold-soft)}
   .card-cta{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);margin-top:14px}
-  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:600px){.grid{grid-template-columns:1fr}nav{padding:14px 20px}.navlinks{gap:12px}.navlinks a,.navlinks button{font-size:10px;letter-spacing:1px}}
-  footer{padding:50px 6vw;background:var(--bark);text-align:center;border-top:1px solid rgba(198,207,196,.1);margin-top:60px}
-  footer .fbrand{font-family:'Fraunces',serif;font-size:18px;color:var(--cream);margin-bottom:6px}
-  footer .fnote{font-size:11px;color:var(--sage);font-weight:300;max-width:60ch;margin:12px auto 0;line-height:1.6;opacity:.75}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;max-width:420px}}
 </style>
 <!-- Internal review view: append ?debug to the URL to reveal FACTS/counsel notes.
      Normal visitors (and JS-off) never see them. -->
@@ -66,7 +51,7 @@
 </head>
 <body>
 
-<nav>
+<nav class="solid">
   <a class="brand" href="../index.html">
     <svg width="34" height="34" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#1C2E24" stroke="#D9B368" stroke-width="3"/><g fill="#2E4636"><path d="M30 78 L34 54 L38 78Z"/><path d="M40 80 L45 46 L50 80Z"/><path d="M52 80 L58 42 L64 80Z"/><path d="M64 78 L68 52 L72 78Z"/></g></svg>
     <span class="brand-name">Calmlyte</span>
@@ -85,7 +70,7 @@
   </div>
 </nav>
 
-<div class="wrap">
+<div class="wrap wide">
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Shop</div>
   <h1 class="serif">The Calmlyte range</h1>
   <p class="intro">Every Calmlyte product is built around the same narrow-band 520–530 nm green spectrum. Choose the form that fits your day — a portable handheld for daytime, a personal mask for evening.</p>
