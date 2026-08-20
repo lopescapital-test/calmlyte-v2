@@ -81,9 +81,29 @@
   <div class="pdp-inner">
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Products &nbsp;/&nbsp; Mask</div>
   <div class="pdp-grid reveal">
-    <figure class="pdp-figure">
-      <img src="../assets/mask/mask.webp" alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it" loading="eager" decoding="async">
-    </figure>
+    <div class="pdp-gallery">
+      <figure class="pdp-figure">
+        <img id="pdpMain" src="../assets/mask/mask.webp" alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it" loading="eager" decoding="async">
+      </figure>
+      <!-- TODO PHOTOGRAPHY: mask-worn.webp is a stock render and shows the red-light
+           variant; replace with the green custom unit once it exists. mask-package.webp
+           carries its contents as baked-in text, so the "In the box" spec row still needs
+           the same list as real text. -->
+      <div class="pdp-thumbs" role="group" aria-label="Calmlyte Mask images">
+        <button type="button" class="pdp-thumb" aria-current="true"
+                data-full="../assets/mask/mask.webp" data-alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it">
+          <img src="../assets/mask/mask.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/mask/mask-worn.webp" data-alt="Calmlyte Mask worn while resting on a sofa in a softly lit room">
+          <img src="../assets/mask/mask-worn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/mask/mask-package.webp" data-alt="Calmlyte Mask package contents: mask, USB charging cable, user manual, remote control and storage bag">
+          <img src="../assets/mask/mask-package.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+      </div>
+    </div>
     <div class="pdp-info">
       <p class="eyebrow">Personal evening light</p>
       <h1 class="h1">Calmlyte Mask</h1>
@@ -168,21 +188,6 @@
   });
 </script>
 
-<script>
-  /* scroll reveals — same observer threshold and easing as the homepage */
-  (function(){
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var els = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window && !reduced){
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-      }, {threshold:.14});
-      els.forEach(function(el){ io.observe(el); });
-    } else {
-      els.forEach(function(el){ el.classList.add('in'); });
-    }
-  })();
-</script>
-
+<script src="../assets/site.js"></script>
 </body>
 </html>

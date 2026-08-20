@@ -81,7 +81,7 @@
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Products &nbsp;/&nbsp; Handheld</div>
   <div class="pdp-grid reveal">
     <figure class="pdp-figure">
-      <img src="../assets/handheld/handheld.webp" alt="Calmlyte Handheld standing on a wood table, round green LED head lit" loading="eager" decoding="async">
+      <img id="pdpMain" src="../assets/handheld/handheld.webp" alt="Calmlyte Handheld standing on a wood table, round green LED head lit" loading="eager" decoding="async">
     </figure>
     <div class="pdp-info">
       <p class="eyebrow">Portable green light</p>
@@ -167,21 +167,6 @@
   });
 </script>
 
-<script>
-  /* scroll reveals — same observer threshold and easing as the homepage */
-  (function(){
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var els = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window && !reduced){
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-      }, {threshold:.14});
-      els.forEach(function(el){ io.observe(el); });
-    } else {
-      els.forEach(function(el){ el.classList.add('in'); });
-    }
-  })();
-</script>
-
+<script src="../assets/site.js"></script>
 </body>
 </html>
