@@ -88,6 +88,8 @@
 .learn-inner{max-width:var(--w-mid);margin:0 auto}
 .learn .lede{max-width:var(--w-prose);margin:0 auto var(--space-block)}
 .specbar{margin:0 auto var(--space-block);max-width:860px}
+.spec-labels{display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:1px;color:var(--sage);margin-top:10px}
+@media(max-width:520px){.spec-labels span:nth-child(2){display:none}}
 .specbar svg{width:100%;height:auto;display:block}
 .learn-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 
@@ -135,14 +137,14 @@
     <span class="brand-name">Calmlyte</span>
   </a>
   <div class="navlinks">
+    <a href="products/index.html">Shop</a>
+    <span class="navsep"></span>
     <a href="#haven" data-mode-link="haven">Haven</a>
     <a href="#focus" data-mode-link="focus" class="hide-m">Focus</a>
     <a href="#stillness" data-mode-link="stillness" class="hide-m">Stillness</a>
     <a href="#dusk" data-mode-link="dusk">Dusk</a>
     <span class="navsep"></span>
-    <a href="products/index.html">Shop</a>
     <a href="learn/faq.html" class="hide-m">Learn</a>
-    <span class="navsep"></span>
     <button class="nav-cart" id="cartBtn">Cart</button>
   </div>
 </nav>
@@ -259,6 +261,10 @@
         <text x="327" y="10" text-anchor="middle" fill="#E7CE9B" font-size="12" font-family="IBM Plex Sans,sans-serif" letter-spacing="1">520–530 nm</text>
         <text x="327" y="66" text-anchor="middle" fill="#8A9B84" font-size="10" font-family="IBM Plex Sans,sans-serif" letter-spacing="1">CALMLYTE GREEN</text>
       </svg>
+      <!-- Axis endpoints as HTML, not SVG <text>: inside an 800-unit viewBox these
+           would render ~4px on a 375px screen. Same copy and space-between pattern
+           as the caption on learn/green-light.html. -->
+      <div class="spec-labels"><span>~400 nm violet</span><span>~550 nm green</span><span>~700 nm red</span></div>
     </div>
     <div class="learn-links reveal">
       <a class="herolink" href="learn/green-light.html">Read: the Calmlyte spectrum →</a>
