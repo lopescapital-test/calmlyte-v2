@@ -18,7 +18,8 @@ assets/
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
   handheld/         Handheld photography (handheld.webp, handheld-inuse.webp)
   mask/             Mask photography (mask.webp hero, mask-held, mask-package)
-  panel/            Signature Panel renders, one per setting, + 3 unused stage shots
+  belt/             Belt photography (belt.webp)
+  panel/            Panel renders, one per setting, + 3 unused stage shots
 ```
 Product photography moved into per-product folders on 2026-08-20 so each SKU's
 shots sit together. The PDP gallery is markup-only: give the main image
@@ -37,25 +38,39 @@ The homepage accepts both #haven and legacy #/haven hashes; arriving on a mode
 hash skips the intro gate.
 
 ## Product lineup (2026-08-22)
-The line is **Signature Panel ($600), Handheld ($450) and Mask ($400).** The
-Signature Panel was retired on 2026-07-06 and brought back on 2026-08-22; its page
-and its four per-setting renders came back out of git history.
+The line is **Panel ($600), Handheld ($450), Belt ($200) and Mask ($400).**
 
-Belt ($200) and Panel Pro ($2,000) remain retired. Belt is restored and integrated
-on the branch `restore-belt-signature-panel` if it is wanted next; Panel Pro is
-still only in history.
+The Panel and the Belt were both retired on 2026-07-06 and brought back on
+2026-08-22 out of git history. **Panel Pro ($2,000) stays retired** and exists only
+in history.
+
+**Naming:** the panel is now just **"Panel"**. It has had three names — the Legal
+Review drafts call it **"Small Panel"**, the site called it **"Signature Panel"**
+until 2026-08-22, and its internal SKU key is still `small-panel`. The SKU key was
+deliberately left alone: it is a stable identifier and changing it would desync
+from counsel's drafts for no gain. **Route the name to Emma** so the drafts and the
+site agree on one.
 
 **Mode -> product mapping** comes straight from each PDP's spec table and must not
 be widened without supplier confirmation:
-- **Signature Panel** — all four settings (spectrum: 520-530 nm green core, plus
-  claimed 490-500 nm cyan-green and 590 nm amber support)
-- **Handheld** — Focus, Haven (spectrum: 520-530 nm green; no amber/cyan confirmed)
-- **Mask** — Dusk, Stillness (spectrum: 520-530 nm green + 590 nm amber)
+- **Panel** — all four settings (520-530 nm green core, plus a *claimed* 490-500 nm
+  cyan-green and 590 nm amber support)
+- **Handheld** — Focus, Haven (520-530 nm green; no amber/cyan confirmed)
+- **Belt** — Stillness, Haven (520-530 nm green; amber unconfirmed, and its own
+  FACTS note says to drop Stillness if the amber channel does not exist)
+- **Mask** — Dusk, Stillness (520-530 nm green + 590 nm amber)
 
-The Signature Panel is the only SKU claiming all four settings, so the homepage
-sells on **form** (room / portable / personal) rather than on which settings each
-product runs. Worth revisiting: a SKU that does everything undercuts the reason to
-buy either of the other two.
+The homepage sells on **form** (room / portable / wearable / personal) rather than
+on settings, because the Panel claims all four and would otherwise make the other
+three look redundant. That tension is a positioning question worth deciding: a SKU
+that does everything undercuts the reason to buy any of the others.
+
+**Belt is not purchasable.** Its PDP shows a "Coming soon" chip rather than
+add-to-cart, and the homepage card matches with a non-interactive chip instead of an
+Add button. Reasons, both unresolved: its "In the box" row is still an open FACTS
+note, and it has no ship window ("Shipping details available at launch" against
+"Ships in 10-14 business days" everywhere else). Do not give it an Add button until
+both are settled.
 
 ## Mask photography (2026-08-20)
 Three images, all the same mould — single pinched eye aperture, temple pucks,

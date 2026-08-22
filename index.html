@@ -150,11 +150,14 @@
 </nav>
 
 <!-- ================= PRODUCTS — the page opens on what you can actually buy =================
-     Lineup: Signature Panel + Handheld + Mask. Mode -> product mapping comes straight
-     from each PDP spec table (Signature Panel: all four / Handheld: Focus, Haven /
-     Mask: Dusk, Stillness) — do not widen it without supplier confirmation.
-     NOTE: the Signature Panel is the only SKU claiming all four settings, which is
-     why the copy below sells on form rather than on which settings each one runs. -->
+     Lineup: Panel + Handheld + Belt + Mask. Mode -> product mapping comes straight
+     from each PDP spec table (Panel: all four / Handheld: Focus, Haven / Belt:
+     Stillness, Haven / Mask: Dusk, Stillness) — do not widen it without supplier
+     confirmation.
+     NOTE: the Panel is the only SKU claiming all four settings, which is why the copy
+     below sells on form rather than on which settings each one runs.
+     Belt shows a non-interactive "Coming soon" chip instead of an Add button, matching
+     its PDP: its box contents are still unconfirmed and it has no ship window. -->
 <header class="phero" id="top">
   <div class="phero-bg" aria-hidden="true"></div>
   <div class="phero-veil" aria-hidden="true"></div>
@@ -162,21 +165,21 @@
   <section class="shop" id="shop">
   <div class="shop-head">
     <p class="eyebrow">520–530&nbsp;nm · narrow-band green light</p>
-    <h1 class="h1">Three forms. One <em>spectrum</em>.</h1>
-    <p class="lede" style="margin:0 auto">Every Calmlyte product is built around the same narrow-band 520–530 nm green spectrum. Choose the form that fits the moment — a panel for the room, a portable handheld for daytime, a personal mask for evening.</p>
+    <h1 class="h1">Four forms. One <em>spectrum</em>.</h1>
+    <p class="lede" style="margin:0 auto">Every Calmlyte product is built around the same narrow-band 520–530 nm green spectrum. Choose the form that fits the moment — a panel for the room, a portable handheld for daytime, a wearable belt for quiet hours, a personal mask for evening.</p>
   </div>
-  <div class="pgrid three">
+  <div class="pgrid four">
     <div class="pcard reveal">
-      <a class="pcard-link" href="products/signature-panel.html">
-        <div class="pcard-img"><img src="assets/panel/panel-haven.webp" alt="Calmlyte Signature Panel on a wood table against a leaf-shadowed green wall" loading="lazy"></div>
+      <a class="pcard-link" href="products/panel.html">
+        <div class="pcard-img"><img src="assets/panel/panel-haven.webp" alt="Calmlyte Panel on a wood table against a leaf-shadowed green wall" loading="lazy"></div>
         <div class="pcard-body">
           <p class="pcard-tag">Room · anytime</p>
-          <p class="pcard-name">Signature Panel</p>
+          <p class="pcard-name">Panel</p>
           <p class="pcard-desc">A green-forward panel for desks and side tables.</p>
           <p class="pcard-modes">Settings · all four</p>
         </div>
       </a>
-      <div class="pcard-row"><span class="pcard-price">$600</span><button class="addbtn" data-sku="small-panel" data-price="600" data-name="Signature Panel">Add</button></div>
+      <div class="pcard-row"><span class="pcard-price">$600</span><button class="addbtn" data-sku="small-panel" data-price="600" data-name="Panel">Add</button></div>
     </div>
     <div class="pcard reveal" style="transition-delay:.1s">
       <a class="pcard-link" href="products/handheld.html">
@@ -191,6 +194,18 @@
       <div class="pcard-row"><span class="pcard-price">$450</span><button class="addbtn" data-sku="handheld" data-price="450" data-name="Handheld">Add</button></div>
     </div>
     <div class="pcard reveal" style="transition-delay:.2s">
+      <a class="pcard-link" href="products/belt.html">
+        <div class="pcard-img"><img src="assets/belt/belt.webp" alt="Calmlyte Belt wrap coiled on a wood table, green LEDs lit inside" loading="lazy"></div>
+        <div class="pcard-body">
+          <p class="pcard-tag">Wearable · quiet hours</p>
+          <p class="pcard-name">Belt</p>
+          <p class="pcard-desc">A wearable green-light wrap for decompression.</p>
+          <p class="pcard-modes">Settings · Stillness &amp; Haven</p>
+        </div>
+      </a>
+      <div class="pcard-row"><span class="pcard-price">$200</span><span class="soonbtn" aria-disabled="true">Coming soon</span></div>
+    </div>
+    <div class="pcard reveal" style="transition-delay:.3s">
       <a class="pcard-link" href="products/mask.html">
         <div class="pcard-img"><img src="assets/mask/mask.webp" alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it" loading="lazy"></div>
         <div class="pcard-body">
@@ -503,8 +518,9 @@
      redirects instead of adding to the in-memory cart. Keep in sync with the
      CHECKOUT_LINKS block on each product page. */
   var CHECKOUT_LINKS = {
-    "small-panel": null,   // Calmlyte Signature Panel — $600
+    "small-panel": null,   // Calmlyte Panel — $600
     "handheld":    null,   // Calmlyte Handheld — $450
+    "belt":        null,   // Calmlyte Belt — $200 (coming soon, no Add button)
     "mask":        null    // Calmlyte Mask — $400
   };
   var CONTACT_EMAIL = "hello@calmlyte.com";  // TODO: confirm the real monitored inbox before launch
