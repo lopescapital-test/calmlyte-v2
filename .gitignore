@@ -1,0 +1,9 @@
+# Source drops and working files. These are raw renders, supplier photography and
+# archives that get normalised into assets/<product>/*.webp before use. They are
+# deliberately untracked: several are 2 MB+ each, and assets/greenlightpics is
+# ~25 MB of imagery the README documents as AI-generated and unusable.
+*.zip
+assets/greenlightpics/
+assets/mask/*.png
+assets/handheld/*.png
+assets/mask/women lounging.webp

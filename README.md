@@ -16,8 +16,9 @@ assets/
   site.css          Shared design system: tokens, nav, footer, PDP + learn layout
   site.js           Shared page behaviour: reveal observer + PDP image gallery
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
-  handheld/         Handheld photography (handheld.webp)
-  mask/             Mask photography (mask.webp hero, mask-package.webp contents)
+  handheld/         Handheld photography (handheld.webp, handheld-inuse.webp)
+  mask/             Mask photography (mask.webp hero, mask-held, mask-package)
+  panel/            Signature Panel renders, one per setting, + 3 unused stage shots
 ```
 Product photography moved into per-product folders on 2026-08-20 so each SKU's
 shots sit together. The PDP gallery is markup-only: give the main image
@@ -35,21 +36,26 @@ visitors. Append `?debug` to any URL to reveal them (e.g.
 The homepage accepts both #haven and legacy #/haven hashes; arriving on a mode
 hash skips the intro gate.
 
-## Product lineup (2026-07-06)
-The line is **Handheld ($450) and Mask ($400) only.** Signature Panel, Belt, and
-Panel Pro were retired and their pages deleted — recoverable from git history if
-the lineup changes back.
+## Product lineup (2026-08-22)
+The line is **Signature Panel ($600), Handheld ($450) and Mask ($400).** The
+Signature Panel was retired on 2026-07-06 and brought back on 2026-08-22; its page
+and its four per-setting renders came back out of git history.
 
-**Mode → product mapping** comes straight from each PDP's spec table and must not
+Belt ($200) and Panel Pro ($2,000) remain retired. Belt is restored and integrated
+on the branch `restore-belt-signature-panel` if it is wanted next; Panel Pro is
+still only in history.
+
+**Mode -> product mapping** comes straight from each PDP's spec table and must not
 be widened without supplier confirmation:
-- **Handheld** — Focus, Haven (spectrum: 520–530 nm green; no amber/cyan confirmed)
-- **Mask** — Dusk, Stillness (spectrum: 520–530 nm green + 590 nm amber)
+- **Signature Panel** — all four settings (spectrum: 520-530 nm green core, plus
+  claimed 490-500 nm cyan-green and 590 nm amber support)
+- **Handheld** — Focus, Haven (spectrum: 520-530 nm green; no amber/cyan confirmed)
+- **Mask** — Dusk, Stillness (spectrum: 520-530 nm green + 590 nm amber)
 
-The hero presents the four modes as *environment*, not hardware channels, so the
-homepage makes no per-device spectrum claims; those live on the PDPs behind their
-existing `[FACTS]` flags. Haven's character line had its "gentle amber tone" clause
-removed because Haven now ships only on the Handheld, whose amber channel is
-unconfirmed — see the comment in the `MODES` block.
+The Signature Panel is the only SKU claiming all four settings, so the homepage
+sells on **form** (room / portable / personal) rather than on which settings each
+product runs. Worth revisiting: a SKU that does everything undercuts the reason to
+buy either of the other two.
 
 ## Mask photography (2026-08-20)
 Three images, all the same mould — single pinched eye aperture, temple pucks,
@@ -114,6 +120,54 @@ Two contradictions the package shot exposes:
   so route the correction through Emma rather than editing it here.
 - **Control row.** Mask specs say "Bluetooth app"; the box ships a physical remote
   and lists no app. Confirm whether both exist.
+
+## assets/greenlightpics — investigated 2026-08-22, DO NOT USE
+Nine JPEGs, extracted from `assets/Green light pics .zip`. Five panels, two
+handheld, two belt, all on white. They look like clean catalogue photography and
+they are not usable. **At least the panel set is AI-generated.**
+
+Evidence:
+1. **Garbled UI text.** The panel control screen in `original-C1662637` reads
+   "CoUKoons", "MraUCnGihea", "Time atore ka", "IrafutRoood" at magnification —
+   crisp letterforms forming non-words, with malformed seven-segment digits. That is
+   a diffusion-model signature. Blurry real text degrades differently, and a 3D
+   render would use a real font with real strings.
+2. **No camera provenance on any of the nine.** No Make, Model, DateTimeOriginal,
+   exposure, ISO or focal length. `original-*` files carry no APP segments at all —
+   completely bare JPEGs. `processed-*` files carry a 190-byte Exif block and an
+   Apple AROT marker (an iOS pipeline touched them) but still zero camera tags.
+3. **Two mutually incompatible panels in one set.** `original-D70A4F6D` is a
+   6 x 15 grid of 90 small LEDs. `original-555DB222` is a 5 x 12 staggered grid of
+   60 large reflector lenses. Both are presented as the panel. Counted
+   programmatically by blob detection, not by eye.
+4. **No count matches any spec.** Signature Panel claims 72 LEDs, Panel Pro 216,
+   Belt 150. The images give 90, 60, and a uniform dot grid far denser than 150.
+
+**Do not treat the detail in these images as facts about the product.** The LED
+counts above are fabricated, so they are not evidence of a spec discrepancy — they
+are evidence the images are synthetic. They are kept on disk, untracked and
+gitignored, purely as a record of what was reviewed.
+
+## Handheld device identity — reopened, and I got this wrong twice
+Current state of the evidence:
+- `handheld.webp` (our render): thick wand, round 13-lens head, LCD on the grip,
+  four buttons, **no hinge**.
+- Supplier booth photos (`7eee2cc2`, `dce274c3`, untracked): thin flat disc head
+  with leaf-shaped vent cutouts, **a separate hinge bracket with a visible pin**, and
+  a thin slab grip. Confirmed at high magnification on the neck joint.
+- `greenlightpics/processed-87168482` and `-BA105444`: thick wand, 13-lens head,
+  LCD, four buttons, no hinge — matches our render. But see the section above; these
+  may be synthetic too, so they confirm nothing on their own.
+
+A hinge is visible from any angle. Our render has none and the booth photo plainly
+has one, so those are different devices. I first called that out, then retracted it
+on the reasoning that front and back views were compatible — the retraction was
+wrong, because the hinge does not depend on which side you photograph.
+
+**Blocking:** `assets/handheld/handheld-inuse.webp` is cropped from `7eee2cc2` and
+is live on the Handheld PDP. It therefore probably shows a device we do not sell.
+It should come off that page unless the supplier confirms a folding variant. It was
+added at the owner's explicit request, so it has not been removed unilaterally.
 
 ## Counsel / launch list
 - The Legal Review drafts still list all five SKUs and their prices (Terms §2,
