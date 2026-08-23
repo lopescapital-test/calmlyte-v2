@@ -17,7 +17,7 @@ assets/
   site.js           Shared page behaviour: reveal observer + PDP image gallery
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
   handheld/         Handheld: hero, in-use, front, profile (4 files)
-  mask/             Mask: hero, held, package (3 files)
+  mask/             Mask: hero, worn, held, package (4 files)
   belt/             Belt: hero, lit flat, fastened (3 files)
   panel/            Panel: hero, Dusk, room, back, controls (5 files)
 ```
@@ -91,8 +91,26 @@ callouts match the spec table's 25.2 x 8.7 in exactly.
   "In the box" spec row still needs that list as real text. It is also the one
   image that must not be cropped, which is what `data-fit="square"` on its thumb
   and `.pdp-figure.fit-square` in site.css are for.
-- **Still wanted:** a worn shot of our own mould in green. `mask-worn.webp` was
-  removed 2026-08-20 because it showed the red unit; recoverable from git history.
+- **mask-worn.webp** (added 2026-08-22) — the worn shot that had been missing, and it
+  **is our mould**: single pinched aperture, temple pucks and perforated cheek band all
+  match the hero and the package shot. No brand mark on it. Copied verbatim rather than
+  re-encoded (the source is only 768px square) and carried with `data-fit="square"`
+  so nothing is cropped. At 768px it is barely 1x for the rendered figure, so it will
+  look slightly soft on high-DPI screens.
+
+  **BLOCKING — its light is RED.** Measured rgb(212,147,124) on the lit rim. This is a
+  green product: 520-530 nm green with 590 nm amber. This is exactly why the previous
+  worn shot was deleted on 2026-08-20. Replace with a green unit before launch.
+
+  **It also corroborates the spec problem.** The file arrived named
+  `TLM300PRO-L-LED-Face-Mask2-768x768.webp` — the same model whose supplier sheet
+  lists 460/665/850/1064 nm and **no green at all**. So there are now two independent
+  artifacts saying the sourced mask is a red/near-IR unit: the sheet, and a product
+  photo of it. The green claim needs supplier confirmation, not another render.
+
+  Renamed on copy, and the model number is deliberately kept out of the page markup —
+  a served HTML comment is readable by anyone who views source, and naming the OEM
+  there would hand over the white-label source. It lives in this file instead.
 
 Unused source renders sit untracked in `assets/mask/`: `mask 2.0.png`,
 `mask3.0.png`, `mask4.0.png`, `mask5.0.png`, `1b093d0d-….png`.

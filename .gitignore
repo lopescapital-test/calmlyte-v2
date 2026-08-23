@@ -13,4 +13,6 @@ assets/*/*.jpeg
 # Real assets live flat at assets/<product>/<name>.webp, so anything nested one
 # level deeper is a source-drop folder (e.g. "assets/panel/Panel New/").
 assets/*/*/
+# Source .webp drops (only .png/.jpg are covered by the patterns above).
 assets/mask/women lounging.webp
+assets/mask/TLM300PRO-L-LED-Face-Mask2-768x768.webp

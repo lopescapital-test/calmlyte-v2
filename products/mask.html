@@ -97,13 +97,26 @@
            mask-package.webp carries its contents as baked-in image text, so the
            "In the box" spec row still needs that list as real text, and it is the
            one image that must not be cropped — hence data-fit="square".
-           Still wanted: a worn shot of our own mould in green. The previous one
-           (assets/mask/mask-worn.webp, deleted 2026-08-20, recoverable from git)
-           showed the red unit. -->
+           mask-worn.webp (2026-08-22) IS our mould — single pinched aperture, temple
+           pucks and perforated cheek band all match the hero and the package shot. It
+           is the worn shot that had been missing. Carried with data-fit="square" so
+           the 768px square source is not cropped.
+           BLOCKING, and the same reason the previous worn shot was deleted on
+           2026-08-20: its light is RED, measured rgb(212,147,124) on the lit rim.
+           This is a green product — 520-530 nm green with 590 nm amber. Replace with
+           a green unit before launch.
+           The source filename named the supplier's model directly. Renamed on copy so
+           it stays out of URLs and out of page source; the model and what its sheet
+           says are recorded in README.md instead, because a served HTML comment is
+           readable by anyone who views source. -->
       <div class="pdp-thumbs" role="group" aria-label="Calmlyte Mask images">
         <button type="button" class="pdp-thumb" aria-current="true"
                 data-full="../assets/mask/mask.webp" data-alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it">
           <img src="../assets/mask/mask.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/mask/mask-worn.webp" data-alt="Calmlyte Mask worn, seen against a plain backdrop" data-fit="square">
+          <img src="../assets/mask/mask-worn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
         </button>
         <button type="button" class="pdp-thumb" aria-current="false"
                 data-full="../assets/mask/mask-held.webp" data-alt="Calmlyte Mask held up beside a face with its green light on">
