@@ -195,12 +195,18 @@ Three images only, per the owner's instruction. Sources live in
 ### panel-inuse.webp: the crop is load-bearing
 The uncropped frame shows a **third-party logo lockup reading "DEARDOO"** on the
 panel's control strip at the right edge — a mark plus wordmark, plainly legible at
-magnification. The crop cuts that strip off while keeping the whole LED face, and
-the tighter framing reads better anyway. Re-cropped tighter again on 2026-08-22 to
-enlarge the panel and drop dead space on the left: the window is now x 215-1115,
-y 265-940 of the source. **x cannot go past 1115 — that is where the control strip
-starts. Do not re-crop wider, and do not swap in
-the original.**
+magnification. The crop cuts that strip off while keeping the whole LED face.
+
+Measured in the source: the green LED array ends at **x=1102** and the first glyph of
+the lockup begins at **x=1127** — 25 px of clearance, and that is the entire budget.
+The crop window is now **x 290-1122, y 320-944**, so the right edge sits 20 px past
+the last LED and 5 px short of the first glyph. Every LED is in frame with a little
+bezel around it.
+
+**The right edge cannot move.** Pushing it further to show the whole panel pulls in
+the control screen and the lockup with it, so the panel body right of the LED array
+is permanently out of frame — that is the trade for using this image at all. To make
+the panel larger, crop the LEFT. Do not swap in the original.
 
 Two things the crop does not fix, both raised and both overridden by explicit
 instruction, so they need Emma rather than another pass from me:
