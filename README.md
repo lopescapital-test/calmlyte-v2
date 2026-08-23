@@ -67,12 +67,23 @@ on settings, because the Panel claims all four and would otherwise make the othe
 three look redundant. That tension is a positioning question worth deciding: a SKU
 that does everything undercuts the reason to buy any of the others.
 
-**Belt is not purchasable.** Its PDP shows a "Coming soon" chip rather than
-add-to-cart, and the homepage card matches with a non-interactive chip instead of an
-Add button. Reasons, both unresolved: its "In the box" row is still an open FACTS
-note, and it has no ship window ("Shipping details available at launch" against
-"Ships in 10-14 business days" everywhere else). Do not give it an Add button until
-both are settled.
+**All four are purchasable** as of 2026-08-22. Belt was the holdout with a "Coming
+soon" chip; it now has Add to cart on both the card and the PDP, and its ship line
+matches the others. That line is not invented — the homepage footer already commits
+site-wide to "made to order and delivered in 10-14 business days", so Belt is being
+brought into line with published policy rather than given a new promise.
+
+Checkout is still stubbed for every SKU. `CHECKOUT_LINKS` are all null, so Add fills
+the in-memory cart and the toast points at the contact address. Nothing can actually
+be bought yet.
+
+**Still open on Belt:** its "In the box" row remains an unanswered FACTS note. That
+was one of the two reasons it was held back, and unlike the ship window it has not
+been resolved — it is just no longer blocking the button. A buyable product with
+unknown box contents is a fulfilment problem, not a web problem.
+
+The `.soonbtn` component in site.css is now unused. Left in place deliberately: this
+lineup has churned repeatedly and a coming-soon state is likely wanted again.
 
 ## Mask photography (2026-08-20)
 Three images, all the same mould — single pinched eye aperture, temple pucks,

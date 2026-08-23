@@ -156,8 +156,10 @@
      confirmation.
      NOTE: the Panel is the only SKU claiming all four settings, which is why the copy
      below sells on form rather than on which settings each one runs.
-     Belt shows a non-interactive "Coming soon" chip instead of an Add button, matching
-     its PDP: its box contents are still unconfirmed and it has no ship window. -->
+     All four are purchasable as of 2026-08-22. Belt previously showed a "Coming soon"
+     chip; its ship window now matches the site-wide policy stated in the footer.
+     Checkout is still stubbed for every SKU — CHECKOUT_LINKS are all null, so Add
+     fills the in-memory cart and the toast points at the contact address. -->
 <header class="phero" id="top">
   <div class="phero-bg" aria-hidden="true"></div>
   <div class="phero-veil" aria-hidden="true"></div>
@@ -203,7 +205,7 @@
           <p class="pcard-modes">Settings · Stillness &amp; Haven</p>
         </div>
       </a>
-      <div class="pcard-row"><span class="pcard-price">$200</span><span class="soonbtn" aria-disabled="true">Coming soon</span></div>
+      <div class="pcard-row"><span class="pcard-price">$200</span><button class="addbtn" data-sku="belt" data-price="200" data-name="Belt">Add</button></div>
     </div>
     <div class="pcard reveal" style="transition-delay:.3s">
       <a class="pcard-link" href="products/mask.html">
@@ -520,7 +522,7 @@
   var CHECKOUT_LINKS = {
     "small-panel": null,   // Calmlyte Panel — $600
     "handheld":    null,   // Calmlyte Handheld — $450
-    "belt":        null,   // Calmlyte Belt — $200 (coming soon, no Add button)
+    "belt":        null,   // Calmlyte Belt — $200
     "mask":        null    // Calmlyte Mask — $400
   };
   var CONTACT_EMAIL = "hello@calmlyte.com";  // TODO: confirm the real monitored inbox before launch
