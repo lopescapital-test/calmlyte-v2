@@ -91,26 +91,22 @@ callouts match the spec table's 25.2 x 8.7 in exactly.
   "In the box" spec row still needs that list as real text. It is also the one
   image that must not be cropped, which is what `data-fit="square"` on its thumb
   and `.pdp-figure.fit-square` in site.css are for.
-- **mask-worn.webp** (added 2026-08-22) — the worn shot that had been missing, and it
-  **is our mould**: single pinched aperture, temple pucks and perforated cheek band all
-  match the hero and the package shot. No brand mark on it. Copied verbatim rather than
-  re-encoded (the source is only 768px square) and carried with `data-fit="square"`
-  so nothing is cropped. At 768px it is barely 1x for the rendered figure, so it will
-  look slightly soft on high-DPI screens.
+- **mask-worn.webp** — the worn shot, and it **is our mould**: single pinched
+  aperture, temple pucks and perforated cheek band all match the hero and the package
+  shot. No brand mark. Carried with `data-fit="square"` so nothing is cropped.
 
-  **BLOCKING — its light is RED.** Measured rgb(212,147,124) on the lit rim. This is a
-  green product: 520-530 nm green with 590 nm amber. This is exactly why the previous
-  worn shot was deleted on 2026-08-20. Replace with a green unit before launch.
+  **Replaced 2026-08-22 with a green unit** — measured rgb(87,186,103) on the lit
+  cheek band, from a 1254px source rather than the earlier 768px one. The first
+  version of this file was the red unit and has been deleted, which **clears the
+  blocking colour flag** that stood here. Do not reinstate a red one; this is a
+  520-530 nm green product.
 
-  **It also corroborates the spec problem.** The file arrived named
-  `TLM300PRO-L-LED-Face-Mask2-768x768.webp` — the same model whose supplier sheet
-  lists 460/665/850/1064 nm and **no green at all**. So there are now two independent
-  artifacts saying the sourced mask is a red/near-IR unit: the sheet, and a product
-  photo of it. The green claim needs supplier confirmation, not another render.
-
-  Renamed on copy, and the model number is deliberately kept out of the page markup —
-  a served HTML comment is readable by anyone who views source, and naming the OEM
-  there would hand over the white-label source. It lives in this file instead.
+  The red file had arrived named after the supplier's model — the same model whose
+  sheet lists 460/665/850/1064 nm and no green. **That contradiction is unaffected by
+  swapping the photo**: a green render does not make the sourced hardware green. The
+  model number stays recorded in this file and out of the page markup, because a
+  served HTML comment is readable by anyone viewing source and naming the OEM there
+  hands over the white-label source.
 
 Unused source renders sit untracked in `assets/mask/`: `mask 2.0.png`,
 `mask3.0.png`, `mask4.0.png`, `mask5.0.png`, `1b093d0d-….png`.
@@ -145,12 +141,14 @@ The LED count and weight discrepancies below are unaffected and still open.
 
 ## Belt photography (2026-08-22)
 - **belt.webp** — hero. Coiled on wood, LEDs lit.
-- **belt-inuse.webp** — belt held open at the waist. Cropped from a square source
-  to 4:3; only dead wall came off the top, nothing of the product or the figure.
-  **The first belt image showing green light**, which is on-spec where the mask and
-  handheld supplier shots were red. Light does fall on skin here — incidental spill
-  from a held-open belt rather than a treatment pose, but the copy rule draws no
-  such distinction.
+- **belt-inuse.webp** — belt **worn and fastened** in an everyday setting. Replaced
+  2026-08-22; the earlier version had it held open across a bare midriff. Measured
+  rgb(180,217,180) on the glow, so green and on-spec. Cropped from a square source to
+  4:3; only dead wall came off the top.
+
+  **Materially better on the copy rule.** The green shows at the band's top and bottom
+  edges, falling on a shirt and skirt rather than on bare skin — it reads as a lit
+  object being worn, not as light being applied to a body.
 - **belt-lit.webp** — opened flat, LED panel lit.
 - **belt-outer.webp** — fastened, seen from outside.
 
@@ -158,10 +156,11 @@ Both new shots are padded onto a 4:3 canvas in their own white, matching the
 figure's default frame so nothing is cropped. This PDP had no gallery before; one
 was added here.
 
-**On the 150-LED spec:** counting emitters on `belt-inuse.webp` lands anywhere from 53
-to 171 depending on detection threshold, so unlike belt-lit it is not obviously
-inconsistent with 150 — but it is synthetic too and must not be used to source the
-number either.
+**On the 150-LED spec:** the earlier held-open belt image put the visible-emitter
+count anywhere from 53 to 171 depending on detection threshold — no defensible
+figure. That image is gone, and the current one shows the belt closed, so it says
+nothing about the count at all. Neither could source the number. Only the supplier
+can.
 
 **Caveat:** `belt-lit.webp` shows a dense, perfectly uniform LED grid far denser
 than the spec table's **150 LEDs**. Do not use it to source or defend that number.
