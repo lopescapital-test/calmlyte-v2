@@ -138,7 +138,7 @@ Two contradictions the package shot exposes:
   and lists no app. Confirm whether both exist.
 
 ## Panel photography (2026-08-22)
- is the hero — a wide beauty shot in the same scene
+`assets/panel/panel.webp` is the hero — a wide beauty shot in the same scene
 language as the four per-setting renders (dark wood, leaf-shadowed green wall). It
 is also the homepage card image, matching how the Mask and Handheld cards track
 their PDP heroes.
@@ -152,7 +152,7 @@ palm raised to a panel on a side table. Three reasons, the first decisive:
    lenses.
 3. It shows **light falling on skin**, which the copy rule forbids depicting.
 
-Kept untracked in . Note this is a different judgement from the
+Kept untracked in `assets/panel/`. Note this is a different judgement from the
 greenlightpics set below: generated brand imagery is what this whole site runs on and
 is fine. What disqualifies an image is a third-party mark, a product that is not
 ours, fabricated spec detail presented as fact, or light shown acting on a body.
