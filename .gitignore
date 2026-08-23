@@ -1,9 +1,13 @@
-# Source drops and working files. These are raw renders, supplier photography and
-# archives that get normalised into assets/<product>/*.webp before use. They are
-# deliberately untracked: several are 2 MB+ each, and assets/greenlightpics is
-# ~25 MB of imagery the README documents as AI-generated and unusable.
+# Source drops and working files. Raw renders, supplier photography and archives
+# get normalised into assets/<product>/*.webp before use; the originals stay out of
+# the repo. Several are 2 MB+ each, and assets/greenlightpics is ~25 MB of imagery
+# the README documents as AI-generated and unusable.
+#
+# Only .webp is tracked under assets/<product>/, so a new product folder is covered
+# automatically rather than needing another line here.
 *.zip
 assets/greenlightpics/
-assets/mask/*.png
-assets/handheld/*.png
+assets/*/*.png
+assets/*/*.jpg
+assets/*/*.jpeg
 assets/mask/women lounging.webp

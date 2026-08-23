@@ -85,9 +85,18 @@
     <div class="pdp-grid reveal">
       <div class="pdp-gallery">
         <figure class="pdp-figure">
-          <img id="pdpMain" src="../assets/panel/panel-haven.webp" alt="Calmlyte Panel on a wood table against a leaf-shadowed green wall" loading="eager" decoding="async">
+          <img id="pdpMain" src="../assets/panel/panel.webp" alt="Calmlyte Panel on a dark wood table against a leaf-shadowed green wall, its green LEDs lit" loading="eager" decoding="async">
         </figure>
         <!-- PHOTOGRAPHY / COUNSEL NOTES
+             panel.webp is the hero beauty shot; the four panel-<setting>.webp renders
+             follow it, one per Calmlyte setting.
+             NOT used: the lifestyle image supplied alongside it (a person with a palm
+             raised to a panel on a side table). Three reasons, the first decisive: the
+             panel in it carries a third-party logo lockup reading "DEARDOO" on its
+             control screen; it is a different panel from ours (front-mounted control
+             screen, side vents, stone base, oval lenses, where ours has a plain face
+             and a white folding stand); and it shows light falling on skin, which the
+             copy rule forbids depicting. Kept untracked in assets/panel/.
              The four images are one panel photographed under each of its presets.
              BLOCKING: the spec table on this page asserts a 490-500 nm cyan-green
              channel. products/mask.html carries a standing FACTS note reading "do
@@ -99,7 +108,11 @@
              confirmed they ship with this one. -->
         <div class="pdp-thumbs" role="group" aria-label="Calmlyte Panel images">
         <button type="button" class="pdp-thumb" aria-current="true"
-                data-full="../assets/panel/panel-haven.webp" data-alt="Calmlyte Panel on a wood table against a leaf-shadowed green wall">
+                data-full="../assets/panel/panel.webp" data-alt="Calmlyte Panel on a dark wood table against a leaf-shadowed green wall, its green LEDs lit">
+          <img src="../assets/panel/panel.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/panel/panel-haven.webp" data-alt="Calmlyte Panel lit for the Haven setting">
           <img src="../assets/panel/panel-haven.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
         </button>
         <button type="button" class="pdp-thumb" aria-current="false"

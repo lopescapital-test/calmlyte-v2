@@ -19,7 +19,8 @@ assets/
   handheld/         Handheld photography (handheld.webp, handheld-inuse.webp)
   mask/             Mask photography (mask.webp hero, mask-held, mask-package)
   belt/             Belt photography (belt.webp)
-  panel/            Panel renders, one per setting, + 3 unused stage shots
+  panel/            Panel hero (panel.webp) + one render per setting,
+                    + 3 unused stage shots
 ```
 Product photography moved into per-product folders on 2026-08-20 so each SKU's
 shots sit together. The PDP gallery is markup-only: give the main image
@@ -135,6 +136,26 @@ Two contradictions the package shot exposes:
   so route the correction through Emma rather than editing it here.
 - **Control row.** Mask specs say "Bluetooth app"; the box ships a physical remote
   and lists no app. Confirm whether both exist.
+
+## Panel photography (2026-08-22)
+ is the hero — a wide beauty shot in the same scene
+language as the four per-setting renders (dark wood, leaf-shadowed green wall). It
+is also the homepage card image, matching how the Mask and Handheld cards track
+their PDP heroes.
+
+**Not used:** a lifestyle image supplied at the same time, showing a person with a
+palm raised to a panel on a side table. Three reasons, the first decisive:
+1. The panel in it carries a **third-party logo lockup reading "DEARDOO"** on its
+   control screen — a mark plus wordmark, plainly legible at magnification.
+2. It is **a different panel**: front-mounted control screen, side vents, stone base,
+   oval faceted lenses. Ours has a plain white face, a white folding stand and round
+   lenses.
+3. It shows **light falling on skin**, which the copy rule forbids depicting.
+
+Kept untracked in . Note this is a different judgement from the
+greenlightpics set below: generated brand imagery is what this whole site runs on and
+is fine. What disqualifies an image is a third-party mark, a product that is not
+ours, fabricated spec detail presented as fact, or light shown acting on a body.
 
 ## assets/greenlightpics — investigated 2026-08-22, DO NOT USE
 Nine JPEGs, extracted from `assets/Green light pics .zip`. Five panels, two
