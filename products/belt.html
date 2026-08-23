@@ -80,9 +80,31 @@
   <div class="pdp-inner">
     <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Products &nbsp;/&nbsp; Belt</div>
     <div class="pdp-grid reveal">
-      <figure class="pdp-figure">
-        <img id="pdpMain" src="../assets/belt/belt.webp" alt="Calmlyte Belt wrap coiled on a wood table, green LEDs lit inside" loading="eager" decoding="async">
-      </figure>
+      <div class="pdp-gallery">
+        <figure class="pdp-figure">
+          <img id="pdpMain" src="../assets/belt/belt.webp" alt="Calmlyte Belt wrap coiled on a wood table, green LEDs lit inside" loading="eager" decoding="async">
+        </figure>
+        <!-- PHOTOGRAPHY NOTES
+             belt-lit and belt-outer are studio shots padded onto a 4:3 canvas in their
+             own white, matching the figure's default frame so nothing is cropped.
+             belt-lit shows a dense uniform LED grid far denser than the spec table's
+             "150 LEDs" — do not use it to source or defend that number. Both come from
+             the set the README documents as AI-generated; added on instruction. -->
+        <div class="pdp-thumbs" role="group" aria-label="Calmlyte Belt images">
+        <button type="button" class="pdp-thumb" aria-current="true"
+                data-full="../assets/belt/belt.webp" data-alt="Calmlyte Belt wrap coiled on a wood table, green LEDs lit inside">
+          <img src="../assets/belt/belt.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/belt/belt-lit.webp" data-alt="Calmlyte Belt opened flat with its green LED panel lit">
+          <img src="../assets/belt/belt-lit.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        <button type="button" class="pdp-thumb" aria-current="false"
+                data-full="../assets/belt/belt-outer.webp" data-alt="Calmlyte Belt fastened, seen from the outside">
+          <img src="../assets/belt/belt-outer.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </button>
+        </div>
+      </div>
       <div class="pdp-info">
         <p class="eyebrow">Wearable green light</p>
         <h1 class="h1">Calmlyte Belt</h1>

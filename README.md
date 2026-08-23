@@ -16,10 +16,10 @@ assets/
   site.css          Shared design system: tokens, nav, footer, PDP + learn layout
   site.js           Shared page behaviour: reveal observer + PDP image gallery
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
-  handheld/         Handheld photography (handheld.webp, handheld-inuse.webp)
-  mask/             Mask photography (mask.webp hero, mask-held, mask-package)
-  belt/             Belt photography (belt.webp)
-  panel/            Panel hero, Dusk setting, room scene (3 files, see below)
+  handheld/         Handheld: hero, in-use, front, profile (4 files)
+  mask/             Mask: hero, held, package (3 files)
+  belt/             Belt: hero, lit flat, fastened (3 files)
+  panel/            Panel: hero, Dusk, room, back, controls (5 files)
 ```
 Product photography moved into per-product folders on 2026-08-20 so each SKU's
 shots sit together. The PDP gallery is markup-only: give the main image
@@ -110,6 +110,9 @@ Unused source renders sit untracked in `assets/mask/`: `mask 2.0.png`,
 - **Not added:** `dce274c3-….png` (untracked). The poster child sits directly
   behind the device, so every crop that keeps the product also keeps the child.
   It cannot be salvaged by cropping.
+- **handheld-front.webp / handheld-side.webp** — studio shots, face-on and in
+  profile. Padded onto a 1:1 canvas in their own white and carried with
+  `data-fit="square"`, so nothing is cropped.
 - **Still wanted:** our own in-use photography, shot against the brand's surfaces
   rather than a booth.
 
@@ -121,6 +124,19 @@ bracket our render does not, so they are different devices, which makes
 here — it argued front and back views were compatible, which a visible hinge defeats.
 
 The LED count and weight discrepancies below are unaffected and still open.
+
+## Belt photography (2026-08-22)
+- **belt.webp** — hero. Coiled on wood, LEDs lit.
+- **belt-lit.webp** — opened flat, LED panel lit.
+- **belt-outer.webp** — fastened, seen from outside.
+
+Both new shots are padded onto a 4:3 canvas in their own white, matching the
+figure's default frame so nothing is cropped. This PDP had no gallery before; one
+was added here.
+
+**Caveat:** `belt-lit.webp` shows a dense, perfectly uniform LED grid far denser
+than the spec table's **150 LEDs**. Do not use it to source or defend that number.
+It comes from the set documented below as AI-generated.
 
 ## Specs still unresolved with the supplier
 From the sheet for model TLM300PRO-L: **236 LEDs vs the site's 72**, and
@@ -145,6 +161,8 @@ Three images only, per the owner's instruction. Sources live in
 | `panel.webp` | Hero. Wide beauty shot, 1600x895, also the homepage card image. |
 | `panel-dusk.webp` | The Dusk setting. |
 | `panel-inuse.webp` | A room scene. **Cropped — see below.** |
+| `panel-back.webp` | Rear view: vent grille and folding stand. |
+| `panel-controls.webp` | Side view with the control screen. **See caveat.** |
 
 ### panel-inuse.webp: the crop is load-bearing
 The uncropped frame shows a **third-party logo lockup reading "DEARDOO"** on the
@@ -161,6 +179,13 @@ instruction, so they need Emma rather than another pass from me:
    through the three thumbs sees two different products.
 2. **It shows light falling on skin** (a raised palm), which the copy rule forbids
    depicting.
+
+### panel-controls.webp caveat
+Its touchscreen carries AI-generated gibberish — "CoUKoons", "Time atore ka",
+"IrafutRoood". Illegible at render size, obvious to anyone who zooms. Separately,
+the spec table lists control as **a Bluetooth app** and mentions no on-device
+screen, so this image shows an interface the specs do not claim. Added on
+instruction; both points are for Emma.
 
 ### Deleted here
 The four per-setting renders (`panel-haven`, `panel-focus`, `panel-stillness`) and the three
@@ -208,9 +233,14 @@ Current state of the evidence:
 - Supplier booth photos (`7eee2cc2`, `dce274c3`, untracked): thin flat disc head
   with leaf-shaped vent cutouts, **a separate hinge bracket with a visible pin**, and
   a thin slab grip. Confirmed at high magnification on the neck joint.
-- `greenlightpics/processed-87168482` and `-BA105444`: thick wand, 13-lens head,
-  LCD, four buttons, no hinge — matches our render. But see the section above; these
-  may be synthetic too, so they confirm nothing on their own.
+- `assets/handheld/handheld-front.webp` and `handheld-side.webp` (now IN the
+  gallery): thick wand, round multi-lens head, LCD, four buttons, and in profile a
+  single continuous moulding with **no hinge** — matches our render. They may be
+  synthetic too, so they are not independent proof of the real hardware, but they do
+  put our render's device and the booth photo's device side by side in one gallery.
+
+**A visitor clicking through the Handheld gallery now sees two different products.**
+That was a documentation problem before; it is a visible one now.
 
 A hinge is visible from any angle. Our render has none and the booth photo plainly
 has one, so those are different devices. I first called that out, then retracted it
