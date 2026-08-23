@@ -10,4 +10,7 @@ assets/greenlightpics/
 assets/*/*.png
 assets/*/*.jpg
 assets/*/*.jpeg
+# Real assets live flat at assets/<product>/<name>.webp, so anything nested one
+# level deeper is a source-drop folder (e.g. "assets/panel/Panel New/").
+assets/*/*/
 assets/mask/women lounging.webp

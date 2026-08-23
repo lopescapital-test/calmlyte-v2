@@ -7,10 +7,10 @@ Production-prepped static storefront. No backend required. Payments are stubbed
 ## Structure
 ```
 index.html          Intro gate + interactive mode-switcher hero
-                    (Haven/Focus/Stillness/Dusk), two-form product grid, learn teaser
-products/           2 product pages (handheld, mask). The separate shop index was
-                    removed 2026-08-20: it duplicated the homepage products block.
-                    Nav Shop now points at index.html#top.
+                    (Haven/Focus/Stillness/Dusk), four-form product grid, learn teaser
+products/           4 product pages (panel, handheld, belt, mask). The separate
+                    shop index was removed 2026-08-20: it duplicated the homepage
+                    products block. Nav Shop now points at index.html#top.
 learn/              green-light.html (counsel-cleared spectrum article), faq.html
 assets/
   site.css          Shared design system: tokens, nav, footer, PDP + learn layout
@@ -19,16 +19,17 @@ assets/
   handheld/         Handheld photography (handheld.webp, handheld-inuse.webp)
   mask/             Mask photography (mask.webp hero, mask-held, mask-package)
   belt/             Belt photography (belt.webp)
-  panel/            Panel hero (panel.webp) + one render per setting,
-                    + 3 unused stage shots
+  panel/            Panel hero, Dusk setting, room scene (3 files, see below)
 ```
 Product photography moved into per-product folders on 2026-08-20 so each SKU's
 shots sit together. The PDP gallery is markup-only: give the main image
 `id="pdpMain"` and add `.pdp-thumb` buttons carrying `data-full` + `data-alt`.
 site.js wires the swap and needs more than one thumb to activate, so a
 single-image PDP degrades to a plain figure.
-Orphaned assets from the retired 5-SKU lineup (belt / panel-pro / panel-<mode> /
-sig-*) were deleted 2026-07-06 — recoverable from git history if the lineup returns.
+Assets are pruned when they stop being referenced rather than left orphaned in the
+tree; git history is the recovery path. Removed so far: the retired-lineup assets on
+2026-07-06 (panel-pro, sig-*), `mask-worn.webp` on 2026-08-20, and the four
+per-setting Panel renders plus three `stage-*.webp` on 2026-08-22.
 
 ## Internal review view
 `[FACTS]` notes and the counsel banner on `learn/green-light.html` are hidden from
@@ -112,14 +113,12 @@ Unused source renders sit untracked in `assets/mask/`: `mask 2.0.png`,
 - **Still wanted:** our own in-use photography, shot against the brand's surfaces
   rather than a booth.
 
-### Retracted: the "different handheld" claim
-An earlier note here said the supplier photos showed a different device from
-`handheld.webp` — "a thin folding paddle" versus "a thick wand with an LCD timer."
-That was wrong, and wrong the same way the `mask-worn.webp` call was: over-reading
-detail from one angle. The photos show the **back** of the device — vent cutouts and
-the hinge bracket — while the render shows the **front**, where the LCD and buttons
-live. Round thick-rimmed head and rectangular slab grip in both. The two views are
-compatible with one device. Nothing here establishes a mismatch.
+### Device identity
+This was called wrong twice and the current reading lives in **"Handheld device
+identity — reopened"** further down. Short version: the booth photos have a hinge
+bracket our render does not, so they are different devices, which makes
+`handheld-inuse.webp` suspect. Do not re-add the retraction that used to sit
+here — it argued front and back views were compatible, which a visible hinge defeats.
 
 The LED count and weight discrepancies below are unaffected and still open.
 
@@ -138,24 +137,42 @@ Two contradictions the package shot exposes:
   and lists no app. Confirm whether both exist.
 
 ## Panel photography (2026-08-22)
-`assets/panel/panel.webp` is the hero — a wide beauty shot in the same scene
-language as the four per-setting renders (dark wood, leaf-shadowed green wall). It
-is also the homepage card image, matching how the Mask and Handheld cards track
-their PDP heroes.
+Three images only, per the owner's instruction. Sources live in
+`assets/panel/Panel New/` and are gitignored.
 
-**Not used:** a lifestyle image supplied at the same time, showing a person with a
-palm raised to a panel on a side table. Three reasons, the first decisive:
-1. The panel in it carries a **third-party logo lockup reading "DEARDOO"** on its
-   control screen — a mark plus wordmark, plainly legible at magnification.
-2. It is **a different panel**: front-mounted control screen, side vents, stone base,
-   oval faceted lenses. Ours has a plain white face, a white folding stand and round
-   lenses.
-3. It shows **light falling on skin**, which the copy rule forbids depicting.
+| file | what it is |
+| --- | --- |
+| `panel.webp` | Hero. Wide beauty shot, 1600x895, also the homepage card image. |
+| `panel-dusk.webp` | The Dusk setting. |
+| `panel-inuse.webp` | A room scene. **Cropped — see below.** |
 
-Kept untracked in `assets/panel/`. Note this is a different judgement from the
-greenlightpics set below: generated brand imagery is what this whole site runs on and
-is fine. What disqualifies an image is a third-party mark, a product that is not
-ours, fabricated spec detail presented as fact, or light shown acting on a body.
+### panel-inuse.webp: the crop is load-bearing
+The uncropped frame shows a **third-party logo lockup reading "DEARDOO"** on the
+panel's control strip at the right edge — a mark plus wordmark, plainly legible at
+magnification. The crop cuts that strip off while keeping the whole LED face, and
+the tighter framing reads better anyway. **Do not re-crop wider, and do not swap in
+the original.**
+
+Two things the crop does not fix, both raised and both overridden by explicit
+instruction, so they need Emma rather than another pass from me:
+1. **It is not the same panel** as the other two images. It has a front-mounted
+   control screen, side vents, a stone base and oval faceted lenses. Ours has a
+   plain white face, a white folding stand and round lenses. A visitor clicking
+   through the three thumbs sees two different products.
+2. **It shows light falling on skin** (a raised palm), which the copy rule forbids
+   depicting.
+
+### Deleted here
+The four per-setting renders (`panel-haven`, `panel-focus`, `panel-stillness`) and the three
+unused `stage-*.webp` shots were removed rather than left orphaned in the tree.
+All are recoverable from git history.
+
+### On generated imagery generally
+This is not an "AI images are unusable" rule — generated imagery is what this whole
+site runs on, including the panel hero. What disqualifies an image is a third-party
+mark, a product that is not ours, fabricated spec detail presented as fact, or light
+shown acting on a body. See the greenlightpics section below for a set that failed
+on three of those four.
 
 ## assets/greenlightpics — investigated 2026-08-22, DO NOT USE
 Nine JPEGs, extracted from `assets/Green light pics .zip`. Five panels, two
