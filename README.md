@@ -18,7 +18,7 @@ assets/
   forest-*.webp     4 scene backgrounds (forest-haven doubles as the intro gate)
   handheld/         Handheld: hero, in-use, front, profile (4 files)
   mask/             Mask: hero, worn, held, package (4 files)
-  belt/             Belt: hero, lit flat, fastened (3 files)
+  belt/             Belt: hero, in-use, lit flat, fastened (4 files)
   panel/            Panel: hero, Dusk, room, back, controls (5 files)
 ```
 Product photography moved into per-product folders on 2026-08-20 so each SKU's
@@ -145,12 +145,23 @@ The LED count and weight discrepancies below are unaffected and still open.
 
 ## Belt photography (2026-08-22)
 - **belt.webp** — hero. Coiled on wood, LEDs lit.
+- **belt-inuse.webp** — belt held open at the waist. Cropped from a square source
+  to 4:3; only dead wall came off the top, nothing of the product or the figure.
+  **The first belt image showing green light**, which is on-spec where the mask and
+  handheld supplier shots were red. Light does fall on skin here — incidental spill
+  from a held-open belt rather than a treatment pose, but the copy rule draws no
+  such distinction.
 - **belt-lit.webp** — opened flat, LED panel lit.
 - **belt-outer.webp** — fastened, seen from outside.
 
 Both new shots are padded onto a 4:3 canvas in their own white, matching the
 figure's default frame so nothing is cropped. This PDP had no gallery before; one
 was added here.
+
+**On the 150-LED spec:** counting emitters on `belt-inuse.webp` lands anywhere from 53
+to 171 depending on detection threshold, so unlike belt-lit it is not obviously
+inconsistent with 150 — but it is synthetic too and must not be used to source the
+number either.
 
 **Caveat:** `belt-lit.webp` shows a dense, perfectly uniform LED grid far denser
 than the spec table's **150 LEDs**. Do not use it to source or defend that number.
