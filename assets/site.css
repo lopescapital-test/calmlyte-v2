@@ -128,7 +128,8 @@ nav.solid{background:linear-gradient(to bottom,rgba(15,23,18,.94),rgba(15,23,18,
 .pcard-price{font-size:16px;color:var(--cream);font-weight:300}
 .shop-foot{text-align:center;margin:var(--space-block) auto 0}
 .shop-note{text-align:center;margin:var(--space-el) auto 0;max-width:var(--w-prose)}
-.shop-note a{color:var(--gold-soft);text-decoration:none}
+/* the safety link sits on its own line under the note, not trailing its last sentence */
+.shop-note a{color:var(--gold-soft);text-decoration:none;display:block;margin-top:10px}
 .shop-note a:hover{text-decoration:underline}
 
 /* ---------- footer ---------- */

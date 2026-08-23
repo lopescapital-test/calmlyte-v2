@@ -168,7 +168,10 @@ Three images only, per the owner's instruction. Sources live in
 The uncropped frame shows a **third-party logo lockup reading "DEARDOO"** on the
 panel's control strip at the right edge — a mark plus wordmark, plainly legible at
 magnification. The crop cuts that strip off while keeping the whole LED face, and
-the tighter framing reads better anyway. **Do not re-crop wider, and do not swap in
+the tighter framing reads better anyway. Re-cropped tighter again on 2026-08-22 to
+enlarge the panel and drop dead space on the left: the window is now x 215-1115,
+y 265-940 of the source. **x cannot go past 1115 — that is where the control strip
+starts. Do not re-crop wider, and do not swap in
 the original.**
 
 Two things the crop does not fix, both raised and both overridden by explicit
