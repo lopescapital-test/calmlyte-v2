@@ -1,0 +1,43 @@
+{
+  "shopDomain": "e6hqgs-hu.myshopify.com",
+  "apiVersion": "2026-07",
+  "currency": "USD",
+  "variants": {
+    "small-panel": {
+      "sku": "small-panel",
+      "handle": "calmlyte-panel",
+      "name": "Panel",
+      "variantId": "gid://shopify/ProductVariant/49423562997915",
+      "variantTitle": "Default Title",
+      "price": 600,
+      "currency": "USD"
+    },
+    "handheld": {
+      "sku": "handheld",
+      "handle": "calmlyte-handheld",
+      "name": "Handheld",
+      "variantId": "gid://shopify/ProductVariant/49423562440859",
+      "variantTitle": "Default Title",
+      "price": 450,
+      "currency": "USD"
+    },
+    "studio-panel": {
+      "sku": "studio-panel",
+      "handle": "calmlyte-studio-panel",
+      "name": "Studio Panel",
+      "variantId": "gid://shopify/ProductVariant/49423562768539",
+      "variantTitle": "Default Title",
+      "price": 6000,
+      "currency": "USD"
+    },
+    "belt": {
+      "sku": "belt",
+      "handle": "calmlyte-belt",
+      "name": "Belt",
+      "variantId": "gid://shopify/ProductVariant/49423572598939",
+      "variantTitle": "Default Title",
+      "price": 200,
+      "currency": "USD"
+    }
+  }
+}

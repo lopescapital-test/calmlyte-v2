@@ -30,3 +30,10 @@ build/
 # Calmlyte Approved Site/assets/, which is tracked. Kept on disk as part of the
 # delivered artifact; not carried in the tracked set.
 Calmlyte Approved Site/uploads/
+
+# Shopify Storefront token. Read from the environment by
+# tools/resolve-variants.js and never written to a tracked file; these patterns
+# exist so a local .env cannot be committed by accident. The Storefront token is
+# publishable, but an Admin token is not and must never land here.
+.env
+.env.*
