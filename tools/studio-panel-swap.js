@@ -55,8 +55,30 @@ const ALT_SIDE = 'Calmlyte Studio Panel at an angle on its floor stand, unlit, s
 const ALT_REAR = 'Calmlyte Studio Panel from behind on its floor stand, showing the cooling fan array across the rear housing';
 const ALT_FRONT = 'Calmlyte Studio Panel face-on on its floor stand, unlit, showing the full LED lens array';
 
-/* The PDP entry, replacing PRODUCTS.mask. Specs are exactly as supplied; the
-   three unconfirmed rows keep [FACTS:] markers per the brief. */
+/* The PDP entry, replacing PRODUCTS.mask. Specs are exactly as supplied.
+ *
+ * Three rows are deliberately absent — Control, In the box, and Suggested use.
+ * None was ever supplied, and an internal editorial marker does not belong on a
+ * public page, so the rows are withheld rather than filled or left visibly
+ * empty. Jake's instruction, 2026-08-31: keep only confirmed specs visible.
+ *
+ * Do not populate them from the other SKUs:
+ *   Control       - the side and rear renders appear to show two physical dials,
+ *                   but that is inference from a photograph. The other three
+ *                   SKUs claim Bluetooth app control; that is their spec.
+ *   In the box    - the other three share one contents string naming a USB
+ *                   charging cable. This panel is mains-rated at 5760W, so
+ *                   copying it would state something false.
+ *   Suggested use - the other three say 10-45 minutes. At 5760W and
+ *                   >=2160 W/m² this is a far more powerful device, and a
+ *                   session length carries a safety implication.
+ *
+ * Restore a row only when manufacturing confirms the value.
+ *
+ * NOTE: everything inside the PDP_ENTRY template literal below is injected into
+ * the built page and served to visitors. Explanatory notes belong here, outside
+ * it — a comment written inside it once shipped the very marker text it was
+ * describing, which is what the build's internal-marker assertion now catches. */
 const PDP_ENTRY = `  '${SKU}': {
     sku: '${SKU}', name: '${CARD_NAME}', title: '${FULL_NAME}', price: '${PRICE_DISPLAY}', priceN: ${PRICE_NUMBER},
     eyebrow: 'Room-scale green light',
@@ -75,9 +97,6 @@ const PDP_ENTRY = `  '${SKU}': {
       ['LED quantity', '1152 pcs dual chips'],
       ['Dimensions', '74.49″ × 22.83″ × 2.56″'],
       ['Power consumption', '5760W'],
-      ['Control', '[FACTS: confirm control method]'],
-      ['In the box', '[FACTS: confirm Studio Panel box contents]'],
-      ['Suggested use', '[FACTS: confirm suggested use for Studio Panel]'],
       ['Warranty', '1-year limited warranty']
     ],
     safety: SAFETY_STD

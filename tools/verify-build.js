@@ -142,6 +142,17 @@ function verify(outDir) {
     }
   }
 
+  /* 3c — internal editorial markers must never reach a public page. [FACTS:] and
+   *      [LEGAL:] are working notes: an unconfirmed row is withheld, not shipped
+   *      with its own to-do visible. Three of these were live on the staging
+   *      domain before being caught by eye rather than by the build. */
+  for (const f of all) {
+    const text = read(f);
+    for (const m of text.matchAll(/\[(?:FACTS|LEGAL):[^\]]*\]/g)) {
+      failures.push(`${f}: internal marker "${m[0]}" reached the build`);
+    }
+  }
+
   /* 4 — noindex on every page, every build. */
   for (const f of pages) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
@@ -161,6 +172,7 @@ function report(result) {
   console.log(`  bindings resolved ............. ${has('binding') ? 'FAIL' : 'pass'}`);
   console.log(`  checkout inert (gate closed) .. ${has('checkout') || has('commerce marker') ? 'FAIL' : 'pass'}`);
   console.log(`  withdrawn Mask fully removed .. ${has('withdrawn Mask') ? 'FAIL' : 'pass'}`);
+  console.log(`  no internal markers shipped ... ${has('internal marker') ? 'FAIL' : 'pass'}`);
   console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);
   console.log(`  files checked ................. ${result.counts.files} (${result.counts.pages} pages)`);
