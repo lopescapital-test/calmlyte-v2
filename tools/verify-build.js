@@ -116,6 +116,32 @@ function verify(outDir) {
     }
   }
 
+  /* 3b — the Mask is withdrawn. It must not reappear as an active product:
+   *      no purchasable SKU, no card, no PDP entry, no cart metadata, no
+   *      shipped imagery. SAFETY_MASK survives in Product.dc.html as a dead
+   *      constant with the same text as SAFETY_STD — not user-visible, and not
+   *      matched here. */
+  const MASK_ACTIVE = [
+    "sku: 'mask'",          // Shop ITEMS / PDP entry
+    "'mask':",              // Cart META key
+    "add('mask')",          // Cart add handler
+    'sku=mask',             // any surviving product link
+    'assets/mask-'          // any shipped Mask image reference
+  ];
+  for (const f of all) {
+    const text = read(f);
+    for (const marker of MASK_ACTIVE) {
+      if (text.includes(marker)) {
+        failures.push(`${f}: withdrawn Mask still active — found "${marker}"`);
+      }
+    }
+  }
+  for (const img of ['mask-hero.webp', 'mask-front.webp', 'mask-rear.webp', 'mask-side.webp', 'mask-package.webp']) {
+    if (fs.existsSync(path.join(OUT, 'assets', img))) {
+      failures.push(`assets/${img}: withdrawn Mask imagery shipped into the build`);
+    }
+  }
+
   /* 4 — noindex on every page, every build. */
   for (const f of pages) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
@@ -134,6 +160,7 @@ function report(result) {
   console.log(`  design-tool routes in output ... ${has('design-tool') ? 'FAIL' : 'pass'}`);
   console.log(`  bindings resolved ............. ${has('binding') ? 'FAIL' : 'pass'}`);
   console.log(`  checkout inert (gate closed) .. ${has('checkout') || has('commerce marker') ? 'FAIL' : 'pass'}`);
+  console.log(`  withdrawn Mask fully removed .. ${has('withdrawn Mask') ? 'FAIL' : 'pass'}`);
   console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);
   console.log(`  files checked ................. ${result.counts.files} (${result.counts.pages} pages)`);

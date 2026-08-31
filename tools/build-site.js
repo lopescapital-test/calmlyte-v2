@@ -20,6 +20,12 @@
 const fs = require('fs');
 const path = require('path');
 const { verify: verifyBuild, report: reportAssertions } = require('./verify-build');
+const SWAP = require('./studio-panel-swap');
+const HOLDERS = require('./image-holders');
+
+/* Artboard-level string rules, applied in order. Both sets assert their match
+   counts, so a rule that stops matching fails the build. */
+const ARTBOARD_RULES = SWAP.RULES.concat(HOLDERS.RULES);
 
 const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'Calmlyte Approved Site');
@@ -108,6 +114,18 @@ const OPTIMIZED = {
   'handheld-card.png': 'handheld-card.webp'
 };
 
+/* Assets added to the build that are not part of the approved artboard set.
+   Source PNGs live in assets/8.30.26/ and are preserved; these are the WebP
+   derivatives, generated at the same pixel dimensions. Kept outside
+   'Calmlyte Approved Site/' so that directory stays byte-identical to the set
+   recorded in Legal Review. */
+const ADDED_ASSETS = {
+  'assets/studio-panel/studio-panel-hero.webp': 'studio-panel-hero.webp',
+  'assets/studio-panel/studio-panel-side.webp': 'studio-panel-side.webp',
+  'assets/studio-panel/studio-panel-rear.webp': 'studio-panel-rear.webp',
+  'assets/studio-panel/studio-panel-front.webp': 'studio-panel-front.webp'
+};
+
 /* ------------------------------------------------------------------ *
  * Responsive layer.
  *
@@ -183,6 +201,10 @@ const report = {
   missingAssets: [],
   assetsCopied: [],
   optimized: [],
+  added: [],
+  excluded: [],
+  swapApplied: [],
+  swapFailures: [],
   links: new Set()
 };
 
@@ -327,8 +349,39 @@ function slice(src, openRe, closeTag) {
   return { inner: src.slice(start, end), start: open.index, end: end + closeTag.length };
 }
 
+/* Mask -> Studio Panel. Applied to the whole artboard before it is split into
+   helmet / markup / logic, so a rule can target either side. Every rule asserts
+   its match count: a rule that stops matching fails the build rather than
+   silently leaving the Mask in place. */
+function applyProductSwap(src, file) {
+  let out = src;
+  for (const rule of ARTBOARD_RULES) {
+    if (rule.file !== file) continue;
+    let found;
+    if (rule.fromRe) {
+      found = (out.match(new RegExp(rule.fromRe.source, rule.fromRe.flags.replace('g', '') + 'g')) || []).length;
+      if (found === rule.count) out = out.replace(rule.fromRe, rule.to);
+    } else {
+      found = out.split(rule.from).length - 1;
+      if (found === rule.count) out = out.split(rule.from).join(rule.to);
+    }
+    if (found !== rule.count) {
+      report.swapFailures.push(`${file}: rule "${rule.label}" matched ${found}×, expected ${rule.count}`);
+    } else {
+      report.swapApplied.push(`${file}: ${rule.label} (${found}×)`);
+    }
+  }
+  /* Any ?sku=mask left over points at a product that no longer exists. */
+  const links = out.split(SWAP.SKU_LINK.from).length - 1;
+  if (links) {
+    out = out.split(SWAP.SKU_LINK.from).join(SWAP.SKU_LINK.to);
+    report.swapApplied.push(`${file}: ?${SWAP.SKU_LINK.from} -> ?${SWAP.SKU_LINK.to} (${links}×)`);
+  }
+  return out;
+}
+
 function extract(file) {
-  const src = fs.readFileSync(path.join(SRC, file), 'utf8');
+  const src = applyProductSwap(fs.readFileSync(path.join(SRC, file), 'utf8'), file);
 
   const dc = slice(src, /<x-dc(?:\s[^>]*)?>/, '</x-dc>');
   if (!dc) throw new Error('no <x-dc> block in ' + file);
@@ -439,6 +492,13 @@ function copyAssets() {
     const s = fs.statSync(path.join(from, f));
     if (!s.isFile()) continue;
 
+    /* Withdrawn-product imagery: present in the approved set, referenced by no
+       page, so not shipped. */
+    if (SWAP.EXCLUDED_ASSETS.includes(f)) {
+      report.excluded.push({ name: f, bytes: s.size });
+      continue;
+    }
+
     const swap = OPTIMIZED[f];
     if (swap) {
       const src = path.join(ROOT, 'tools', 'optimized', swap);
@@ -459,6 +519,19 @@ function copyAssets() {
     report.assetsCopied.push({ name: f, bytes: s.size });
   }
   fs.copyFileSync(path.join(ROOT, 'tools', 'dc-runtime.js'), path.join(to, 'dc.js'));
+
+  /* Assets added outside the approved artboard set. */
+  for (const [from, name] of Object.entries(ADDED_ASSETS)) {
+    const srcPath = path.join(ROOT, from);
+    if (!fs.existsSync(srcPath)) {
+      report.unresolved.push('added asset missing: ' + from);
+      continue;
+    }
+    fs.copyFileSync(srcPath, path.join(to, name));
+    const bytes = fs.statSync(srcPath).size;
+    report.assetsCopied.push({ name, bytes });
+    report.added.push({ name, from, bytes });
+  }
 }
 
 function checkAssetRefs() {
@@ -500,6 +573,26 @@ function main() {
   console.log(`\nBINDINGS: ${report.bindings.size} distinct`);
   console.log(`LINKS REWRITTEN: ${report.links.size} distinct`);
   for (const l of [...report.links].sort()) console.log('  ' + l);
+
+  console.log('\nPRODUCT SWAP (Mask -> Studio Panel)');
+  for (const a of report.swapApplied) console.log('  applied  ' + a);
+  if (report.swapFailures.length) {
+    console.error('\nBUILD FAILED — product swap did not apply cleanly:');
+    for (const f of report.swapFailures) console.error('  ' + f);
+    process.exit(1);
+  }
+
+  console.log('\nEXCLUDED ASSETS (withdrawn product, not shipped)');
+  if (!report.excluded.length) console.log('  none');
+  for (const e of report.excluded) {
+    console.log(`  ${e.name.padEnd(26)} ${(e.bytes / 1024).toFixed(0).padStart(5)} KB   (kept in the approved set)`);
+  }
+
+  console.log('\nADDED ASSETS (outside the approved set)');
+  if (!report.added.length) console.log('  none');
+  for (const a of report.added) {
+    console.log(`  ${a.name.padEnd(26)} ${(a.bytes / 1024).toFixed(0).padStart(5)} KB   <- ${a.from}`);
+  }
 
   console.log('\nIMAGE OPTIMIZATION');
   if (!report.optimized.length) console.log('  none');
