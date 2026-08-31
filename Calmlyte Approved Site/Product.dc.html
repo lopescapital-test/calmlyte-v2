@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:3px;border-radius:4px}
+/* Nav responsive ladder from calmlyte/assets/site.css — inline styles need
+   !important to be overridden at breakpoints. */
+@media(max-width:760px){
+  nav{padding:14px 20px!important}
+  nav > div{gap:2px!important}
+  nav > div > a{font-size:10px!important;letter-spacing:1px!important;padding:8px 9px!important}
+  nav > div > a:last-child{padding:6px 14px!important;margin-left:6px!important}
+}
+@media(max-width:560px){
+  nav > a > span{display:none}
+  nav > div > a{padding:8px 6px!important}
+}
+</style>
+</helmet>
+
+<div style="background:#0F1712;min-height:100vh">
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;background:rgba(15,23,18,.92);backdrop-filter:blur(14px)">
+  <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+    <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+  </div>
+  <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+  <div style="display:flex;align-items:center;gap:2px">
+    <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+    <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;padding:8px 13px;border-bottom:1px solid #D9B368">Shop</a>
+    <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Spectrum</a>
+    <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Studies</a>
+    <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">FAQ</a>
+    <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:20px;padding:7px 16px" style-hover="background:rgba(217,179,104,.14)">Cart {{ cartLabel }}</a>
+  </div>
+</nav>
+
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:min(620px,80vh);overflow:hidden;pointer-events:none">
+  <div style="position:absolute;inset:0;background-image:url('assets/forest-haven.webp');background-size:cover;background-position:center;opacity:.42"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.55) 0%,rgba(15,23,18,.72) 55%,rgba(15,23,18,.98) 100%)"></div>
+</div>
+
+<div style="position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:clamp(112px,8vw,160px) clamp(24px,5vw,88px) 0">
+  <p style="font-size:12px;letter-spacing:1px;color:#8A9B84;margin-bottom:28px"><a href="Shop.dc.html" style="color:#8A9B84">Calmlyte</a> &nbsp;/&nbsp; Shop &nbsp;/&nbsp; {{ name }}</p>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:start">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <figure style="background:#16211B;border:1px solid rgba(198,207,196,.14);border-radius:16px;overflow:hidden">
+        <div role="img" aria-label="{{ mainAlt }}" style="{{ mainStyle }}"></div>
+      </figure>
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px">
+        <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.pick }}" aria-label="{{ t.label }}" style="{{ t.style }}"></button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="padding-top:4px">
+      <p style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#E7CE9B;margin-bottom:20px">{{ eyebrow }}</p>
+      <h1 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(34px,4.6vw,52px);line-height:1.05;letter-spacing:-.01em;margin-bottom:22px">{{ title }}</h1>
+      <p style="font-size:17px;color:#EDE8DC;font-weight:300;line-height:1.65;margin-bottom:30px">{{ lede }}</p>
+      <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(30px,3.4vw,38px);color:#E7CE9B;margin-bottom:24px">{{ price }}</p>
+      <button onClick="{{ addToCart }}" style="background:#D9B368;color:#0F1712;border:none;border-radius:10px;padding:17px 32px;font-family:inherit;font-weight:500;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer" style-hover="background:#E7CE9B">Add to cart</button>
+      <p style="font-size:13px;color:#8A9B84;font-weight:300;margin-top:18px">Free US shipping. 30-day returns.</p>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:1120px;margin:0 auto;padding:clamp(56px,5vw,88px) clamp(24px,5vw,88px) clamp(72px,5.5vw,120px);display:flex;flex-direction:column;gap:clamp(48px,4.5vw,80px)">
+
+  <section>
+    <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(22px,2.6vw,28px);color:#EDE8DC;margin-bottom:20px">Specifications</h2>
+    <div style="background:#141F19;border:1px solid rgba(198,207,196,.14);border-radius:14px;padding:clamp(22px,3vw,40px)">
+      <sc-for list="{{ specs }}" as="row" hint-placeholder-count="8">
+        <div style="display:grid;grid-template-columns:minmax(140px,32%) minmax(0,1fr);gap:20px;padding:13px 0;border-bottom:1px solid rgba(198,207,196,.14)">
+          <p style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8A9B84;line-height:1.9">{{ row.k }}</p>
+          <p style="font-size:14px;color:#EDE8DC;font-weight:300">{{ row.v }}</p>
+        </div>
+      </sc-for>
+      <p style="font-size:13px;color:#8A9B84;font-weight:300;line-height:1.7;margin-top:26px">{{ safety }} <a href="FAQ.dc.html" style="white-space:nowrap">More questions →</a></p>
+    </div>
+  </section>
+
+  <section style="border-top:1px solid rgba(198,207,196,.14);padding-top:clamp(36px,3.5vw,56px)">
+    <p style="font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#8A9B84;margin-bottom:24px">The rest of the range</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <sc-for list="{{ others }}" as="o" hint-placeholder-count="3">
+        <a href="{{ o.href }}" style="display:block;background:#141F19;border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden;color:inherit;text-decoration:none" style-hover="border-color:rgba(217,179,104,.45)">
+          <div role="img" aria-label="{{ o.name }}" style="{{ o.imgStyle }}"></div>
+          <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+            <span style="font-family:'Spectral',Georgia,serif;font-size:17px;color:#EDE8DC">{{ o.name }}</span>
+            <span style="font-size:14px;font-weight:300;color:#C6CFC4">{{ o.price }}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <p style="font-size:11.5px;color:#8A9B84;font-weight:300;line-height:1.7;max-width:78ch;opacity:.9">Calmlyte is a wellness product, not a medical device. Not intended to diagnose, treat, cure, or prevent any condition. Statements have not been evaluated by the FDA.</p>
+</div>
+
+<footer style="padding:64px clamp(24px,5vw,88px) 56px;text-align:center;border-top:1px solid rgba(198,207,196,.14)">
+  <svg width="38" height="38" viewBox="0 0 100 100" aria-hidden="true" style="margin:0 auto 14px">
+    <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+    <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+    <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+  </svg>
+  <p style="font-family:'Spectral',Georgia,serif;font-size:20px;color:#EDE8DC;margin-bottom:8px">Calmlyte</p>
+  <p style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#8A9B84;margin-bottom:22px">A calmer kind of light</p>
+  <p style="font-size:13px;color:#C6CFC4;font-weight:300">Questions? <a href="mailto:hello@calmlyte.com">hello@calmlyte.com</a></p>
+</footer>
+
+<div style="{{ toastStyle }}">{{ toastText }}</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const KEY = 'calmlyte-cart';
+
+const SAFETY_STD = 'Do not stare directly into the LEDs. Discontinue use if light feels uncomfortable. Individuals with photosensitivity, eye conditions, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.';
+const SAFETY_MASK = 'Do not stare directly into the LEDs. Discontinue use if light feels uncomfortable. Individuals with photosensitivity, eye conditions, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.';
+
+const PRODUCTS = {
+  panel: {
+    sku: 'small-panel', name: 'Panel', title: 'Calmlyte Panel', price: '$600', priceN: 600,
+    eyebrow: 'The signature Calmlyte light',
+    lede: 'A compact green-forward LED panel built around a narrow-band 520–530 nm green spectrum, with optional cyan-green and amber support. Designed for desks, side tables, nightstands, wellness rooms, and quiet spaces.',
+    images: [
+      ['assets/panel-hero.webp', 'Calmlyte Panel lit on a wood console against a deep green wall', 'cover'],
+      ['assets/panel-front.webp', 'Calmlyte Panel seen face-on with its green LED array lit', 'contain'],
+      ['assets/panel-front-off.webp', 'Calmlyte Panel seen face-on with the array unlit', 'contain'],
+      ['assets/panel-side.webp', 'Calmlyte Panel in profile on its folding stand, control screen visible', 'contain'],
+      ['assets/panel-rear.webp', 'Calmlyte Panel from behind, showing its vent grille and folding stand', 'contain']
+    ],
+    specs: [
+      ['Light spectrum', 'Narrow-band 520–530 nm green core, with 490–500 nm cyan-green and 590 nm amber support'],
+      ['Control', 'Bluetooth app control with adjustable brightness'],
+      ['In the box', 'Device, USB charging cable, user manual, remote control, storage bag'],
+      ['Dimensions', '12.5 × 9 × 2.5 in'],
+      ['Power', '120W ±10%'],
+      ['Materials / finish', 'White panel housing with adjustable tabletop stand'],
+      ['Suggested session', '10–45 minutes'],
+      ['Warranty', '1-year limited warranty']
+    ],
+    safety: SAFETY_STD
+  },
+  handheld: {
+    sku: 'handheld', name: 'Handheld', title: 'Calmlyte Handheld', price: '$450', priceN: 450,
+    eyebrow: 'Portable green light',
+    lede: 'A portable green-light reset built around a narrow-band 520–530 nm green spectrum. Designed for short daytime sessions at your desk, in your office, or on the go.',
+    images: [
+      ['assets/handheld-card.png', 'Calmlyte Handheld resting on linen on a wood console, green LEDs lit', 'cover'],
+      ['assets/handheld-front.webp', 'Calmlyte Handheld face-on, showing its ring of LED lenses and control panel', 'contain'],
+      ['assets/handheld-side.webp', 'Calmlyte Handheld in profile', 'contain'],
+      ['assets/handheld-rear.webp', 'Calmlyte Handheld from behind, showing its vent and USB-C port', 'contain']
+    ],
+    specs: [
+      ['Light spectrum', 'Narrow-band 520–530 nm green'],
+      ['Control', 'Bluetooth app with adjustable brightness'],
+      ['In the box', 'Device, USB charging cable, user manual, remote control, storage bag'],
+      ['Dimensions', '8.2 × 1.7 × 4.9 in'],
+      ['Power', 'Rechargeable battery'],
+      ['Weight', '0.35 kg (approx. 0.77 lb)'],
+      ['Materials / finish', 'Aluminum alloy housing'],
+      ['Suggested session', '10–45 minutes'],
+      ['Warranty', '1-year limited warranty']
+    ],
+    safety: SAFETY_STD
+  },
+  mask: {
+    sku: 'mask', name: 'Mask', title: 'Calmlyte Mask', price: '$400', priceN: 400,
+    eyebrow: 'Personal evening light',
+    lede: 'A warm, low-intensity green-and-amber light brought close for a personal evening ritual. Built around 520–530 nm green with 590 nm amber, for reading, resting, and transitioning out of the day.',
+    images: [
+      ['assets/mask-hero.webp', 'Calmlyte Mask on a wood console against a deep green wall, green LEDs lit', 'cover'],
+      ['assets/mask-front.webp', 'Calmlyte Mask seen face-on, unlit', 'contain'],
+      ['assets/mask-rear.webp', 'Calmlyte Mask interior, showing its full green LED array lit', 'contain'],
+      ['assets/mask-side.webp', 'Calmlyte Mask at an angle, showing the temple dial and strap', 'contain'],
+      ['assets/mask-package.webp', 'Calmlyte Mask package contents: mask, USB charging cable, user manual, remote control and storage bag', 'contain']
+    ],
+    specs: [
+      ['Light spectrum', '520–530 nm green with 590 nm amber'],
+      ['Control', 'Bluetooth app with adjustable brightness'],
+      ['In the box', 'Device, USB charging cable, user manual, remote control, storage bag'],
+      ['Dimensions', '25.2 × 8.7 × 0.2 in'],
+      ['Power', 'USB rechargeable (1800 mAh)'],
+      ['Weight', '0.375 kg (approx. 0.83 lb)'],
+      ['Suggested session', '10–45 minutes'],
+      ['Warranty', '1-year limited warranty']
+    ],
+    safety: SAFETY_MASK
+  },
+  belt: {
+    sku: 'belt', name: 'Belt', title: 'Calmlyte Belt', price: '$200', priceN: 200,
+    eyebrow: 'Wearable green light',
+    lede: 'A wearable green-light wrap built around a narrow-band 520–530 nm green spectrum. Designed to be worn quietly during decompression, for a calmer, lower-stimulation moment.',
+    images: [
+      ['assets/belt-hero.webp', 'Calmlyte Belt fastened on a wood table against a deep green wall, its green LED panel lit', 'cover'],
+      ['assets/belt-interior.webp', 'Calmlyte Belt open, showing the lit green LED panel inside', 'contain'],
+      ['assets/belt-front.webp', 'Calmlyte Belt laid flat, LED panel lit', 'contain'],
+      ['assets/belt-exterior.webp', 'Calmlyte Belt laid flat from the outside, showing the control button', 'contain']
+    ],
+    specs: [
+      ['Light spectrum', 'Narrow-band 520–530 nm green'],
+      ['Control', 'Bluetooth app with adjustable brightness'],
+      ['In the box', 'Device, USB charging cable, user manual, remote control, storage bag'],
+      ['Dimensions', '18.7 × 7.87 in'],
+      ['Power', '25W'],
+      ['Weight', '2.65 lb'],
+      ['Materials / finish', 'Skin-friendly fabric'],
+      ['Suggested session', '10–45 minutes'],
+      ['Warranty', '1-year limited warranty']
+    ],
+    safety: SAFETY_STD
+  }
+};
+
+const ORDER = ['panel', 'handheld', 'mask', 'belt'];
+
+class Component extends DCLogic {
+  state = { key: 'panel', idx: 0, count: 0, toast: '' };
+
+  componentDidMount() {
+    const q = new URLSearchParams(location.search).get('sku');
+    const key = PRODUCTS[q] ? q : 'panel';
+    let n = 0;
+    try { n = (JSON.parse(localStorage.getItem(KEY)) || []).reduce((a, i) => a + i.qty, 0); } catch (e) {}
+    document.title = 'Calmlyte ' + PRODUCTS[key].name;
+    this.setState({ key, count: n });
+  }
+
+  add(p) {
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
+    const hit = cart.find(i => i.sku === p.sku);
+    if (hit) hit.qty += 1; else cart.push({ sku: p.sku, name: p.name, price: p.priceN, qty: 1 });
+    localStorage.setItem(KEY, JSON.stringify(cart));
+    clearTimeout(this._t);
+    this.setState({ count: cart.reduce((a, i) => a + i.qty, 0), toast: p.name + ' added to cart' });
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+
+  renderVals() {
+    const p = PRODUCTS[this.state.key];
+    const img = p.images[this.state.idx] || p.images[0];
+    const shown = !!this.state.toast;
+
+    return {
+      cartLabel: this.state.count ? '(' + this.state.count + ')' : '',
+      name: p.name,
+      title: p.title,
+      eyebrow: p.eyebrow,
+      lede: p.lede,
+      price: p.price,
+      safety: p.safety,
+      specs: p.specs.map(r => ({ k: r[0], v: r[1] })),
+      mainAlt: img[1],
+      mainStyle: 'width:100%;aspect-ratio:' + (img[2] === 'contain' ? '1' : '4/3') +
+        ';background-color:#16211B;background-image:url(' + img[0] + ');background-size:' + img[2] +
+        ';background-position:center;background-repeat:no-repeat',
+      thumbs: p.images.map((im, i) => ({
+        label: im[1],
+        style: 'width:100%;aspect-ratio:1;padding:0;background-color:#16211B;background-image:url(' + im[0] +
+          ');background-size:cover;background-position:center;background-repeat:no-repeat;border:1px solid ' +
+          (i === this.state.idx ? '#D9B368' : 'rgba(198,207,196,.14)') + ';border-radius:10px;cursor:pointer',
+        pick: () => this.setState({ idx: i })
+      })),
+      others: ORDER.filter(k => k !== this.state.key).map(k => ({
+        href: 'Product.dc.html?sku=' + k,
+        imgStyle: 'height:150px;background-color:#16211B;background-image:url(' + PRODUCTS[k].images[0][0] +
+          ');background-size:cover;background-position:center;background-repeat:no-repeat',
+        name: PRODUCTS[k].name,
+        price: PRODUCTS[k].price
+      })),
+      addToCart: () => this.add(p),
+      toastText: this.state.toast,
+      toastStyle: 'position:fixed;left:50%;bottom:28px;transform:translate(-50%,' + (shown ? '0' : '20px') + ');background:#16211B;border:1px solid rgba(217,179,104,.5);color:#EDE8DC;font-size:13px;font-weight:300;border-radius:10px;padding:12px 22px;opacity:' + (shown ? '1' : '0') + ';pointer-events:none;transition:opacity .35s,transform .35s;z-index:210'
+    };
+  }
+}
+
+</script>
+</body>
+</html>

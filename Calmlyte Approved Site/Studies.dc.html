@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Sora:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:3px;border-radius:5px}
+#list::-webkit-scrollbar,#detail::-webkit-scrollbar{width:8px}
+#list::-webkit-scrollbar-thumb,#detail::-webkit-scrollbar-thumb{background:rgba(198,207,196,.22);border-radius:4px}
+@media(max-width:1000px){html,body{height:auto!important;overflow:auto!important}#page{position:static!important;min-height:100vh;overflow:visible!important}#body{grid-template-columns:minmax(0,1fr)!important}#list,#detail{overflow:visible!important;max-height:none!important}}
+@media(max-width:760px){nav{padding:14px 20px!important}nav > div{gap:2px!important}nav > div > a{font-size:10px!important;letter-spacing:1px!important;padding:8px 9px!important}}
+@media(max-width:560px){nav > a > span{display:none}}
+</style>
+</helmet>
+
+<div id="page" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#0F1712;overflow:hidden">
+
+  <div aria-hidden="true" style="{{ sceneStyle }}"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.55) 0%,rgba(15,23,18,.72) 55%,rgba(15,23,18,.88) 100%)"></div>
+
+  <nav style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px">
+    <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px">
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+      <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+    </div>
+    <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:2px">
+      <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+      <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shop</a>
+      <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Spectrum</a>
+      <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;padding:8px 13px;border-bottom:1px solid #D9B368">Studies</a>
+      <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">FAQ</a>
+      <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:20px;padding:7px 16px" style-hover="background:rgba(217,179,104,.14)">Cart {{ cartLabel }}</a>
+    </div>
+  </nav>
+
+  <div id="body" style="position:relative;z-index:10;flex:1;min-height:0;display:grid;grid-template-columns:clamp(430px,31%,490px) minmax(0,1fr);column-gap:clamp(28px,3.4vw,56px);row-gap:28px;padding:clamp(20px,3vh,34px) clamp(32px,4.4vw,80px) clamp(14px,2vh,24px)">
+
+    <div style="min-width:0;min-height:0;display:flex;flex-direction:column;gap:clamp(14px,2vh,22px)">
+      <div style="flex:none">
+        <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#8A9B84;margin-bottom:7px">Studies · the reading list</p>
+        <p style="font-size:clamp(12px,1vw,13.5px);line-height:1.6;font-weight:300;color:#C6CFC4;text-wrap:pretty">Every paper referenced on this site, with its design caveats stated rather than buried. Read the caveats before quoting a figure. Calmlyte did not conduct this research.</p>
+      </div>
+
+      <div style="flex:none;display:flex;gap:6px;flex-wrap:nowrap">
+        <button onClick="{{ tAll }}" style="{{ fAll }}">All {{ nAll }}</button>
+        <button onClick="{{ t1 }}" style="{{ f1 }}">Tier 1</button>
+        <button onClick="{{ t2 }}" style="{{ f2 }}">Tier 2</button>
+        <button onClick="{{ t3 }}" style="{{ f3 }}">Additional</button>
+        <button onClick="{{ t4 }}" style="{{ f4 }}">Reviews</button>
+      </div>
+
+      <div id="list" style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding-right:6px">
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="9">
+          <button onClick="{{ row.pick }}" style="{{ row.style }}">
+            <span style="display:flex;align-items:center;gap:9px;margin-bottom:4px">
+              <span style="{{ row.dot }}"></span>
+              <span style="font-size:9px;letter-spacing:1.7px;text-transform:uppercase;color:#8A9B84">{{ row.kind }}</span>
+            </span>
+            <span style="display:block;font-family:'Spectral',Georgia,serif;font-size:14.5px;font-weight:300;line-height:1.3;color:inherit;text-wrap:pretty">{{ row.title }}</span>
+            <span style="display:block;font-size:10.5px;font-weight:300;color:#8A9B84;line-height:1.4;margin-top:3px">{{ row.meta }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div id="detail" style="min-width:0;min-height:0;overflow-y:auto;background:rgba(20,31,25,.78);border:1px solid rgba(198,207,196,.14);border-radius:16px;padding:clamp(26px,3.4vh,44px) clamp(26px,2.8vw,48px)">
+      <div style="max-width:1180px;display:flex;flex-direction:column;align-items:stretch;gap:26px">
+
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+        <span style="{{ statusChip }}">{{ statusLabel }}</span>
+        <sc-for list="{{ tags }}" as="tag" hint-placeholder-count="2">
+          <span style="font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:#8A9B84;border:1px solid rgba(198,207,196,.25);border-radius:20px;padding:4px 12px">{{ tag }}</span>
+        </sc-for>
+      </div>
+
+      <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:-8px">{{ source }}</p>
+      <h1 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2vw,28px);line-height:1.25;color:#EDE8DC;text-wrap:pretty"><span style="{{ headLeadStyle }}">{{ headLead }}</span>{{ head }}</h1>
+      <div style="{{ titleStyle }}">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:4px">Title</p>
+        <p style="font-size:14.5px;color:#EDE8DC;font-weight:300;line-height:1.5;text-wrap:pretty">{{ realTitle }}</p>
+      </div>
+      <div>
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:4px">{{ topicLabel }}</p>
+        <p style="font-size:14.5px;color:#E7CE9B;font-weight:300;line-height:1.5;text-wrap:pretty">{{ topic }}</p>
+      </div>
+      <p style="font-size:clamp(13.5px,1.1vw,15.5px);color:#C6CFC4;font-weight:300;line-height:1.65;text-wrap:pretty">{{ summary }}</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:rgba(198,207,196,.14);border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden">
+        <sc-for list="{{ fields }}" as="f" hint-placeholder-count="4">
+          <div style="background:#16211B;padding:17px 20px">
+            <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:5px">{{ f.k }}</p>
+            <p style="font-size:13.5px;color:#EDE8DC;font-weight:300;line-height:1.4;overflow-wrap:anywhere">{{ f.v }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="{{ citeStyle }}">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:8px">{{ citeLabel }}</p>
+        <p style="font-size:12.5px;color:#C6CFC4;font-weight:300;line-height:1.7;text-wrap:pretty">{{ citation }}</p>
+      </div>
+
+      <div style="{{ linksStyle }}">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="2">
+          <a href="{{ l.href }}" target="_blank" rel="noopener" style="{{ l.style }}">{{ l.label }}</a>
+        </sc-for>
+      </div>
+
+      <div style="{{ noteStyle }}">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:8px">{{ noteLabel }}</p>
+        <p style="font-size:12.5px;color:#C6CFC4;font-weight:300;line-height:1.7;text-wrap:pretty">{{ note }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:8px clamp(28px,4vw,72px);border-top:1px solid rgba(198,207,196,.14)">
+    <p style="font-size:11.5px;color:#8A9B84;font-weight:300;line-height:1.55">Research linked here was conducted independently of Calmlyte and does not evaluate Calmlyte products. Not evaluated by the FDA.</p>
+    <a href="Research.dc.html" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#E7CE9B;white-space:nowrap">Calmlyte white paper →</a>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;scene&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;Deep wood&quot;, &quot;Morning&quot;, &quot;Rain&quot;, &quot;Dusk&quot;], &quot;default&quot;: &quot;Deep wood&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Forest scene&quot;},
+  &quot;sceneOpacity&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;min&quot;: 0, &quot;max&quot;: 0.7, &quot;step&quot;: 0.02, &quot;default&quot;: 0.42, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Forest scene&quot;}
+}">
+const SCENE_FILE = { 'Deep wood': 'haven', Morning: 'morning', Rain: 'rain', Dusk: 'dusk' };
+// tier: 1 priority reading · 2 read with caveats · 3 additional · 4 reviews · 0 Calmlyte's own
+const R = [
+  {
+    tier: 0, kind: 'Calmlyte white paper',
+    topic: 'The Therapeutic Horizons of Green Light Photobiomodulation',
+    meta: 'Calmlyte white paper · seven sections',
+    headLead: 'Calmlyte white paper',
+    source: 'Written by Calmlyte · summary of published work',
+    tags: ['Pinned', 'Seven sections'],
+    summary: 'Calmlyte\u2019s own white paper on the published literature, in seven sections covering mechanism, the neurobiology of analgesia, headache, widespread and post-surgical pain, and health economics. Clinical findings are attributed to named studies in the text. It is a synthesis of other people\u2019s research rather than a study of our own.',
+    fields: [{ k: 'Type', v: 'White paper' }, { k: 'Sections', v: '7' }, { k: 'Author', v: 'Calmlyte' }, { k: 'Clinical claims', v: 'Attributed inline' }],
+    citation: 'Cite as: Calmlyte. The Therapeutic Horizons of Green Light Photobiomodulation: Mechanisms, Clinical Applications, and Future Directions. Calmlyte white paper. Undated.',
+    links: [{ label: 'Read the review →', href: 'Research.dc.html', primary: true }],
+    note: 'Cites the Tier 1 mechanistic work, both Martin trials, Avulux, Nelli, Lipton, Dai and Mahmood in the text, with the design caveats stated alongside the findings. Three things remain uncited: all of section two, the cytokine findings at the end of section three, and the cost figures in section six.'
+  },
+  {
+    tier: 1, kind: 'Mechanism · primary circuit',
+    topic: 'vLGN-Penk → DRN circuit',
+    meta: 'Tang et al. · Sci Transl Med · 2022',
+    source: 'Science Translational Medicine 14:eabq6474 · 2022',
+    tags: ['Peer-reviewed', 'Mechanism'],
+    summary: 'Identifies a specific neural circuit — from enkephalin-expressing neurons in the ventral lateral geniculate nucleus to the dorsal raphe — through which green light produces antinociception. This is the strongest mechanistic account of why the effect is visual rather than dermal.',
+    fields: [{ k: 'Journal', v: 'Sci Transl Med 14' }, { k: 'Article', v: 'eabq6474' }, { k: 'Year', v: '2022' }, { k: 'Type', v: 'Primary research' }],
+    citation: 'Tang et al. Science Translational Medicine. 2022;14:eabq6474. doi:10.1126/scitranslmed.abq6474 \u2014 title not supplied in the source list.',
+    links: [{ label: 'Read the paper →', href: 'https://www.science.org/doi/10.1126/scitranslmed.abq6474', primary: true }],
+    note: 'Priority reading. Mechanistic work in animals; it explains a pathway, it does not establish a clinical outcome in humans.'
+  },
+  {
+    tier: 1, kind: 'Mechanism · photophobia',
+    topic: 'Cone-driven photophobia',
+    meta: 'Noseda, Bernstein, Burstein et al. · Brain · 2016',
+    source: 'Brain 139(7):1971–86 · 2016',
+    tags: ['Peer-reviewed', 'Free full text'],
+    summary: 'Establishes why green light is uniquely tolerable to migraine patients: cone-driven retinal signals feeding thalamic neurons produce less photophobia at green wavelengths than at blue, amber or red. The physiological basis for narrow-band green rather than any other colour.',
+    fields: [{ k: 'Journal', v: 'Brain 139(7)' }, { k: 'Pages', v: '1971–1986' }, { k: 'PMID', v: '27190022' }, { k: 'DOI', v: '10.1093/brain/aww119' }],
+    citation: 'Noseda R, Bernstein CA, Burstein R, et al. Brain. 2016;139(7):1971–1986. PMID 27190022. doi:10.1093/brain/aww119',
+    links: [
+      { label: 'Read the paper →', href: 'https://academic.oup.com/brain/article/139/7/1971/2464334', primary: true },
+      { label: 'Free full text (PMC)', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4939697' }
+    ],
+    note: 'Priority reading, and freely available. This is the paper to cite when explaining the choice of wavelength.'
+  },
+  {
+    tier: 1, kind: 'Mechanism · replication',
+    topic: 'V2M → ACC circuit; independent replication',
+    meta: 'Cao et al. · Cell Reports · 2023',
+    source: 'Cell Reports 42(4):112290 · 2023',
+    tags: ['Peer-reviewed', 'Open access', 'Independent replication'],
+    summary: 'An independent group finds a second visual-cortical route — secondary visual cortex to anterior cingulate — supporting green-light analgesia. Independent replication by a different circuit matters more than any single strong result.',
+    fields: [{ k: 'Journal', v: 'Cell Reports 42(4)' }, { k: 'Article', v: '112290' }, { k: 'Year', v: '2023' }, { k: 'Access', v: 'Open' }],
+    citation: 'Cao et al. Cell Reports. 2023;42(4):112290.',
+    links: [
+      { label: 'Read the paper →', href: 'https://www.cell.com/cell-reports/fulltext/S2211-1247(23)00301-7', primary: true },
+      { label: 'Open access (ScienceDirect)', href: 'https://www.sciencedirect.com/science/article/pii/S2211124723003017' }
+    ],
+    note: 'Priority reading. Independent replication of the visual-pathway account, via a different circuit from Tang et al.'
+  },
+  {
+    tier: 1, kind: 'Preclinical · anchor study',
+    topic: 'Rodent anchor, 525 nm',
+    meta: 'Ibrahim et al. · Pain · 2017 · 525 nm',
+    source: 'Pain 158(2):347–60 · 2017',
+    tags: ['Peer-reviewed', 'Rodent', '525 nm'],
+    summary: 'The rodent anchor for the whole field, and the study that fixes 525 nm as the wavelength of interest. Establishes the dose–response behaviour that later human protocols were built on.',
+    fields: [{ k: 'Journal', v: 'Pain 158(2)' }, { k: 'Pages', v: '347–360' }, { k: 'Wavelength', v: '525 nm' }, { k: 'DOI', v: '10.1097/j.pain.0000000000000767' }],
+    citation: 'Ibrahim MM, et al. Pain. 2017;158(2):347–360. doi:10.1097/j.pain.0000000000000767',
+    links: [{ label: 'PubMed record →', href: 'https://pubmed.ncbi.nlm.nih.gov/28092651/', primary: true }],
+    note: 'Priority reading. Animal work; the 525 nm figure quoted across this site traces here.'
+  },
+  {
+    tier: 1, kind: 'Clinical · post-surgical',
+    topic: 'GLOW; post-surgical mechanism',
+    meta: 'Martin et al. · J Pain · 2023',
+    source: 'Journal of Pain 24(3):509–29 · 2023',
+    tags: ['Peer-reviewed', 'Post-surgical'],
+    summary: 'The GLOW work, covering post-surgical pain and its mechanism. This is the citation for every reference to “the GLOW trial” elsewhere on this site.',
+    fields: [{ k: 'Journal', v: 'J Pain 24(3)' }, { k: 'Pages', v: '509–529' }, { k: 'Year', v: '2023' }, { k: 'DOI', v: '10.1016/j.jpain.2022.10.011' }],
+    citation: 'Martin LF, et al. Journal of Pain. 2023;24(3):509–529. doi:10.1016/j.jpain.2022.10.011',
+    links: [{ label: 'Read the paper →', href: 'https://www.jpain.org/article/S1526-5900(22)00437-0/fulltext', primary: true }],
+    note: 'Priority reading. GLOW was previously named on the review page with no citation attached; it now resolves here.'
+  },
+  {
+    tier: 1, kind: 'Clinical · randomised, blinded',
+    topic: 'Avulux lens randomised controlled trial',
+    meta: 'J Clin Neurosci · 2023 · n = 78 · double-blind',
+    source: 'Journal of Clinical Neuroscience · 2023',
+    tags: ['Peer-reviewed', 'Randomised', 'Double-blind'],
+    summary: 'A randomised, double-blind trial in 78 participants using spectral-filtering lenses. The most rigorous design in this collection, and the closest thing here to evidence that survives blinding.',
+    fields: [{ k: 'Design', v: 'Randomised, double-blind' }, { k: 'Participants', v: '78' }, { k: 'Year', v: '2023' }, { k: 'Modality', v: 'Spectral lenses' }],
+    citation: 'Avulux lens randomised controlled trial. Journal of Clinical Neuroscience. 2023.',
+    links: [{ label: 'PubMed record →', href: 'https://pubmed.ncbi.nlm.nih.gov/37150129/', primary: true }],
+    note: 'Priority reading, and not present in the Calmlyte literature review — it should be added there. Note this tests filtering lenses, not an emitting device.'
+  },
+  {
+    tier: 2, kind: 'Clinical · migraine',
+    topic: 'Migraine, preliminary one-way crossover',
+    realTitle: 'Evaluation of green light exposure on headache frequency and quality of life in migraine patients',
+    meta: 'Martin et al. · Cephalalgia · 2021 · n = 29',
+    source: 'Cephalalgia 41(2):135–47 · 2021',
+    tags: ['Peer-reviewed', 'Migraine', 'One-way crossover'],
+    summary: 'A preliminary one-way cross-over trial in 29 adults, 22 with chronic and seven with episodic migraine, recruited from the University of Arizona / Banner Medical Center chronic pain clinic. Reports reduced headache frequency and intensity alongside improved quality of life.',
+    fields: [{ k: 'Participants', v: '29 adults' }, { k: 'Design', v: 'One-way crossover' }, { k: 'Journal', v: 'Cephalalgia 41(2)' }, { k: 'DOI', v: '10.1177/0333102420956711' }],
+    citation: 'Martin LF, Patwardhan AM, Jain SV, Salloum MM, Freeman J, Khanna R, Gannala P, Goel V, Jones-MacFarland FN, Killgore WDS, Porreca F, Ibrahim MM. Cephalalgia. 2021;41(2):135–147. doi:10.1177/0333102420956711',
+    links: [{ label: 'PubMed record →', href: 'https://pubmed.ncbi.nlm.nih.gov/32903062/', primary: true }],
+    note: 'Read with the design caveat: one-way crossover, no blinding, n = 29. Two authors disclose a patent pending through the University of Arizona for use of green light therapy in chronic pain. The 7.9 → 2.4 and 22.3 → 9.4 headache-day figures used on this site come from here.'
+  },
+  {
+    tier: 2, kind: 'Clinical · fibromyalgia',
+    topic: 'Fibromyalgia, preliminary one-way crossover',
+    realTitle: 'Green Light Exposure Improves Pain and Quality of Life in Fibromyalgia Patients: A Preliminary One-Way Crossover Clinical Trial',
+    meta: 'Martin et al. · Pain Medicine · 2021 · n = 21',
+    source: 'Pain Medicine 22(1):118–30 · 2021',
+    tags: ['Peer-reviewed', 'Fibromyalgia', 'One-way crossover'],
+    summary: 'A preliminary one-way cross-over trial in 21 fibromyalgia patients. The source of the fibromyalgia pain-score figures quoted on this site.',
+    fields: [{ k: 'Participants', v: '21' }, { k: 'Design', v: 'One-way crossover' }, { k: 'Journal', v: 'Pain Medicine 22(1)' }, { k: 'Pages', v: '118–130' }],
+    citation: 'Martin LF, et al. Pain Medicine. 2021;22(1):118–130.',
+    links: [
+      { label: 'Read the paper →', href: 'https://academic.oup.com/painmedicine/article/22/1/118/5957437', primary: true },
+      { label: 'Full PDF', href: 'https://accurateclinic.com/wp-content/uploads/2021/11/Green-Light-Exposure-Improves-Pain-and-Quality-of-Life-in-Fibromyalgia-Patients-A-Preliminary-One-Way-Crossover-Clinical-Trial-2021.pdf' }
+    ],
+    note: 'Read with the design caveat: preliminary, one-way crossover, n = 21. The opioid-reduction figure quoted on the review page should be checked against this paper and its lens sub-study before it is used anywhere in marketing.'
+  },
+  {
+    tier: 2, kind: 'Clinical · negative result',
+    topic: 'Duke green lenses; feasibility pilot, primary endpoint not significant',
+    meta: 'Nelli, Wright, Gulur · Pain Physician · 2023',
+    source: 'Pain Physician 26(4):403–410 · 2023',
+    tags: ['Peer-reviewed', 'Primary endpoint not significant'],
+    summary: 'A feasibility pilot of green-tinted lenses at Duke. The primary endpoint was not significant. Included deliberately: a reading list that omits its negative results is advertising, not evidence.',
+    fields: [{ k: 'Journal', v: 'Pain Physician 26(4)' }, { k: 'Pages', v: '403–410' }, { k: 'Primary endpoint', v: 'Not significant' }, { k: 'DOI', v: '10.36076/ppj.2023.26.403' }],
+    citation: 'Nelli A, Wright MC, Gulur P. Pain Physician. 2023;26(4):403–410. doi:10.36076/ppj.2023.26.403',
+    links: [{ label: 'Read the paper →', href: 'https://www.painphysicianjournal.com/current/pdf?article=NzY5OQ%3D%3D&journal=153', primary: true }],
+    note: 'Read with the design caveats: feasibility pilot, and the primary endpoint did not reach significance. This paper belongs in any honest summary of the field.'
+  },
+  {
+    tier: 2, kind: 'Clinical · osteoarthritis',
+    topic: 'Ambient green light in knee osteoarthritis',
+    meta: 'Can J Pain · 2025 · n = 19',
+    source: 'Canadian Journal of Pain · 2025',
+    tags: ['Peer-reviewed', 'Free full text', 'Crossover'],
+    summary: 'A crossover study in 19 participants with knee osteoarthritis, using the same design as the earlier migraine and fibromyalgia trials. The source of the WOMAC figures quoted on the review page.',
+    fields: [{ k: 'Participants', v: '19' }, { k: 'Design', v: 'Crossover' }, { k: 'Year', v: '2025' }, { k: 'Access', v: 'Free (PMC)' }],
+    citation: 'Ambient green light in knee osteoarthritis. Canadian Journal of Pain. 2025. doi:10.1080/24740527.2025.2598285',
+    links: [
+      { label: 'Read the paper →', href: 'https://www.tandfonline.com/doi/full/10.1080/24740527.2025.2598285', primary: true },
+      { label: 'Free full text (PMC)', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12867406/' }
+    ],
+    note: 'Read with the design caveat: n = 19, same one-way crossover family as the other trials, so it inherits the same limitations rather than independently confirming them.'
+  },
+  {
+    tier: 2, kind: 'Clinical · open label',
+    topic: 'Allay lamp; open-label diary, self-selected purchasers',
+    meta: 'Lipton et al. · Front Neurol · 2023',
+    source: 'Frontiers in Neurology 14:1282236 · 2023',
+    tags: ['Peer-reviewed', 'Open label', 'Self-selected'],
+    summary: 'A diary study of Allay lamp users. The participants had already bought the device, and there was no blinding or control, so the result speaks to user-reported experience rather than efficacy.',
+    fields: [{ k: 'Journal', v: 'Front Neurol 14' }, { k: 'Article', v: '1282236' }, { k: 'Design', v: 'Open-label diary' }, { k: 'Sample', v: 'Self-selected purchasers' }],
+    citation: 'Lipton RB, et al. Frontiers in Neurology. 2023;14:1282236. doi:10.3389/fneur.2023.1282236',
+    links: [{ label: 'Read the paper →', href: 'https://doi.org/10.3389/fneur.2023.1282236', primary: true }],
+    note: 'Read with the design caveats: open-label diary, self-selected purchasers. The Allay Lamp device figures on the review page trace here.'
+  },
+  {
+    tier: 2, kind: 'Clinical · sham improved too',
+    topic: 'Green light vs tDCS; no blinding, sham improved on all variables',
+    meta: 'Mahmood et al. · Brain Sci · 2025',
+    source: 'Brain Sciences 15(11):1209 · 2025',
+    tags: ['Peer-reviewed', 'No blinding', 'Sham improved'],
+    summary: 'A comparison of green light against transcranial direct current stimulation. There was no blinding, and the sham condition improved on all variables — which is the most useful thing this paper tells you.',
+    fields: [{ k: 'Journal', v: 'Brain Sci 15(11)' }, { k: 'Article', v: '1209' }, { k: 'Blinding', v: 'None' }, { k: 'Sham', v: 'Improved on all variables' }],
+    citation: 'Mahmood A, et al. Brain Sciences. 2025;15(11):1209.',
+    links: [
+      { label: 'Read the paper →', href: 'https://www.mdpi.com/2076-3425/15/11/1209', primary: true },
+      { label: 'PubMed record', href: 'https://pubmed.ncbi.nlm.nih.gov/41300216/' }
+    ],
+    note: 'Read with the design caveats: no blinding, and the sham improved on all variables. Do not quote this as supporting evidence.'
+  },
+  {
+    tier: 3, kind: 'Preclinical · green and red',
+    topic: 'Glutamatergic and GABAergic vLGN neurons; green and red light',
+    meta: 'Wu et al. · Neurobiol Dis · 2023',
+    source: 'Neurobiology of Disease 183:106164 · 2023',
+    tags: ['Peer-reviewed', 'Red light', 'Wavelength-specific'],
+    summary: 'Separates glutamatergic from GABAergic neurons in the ventral lateral geniculate nucleus and tests both green and red light. Directly relevant to specifying a wavelength, because it indicates red may facilitate pain through the same nucleus that green acts on.',
+    fields: [{ k: 'Journal', v: 'Neurobiol Dis 183' }, { k: 'Article', v: '106164' }, { k: 'Year', v: '2023' }, { k: 'Wavelengths', v: 'Green and red' }],
+    citation: 'Wu et al. Neurobiology of Disease. 2023;183:106164. doi:10.1016/j.nbd.2023.106164',
+    links: [{ label: 'Read the paper →', href: 'https://doi.org/10.1016/j.nbd.2023.106164', primary: true }],
+    note: 'The citation for any green-versus-red comparison on this site. It suggests the two wavelengths are not interchangeable and may act in opposite directions.'
+  },
+  {
+    tier: 3, kind: 'Preclinical · competing account',
+    topic: 'Visual circuit to PAG for bright-light antinociception',
+    meta: 'Hu et al. · Neuron · 2022',
+    source: 'Neuron 110:1712–1727 · 2022',
+    tags: ['Peer-reviewed', 'Competing account'],
+    summary: 'Attributes antinociception to bright light through a circuit to the periaqueductal grey, rather than to narrow-band green specifically. A competing explanation that should be acknowledged rather than omitted.',
+    fields: [{ k: 'Journal', v: 'Neuron 110' }, { k: 'Pages', v: '1712–1727' }, { k: 'Account', v: 'Bright light, not green' }, { k: 'DOI', v: '10.1016/j.neuron.2022.02.017' }],
+    citation: 'Hu et al. Neuron. 2022;110:1712–1727. doi:10.1016/j.neuron.2022.02.017',
+    links: [{ label: 'DOI record →', href: 'https://doi.org/10.1016/j.neuron.2022.02.017', primary: true }],
+    note: 'If bright light rather than green wavelength drives the effect, the case for a narrow band weakens. Worth engaging with directly.'
+  },
+  {
+    tier: 3, kind: 'Preclinical · osteoarthritis',
+    topic: 'Green light in osteoarthritic rats; lipidome changes',
+    meta: 'O\u2019Brien et al. · Pain · 2025',
+    source: 'Pain 166(6):1274–84 · 2025',
+    tags: ['Peer-reviewed', 'Free full text', 'Rodent'],
+    summary: 'Reports lipidome changes in osteoarthritic rats exposed to green light, adding a biochemical dimension to the mechanistic picture.',
+    fields: [{ k: 'Journal', v: 'Pain 166(6)' }, { k: 'Pages', v: '1274–1284' }, { k: 'Year', v: '2025' }, { k: 'DOI', v: '10.1097/j.pain.0000000000003458' }],
+    citation: 'O\u2019Brien et al. Pain. 2025;166(6):1274–1284. doi:10.1097/j.pain.0000000000003458',
+    links: [{ label: 'Free full text (PMC) →', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12006445/', primary: true }],
+    note: 'Animal work. Useful for mechanism, not for claims about people.'
+  },
+  {
+    tier: 3, kind: 'Methodology · hardware',
+    topic: 'Photoneuromodulation methodology',
+    meta: 'Ismail et al. · J Vis Exp · 2025',
+    source: 'Journal of Visualized Experiments (217) · 2025',
+    tags: ['Peer-reviewed', 'Protocol'],
+    summary: 'The protocol paper for green-light exposure setup. The one to read while specifying hardware — intensity, geometry, duration and control conditions.',
+    fields: [{ k: 'Journal', v: 'J Vis Exp (217)' }, { k: 'Year', v: '2025' }, { k: 'Type', v: 'Methods' }, { k: 'DOI', v: '10.3791/67821' }],
+    citation: 'Ismail et al. Journal of Visualized Experiments. 2025;(217). doi:10.3791/67821',
+    links: [{ label: 'DOI record →', href: 'https://doi.org/10.3791/67821', primary: true }],
+    note: 'Relevant to product specification rather than to claims. If Calmlyte\u2019s exposure parameters diverge from published protocols, that difference should be stated.'
+  },
+  {
+    tier: 4, kind: 'Review · most current',
+    topic: 'PBM mechanisms in pain therapy',
+    meta: 'Frontiers in Pain Research · 2026',
+    source: 'Frontiers in Pain Research · 2026',
+    tags: ['Review', 'Separates green, red, white'],
+    summary: 'The most current synthesis available, and it explicitly separates green, red and white light effects rather than treating photobiomodulation as one thing.',
+    fields: [{ k: 'Type', v: 'Review' }, { k: 'Year', v: '2026' }, { k: 'Journal', v: 'Front Pain Res' }, { k: 'Access', v: 'Open' }],
+    citation: 'Photobiomodulation mechanisms in pain therapy. Frontiers in Pain Research. 2026. doi:10.3389/fpain.2026.1920821',
+    links: [{ label: 'Read the review →', href: 'https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1920821/full', primary: true }],
+    note: 'More conservative than the Calmlyte literature review. Read this to see how the field characterises its own evidence quality.'
+  },
+  {
+    tier: 4, kind: 'Review · neuropathic pain',
+    topic: 'Green light and neuropathic pain; mini-review',
+    meta: 'Dai et al. · Front Pain Res · 2025',
+    source: 'Frontiers in Pain Research · 2025',
+    tags: ['Review', 'States a clinical gap'],
+    summary: 'Notes plainly that green light\u2019s effect on neuropathic pain has not been reported clinically. That sentence should govern how neuropathic pain is discussed anywhere on this site.',
+    fields: [{ k: 'Type', v: 'Mini-review' }, { k: 'Year', v: '2025' }, { k: 'Finding', v: 'No clinical report' }, { k: 'Access', v: 'Free (PMC)' }],
+    citation: 'Dai et al. Frontiers in Pain Research. 2025.',
+    links: [{ label: 'Free full text (PMC) →', href: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12440971/', primary: true }],
+    note: 'Direct constraint on copy: the review page\u2019s neuropathic-pain material is preclinical only, and must not read as clinical evidence.'
+  },
+  {
+    tier: 4, kind: 'Review · mechanism',
+    topic: 'Neural mechanisms of light therapy',
+    meta: 'Neuroscience Bulletin · 2023',
+    source: 'Neuroscience Bulletin · 2023',
+    tags: ['Review', 'Mechanism'],
+    summary: 'A synthesis of the neural mechanisms behind light therapy generally, useful for placing green light within the wider field.',
+    fields: [{ k: 'Type', v: 'Review' }, { k: 'Year', v: '2023' }, { k: 'Journal', v: 'Neurosci Bull' }, { k: 'DOI', v: '10.1007/s12264-023-01089-8' }],
+    citation: 'Neural mechanisms of light therapy. Neuroscience Bulletin. 2023. doi:10.1007/s12264-023-01089-8',
+    links: [{ label: 'Read the review →', href: 'https://link.springer.com/article/10.1007/s12264-023-01089-8', primary: true }],
+    note: 'Orientation reading for mechanism.'
+  }
+];
+
+const TIER = {
+  1: { label: 'Priority reading', dot: '#55BC5C' },
+  2: { label: 'Read with the design caveats', dot: '#D9B368' },
+  3: { label: 'Additional · worth adding', dot: '#8FD69F' },
+  4: { label: 'Review · orientation', dot: '#00b8b0' },
+  0: { label: 'Calmlyte white paper', dot: '#E88B7D' }
+};
+
+class Component extends DCLogic {
+  state = { idx: 0, tier: 'all', count: 0 };
+
+  componentDidMount() {
+    let n = 0;
+    try { n = (JSON.parse(localStorage.getItem('calmlyte-cart')) || []).reduce((a, i) => a + i.qty, 0); } catch (e) {}
+    this.setState({ count: n });
+  }
+
+  setTier(t) {
+    const first = R.findIndex(r => t === 'all' || r.tier === t);
+    this.setState({ tier: t, idx: first < 0 ? 0 : first });
+    const d = document.getElementById('detail');
+    if (d) d.scrollTop = 0;
+  }
+
+  filterStyle(t) {
+    const on = this.state.tier === t;
+    return 'font-family:inherit;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;cursor:pointer;' +
+      'border-radius:20px;padding:6px 12px;white-space:nowrap;background:' + (on ? 'rgba(217,179,104,.16)' : 'transparent') +
+      ';border:1px solid ' + (on ? 'rgba(217,179,104,.55)' : 'rgba(198,207,196,.18)') +
+      ';color:' + (on ? '#E7CE9B' : '#8A9B84') + ';transition:background .2s,border-color .2s,color .2s';
+  }
+
+  renderVals() {
+    const r = R[this.state.idx];
+    const t = TIER[r.tier];
+    return {
+      cartLabel: this.state.count ? '(' + this.state.count + ')' : '',
+      sceneStyle: 'position:absolute;inset:0;background-image:url(assets/forest-' +
+        (SCENE_FILE[this.props.scene] || 'haven') +
+        '.webp);background-size:cover;background-position:center;background-repeat:no-repeat;opacity:' +
+        (this.props.sceneOpacity ?? 0.42),
+      nAll: R.length,
+      tAll: () => this.setTier('all'), t1: () => this.setTier(1), t2: () => this.setTier(2),
+      t3: () => this.setTier(3), t4: () => this.setTier(4),
+      fAll: this.filterStyle('all'), f1: this.filterStyle(1), f2: this.filterStyle(2),
+      f3: this.filterStyle(3), f4: this.filterStyle(4),
+      rows: R.map((rec, i) => ({ rec: rec, i: i }))
+        .filter(x => this.state.tier === 'all' || x.rec.tier === this.state.tier)
+        .map(x => {
+          const on = x.i === this.state.idx;
+          return {
+            kind: x.rec.kind,
+            title: x.rec.meta,
+            meta: x.rec.topic,
+            dot: 'flex:none;width:6px;height:6px;border-radius:50%;background:' + TIER[x.rec.tier].dot,
+            style: 'display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;border-radius:11px;' +
+              'padding:14px 16px;background:' + (on ? 'rgba(217,179,104,.12)' : 'rgba(20,31,25,.6)') +
+              ';border:1px solid ' + (on ? 'rgba(217,179,104,.5)' : 'rgba(198,207,196,.14)') +
+              ';color:' + (on ? '#EDE8DC' : '#C6CFC4') + ';transition:background .2s,border-color .2s',
+            pick: () => { this.setState({ idx: x.i }); const d = document.getElementById('detail'); if (d) d.scrollTop = 0; }
+          };
+        }),
+      statusLabel: t.label,
+      statusChip: 'font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;border-radius:20px;padding:4px 12px;' +
+        (r.tier === 0
+          ? 'background:transparent;color:#E88B7D;border:1px solid rgba(232,139,125,.55)'
+          : 'background:' + t.dot + ';color:#0F1712'),
+      tags: r.tags,
+      source: r.source,
+      headLead: r.headLead || '',
+      headLeadStyle: r.headLead ? 'font-weight:500;color:#EDE8DC' : 'display:none',
+      head: r.headLead ? r.meta.slice(r.headLead.length) : r.meta,
+      topic: r.topic,
+      realTitle: r.realTitle || '',
+      titleStyle: r.realTitle ? 'display:block' : 'display:none',
+      topicLabel: 'Topic',
+      summary: r.summary,
+      fields: r.fields,
+      citeLabel: r.tier === 0 ? 'How to cite this' : 'Full citation',
+      citation: r.citation,
+      citeStyle: 'background:#16211B;border-left:2px solid ' + t.dot +
+        ';border-radius:0 10px 10px 0;padding:18px 22px',
+      linksStyle: r.links.length ? 'display:flex;gap:11px;flex-wrap:wrap' : 'display:none',
+      links: r.links.map(l => ({
+        label: l.label,
+        href: l.href,
+        style: 'display:inline-block;border-radius:9px;padding:11px 20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;' +
+          (l.primary
+            ? 'border:1px solid rgba(217,179,104,.5);color:#E7CE9B'
+            : 'border:1px solid rgba(198,207,196,.25);color:#C6CFC4')
+      })),
+      noteStyle: r.tier === 2
+        ? 'border-top:1px solid rgba(198,207,196,.14);padding-top:26px'
+        : 'display:none',
+      noteLabel: 'Design caveats',
+      note: r.note
+    };
+  }
+}
+
+</script>
+</body>
+</html>

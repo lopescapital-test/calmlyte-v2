@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Sora:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:3px;border-radius:4px}
+@media(max-width:760px){nav{padding:14px 20px!important}nav > div{gap:2px!important}nav > div > a{font-size:10px!important;letter-spacing:1px!important;padding:8px 9px!important}nav > div > a:last-child{padding:6px 14px!important;margin-left:6px!important}}
+@media(max-width:560px){nav > a > span{display:none}nav > div > a{padding:8px 6px!important}}
+#doc{display:grid;grid-template-columns:230px minmax(0,1fr);gap:clamp(40px,5.5vw,96px);max-width:1240px;margin:0 auto;padding:0 clamp(24px,5vw,88px) clamp(72px,5.5vw,120px);align-items:start}
+@media(max-width:940px){#doc{grid-template-columns:minmax(0,1fr)}#toc{display:none}}
+[id^="s-"]{scroll-margin-top:96px}
+@media(max-width:760px){[data-table]{overflow-x:auto!important;-webkit-overflow-scrolling:touch}[data-table] > div{min-width:660px}}
+</style>
+</helmet>
+
+<div style="background:#0F1712;min-height:100vh">
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;background:rgba(15,23,18,.92);backdrop-filter:blur(14px)">
+  <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+    <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+  </div>
+  <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+  <div style="display:flex;align-items:center;gap:2px">
+    <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+    <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shop</a>
+    <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Spectrum</a>
+    <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;padding:8px 13px;border-bottom:1px solid #D9B368">Studies</a>
+    <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">FAQ</a>
+    <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:20px;padding:7px 16px" style-hover="background:rgba(217,179,104,.14)">Cart {{ cartLabel }}</a>
+  </div>
+</nav>
+
+<header style="position:relative;overflow:hidden;padding:clamp(120px,9vw,180px) clamp(24px,5vw,88px) clamp(44px,4vw,68px)">
+  <div style="position:absolute;inset:0;background-image:url('assets/forest-haven.webp');background-size:cover;background-position:center"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.86),rgba(15,23,18,.94) 60%,rgba(15,23,18,.99))"></div>
+  <div style="position:relative;z-index:2;max-width:1240px;margin:0 auto">
+    <p style="font-size:12px;letter-spacing:1px;color:#8A9B84;margin-bottom:26px"><a href="Studies.dc.html" style="color:#8A9B84">Studies</a> &nbsp;/&nbsp; White paper</p>
+    <p style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#E7CE9B;margin-bottom:22px">Calmlyte white paper</p>
+    <h1 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(34px,5vw,56px);line-height:1.06;letter-spacing:-.01em;margin-bottom:24px;max-width:30ch;text-wrap:pretty">The Therapeutic Horizons of Green Light Photobiomodulation</h1>
+    <p style="font-size:19px;color:#C6CFC4;font-weight:300;max-width:60ch;font-family:'Spectral',Georgia,serif;font-style:italic">Mechanisms, Clinical Applications, and Future Directions</p>
+  </div>
+</header>
+
+<div id="doc">
+
+  <aside id="toc" style="position:sticky;top:96px;border-left:1px solid rgba(198,207,196,.14);padding-left:20px">
+    <p style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#8A9B84;margin-bottom:16px">Contents</p>
+    <div style="display:flex;flex-direction:column;gap:15px">
+      <a href="#s-1" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Introduction</a>
+      <a href="#s-2" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Cellular &amp; molecular mechanisms</a>
+      <a href="#s-3" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Neurobiological pathways</a>
+      <a href="#s-4" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Primary headache disorders</a>
+      <a href="#s-5" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Widespread &amp; post-surgical pain</a>
+      <a href="#s-6" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Health economics</a>
+      <a href="#s-7" style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.4">Conclusions</a>
+      <a href="#s-refs" style="font-size:13px;color:#E7CE9B;font-weight:300;line-height:1.4">References</a>
+    </div>
+  </aside>
+
+  <article style="display:flex;flex-direction:column;gap:clamp(56px,5vw,88px);min-width:0">
+
+    <div style="background:rgba(217,179,104,.07);border:1px solid rgba(217,179,104,.3);border-radius:12px;padding:20px 24px">
+      <p style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.7;margin-bottom:12px">This is a <em style="font-style:normal;font-weight:500;color:#EDE8DC">Calmlyte white paper</em> on independently published research into green light photobiomodulation. The research it summarises was not conducted by Calmlyte, it does not evaluate Calmlyte products, and nothing in it is a claim about what any Calmlyte product does.</p>
+      <p style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.7">Clinical findings are attributed to named studies in the text and listed in full under <a href="#s-refs">References</a>. The cellular and molecular mechanisms in section two, and the cost figures in section six, summarise primary literature that is not yet cited individually. <a href="Studies.dc.html">Reading list, with design caveats →</a></p>
+    </div>
+
+    <section id="s-1">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Introduction to Photobiomodulation and the Emergence of Green Light Therapy</h2>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">The application of specific wavelengths of light to modulate biological functions—formally defined as photobiomodulation (PBM) or low-level light therapy (LLLT)—has undergone a profound evolution in modern clinical neuroscience, dermatology, and rehabilitation medicine. Historically, the scientific and medical consensus prioritized red and near-infrared (NIR) wavelengths, ranging between 600 nm and 1100 nm, due to their deep tissue penetration and well-documented efficacy in stimulating mitochondrial bioenergetics. For decades, these non-ionizing, non-thermal light sources have been utilized to accelerate tissue repair, mitigate neurodegeneration, and dampen local inflammation. However, emerging neurobiological paradigms, extensive animal modeling, and large-scale human clinical trials have increasingly highlighted the therapeutic potency of the visible spectrum, particularly narrow-band green light (NbGL) typically peaking between 520 nm and 530 nm.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Green light therapy represents a fundamental paradigm shift in non-pharmacological interventions. Unlike systemic pharmaceuticals that distribute active compounds indiscriminately throughout the body, green light exerts highly specific, non-invasive neuromodulatory effects mediated primarily through the visual system and superficial dermal photoreceptors. The therapeutic scope of green light now spans chronic pain management, psychiatric mood regulation, post-traumatic neurorehabilitation, and advanced tissue regeneration.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.8">The transition toward green light therapy is largely driven by an escalating need to mitigate the adverse effects, tolerance profiles, and socioeconomic burdens associated with chronic pharmacological treatments. The over-reliance on opioids for widespread neuropathic pain, or the high costs associated with monoclonal antibodies for migraine prophylaxis, has forced the medical community to seek sustainable alternatives. The expanding body of evidence suggests that controlled exposure to green light-emitting diodes (GLED) can fundamentally alter descending pain modulation pathways, stimulate endogenous analgesic and endocannabinoid systems, and suppress pro-inflammatory cascades, offering a highly sustainable, side-effect-free therapeutic modality.</p>
+    </section>
+
+    <section id="s-2">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Cellular and Molecular Mechanisms of Green Light Photobiomodulation</h2>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">To comprehend the macroscopic clinical benefits of green light, one must first examine the subcellular phototransduction mechanisms that translate photonic energy into widespread biochemical signals. The biological effects of PBM are primarily governed by the activation of specific chromophores within the mitochondria and specialized G protein-coupled receptors located on cellular membranes.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Mitochondrial Bioenergetics and Cytochrome c Oxidase</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">At the cellular level, the primary photoacceptor for PBM is Cytochrome c Oxidase (CCO), which functions as Complex IV within the mitochondrial electron transport chain. CCO is responsible for the reduction of oxygen to water, a terminal process that drives oxidative phosphorylation and the synthesis of adenosine triphosphate (ATP) via ATP synthase. The absorption of photons by the chromophores within CCO alters the redox state of the enzyme, facilitating increased electron transport and significantly enhancing the mitochondrial membrane potential.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Although red and NIR wavelengths are most commonly associated with CCO activation due to their optimal tissue penetrance, visible wavelengths, including green light, exert profound effects on superficial cellular bioenergetics and systemic signaling. Studies measuring the optical redox ratio (ORR)—defined as the ratio of FAD to the sum of NADH and FAD fluorescence—indicate that light absorption by CCO shifts the metabolic state of the cell toward increased oxidative phosphorylation, rapidly upregulating ATP production. Interestingly, researchers have found that varied power settings influence mitochondrial complexes differently. Exposure at extremely low powers (e.g., 0.1 W) can uncouple the respiratory chain, leading to drastic inhibition of ATP production and oxidative stress, whereas optimized intermediate to higher powers (e.g., 0.8 W) actively stimulate Complex III and Complex IV, keeping the mitochondria coupled and massively increasing ATP synthesis.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">The photonic stimulation of CCO generates a transient, controlled burst of reactive oxygen species (ROS). Under pathological conditions characterized by mitochondrial dysfunction, a self-amplifying feedback loop known as ROS-induced ROS release (RIRR) can trigger the opening of the mitochondrial permeability transition pore, leading to the collapse of the mitochondrial membrane potential and subsequent cellular apoptosis. However, the modest, sub-lethal ROS generation induced by controlled PBM acts as a vital secondary messenger. This transient oxidative shift activates key transcription factors, most notably the nuclear factor kappa-light-chain-enhancer of activated B cells (NF-κB). The activation of NF-κB via PBM-induced ROS and protein kinase D paradoxically downregulates pro-inflammatory markers in activated immune cells—shifting macrophages from a pro-inflammatory M1 phenotype to an anti-inflammatory M2 phenotype—while promoting cellular survival and proliferation pathways in quiescent cells.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Opsin 3 (OPN3) Signaling in Dermal and Neural Tissues</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Beyond the mitochondria, the biological effects of green light are heavily mediated by non-visual opsins, particularly Opsin 3 (OPN3), also known as encephalopsin or panopsin. OPN3 is a G protein-coupled receptor widely expressed in human epidermal melanocytes, normal human dermal fibroblasts (NHDFs), and various central and peripheral neural tissues.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">The functional characterization of OPN3 reveals a highly complex, wavelength- and dose-dependent signaling architecture. In human epidermal melanocytes, OPN3 has been identified as a critical negative regulator of melanogenesis. Upon activation, OPN3 couples to the Gαi subunit of G proteins, which inhibits the cyclic adenosine monophosphate (cAMP) response normally evoked by the melanocortin 1 receptor (MC1R). The suppression of cAMP subsequently limits the activation of the microphthalmia-associated transcription factor (MITF)—the master regulator of melanocyte differentiation—thereby drastically reducing the synthesis of melanin.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Conversely, exposure to high fluences of specific visible light bands can trigger an alternative, calcium-dependent signaling cascade. This pathway involves the activation of calcium/calmodulin-dependent protein kinase II (CaMKII), leading to the phosphorylation of the cAMP response element-binding protein (CREB), extracellular signal-regulated kinases (ERK1/2), and p38 mitogen-activated protein kinases (MAPK). The activation of the p38 MAPK and ERK pathways stabilizes multimeric tyrosinase complexes, which can lead to prolonged hyperpigmentation by upregulating the expression of tyrosinase, tyrosinase-related protein-1 (TRP-1), and TRP-2. Intriguingly, OPN3 has also been shown to interact physically and functionally with the BRAFV600E mutation in congenital melanocytic nevus (CMN) cells, where knocking down OPN3 expression inhibits the BRAFV600E/ERK signaling pathway, highlighting its profound regulatory role in pigmented lesions.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">This dichotomy in OPN3 function underscores a critical therapeutic window for green light therapy. Low-intensity green light PBM harnesses the inhibitory Gαi pathway to calm inflammatory hyperpigmentation and downregulate neuroinflammation, whereas high-intensity, uncalibrated visible light exposure risks activating the CaMKII/p38 pathways associated with oxidative stress, collagen degradation via matrix metalloproteinases (MMPs), and photoaging.</p>
+
+      <div data-table="std" style="border:1px solid rgba(198,207,196,.14);border-radius:14px;overflow:hidden;background:#141F19">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 22px;background:#16211B;border-bottom:1px solid rgba(198,207,196,.14)">
+          <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84">Every claim in this table</p>
+          <a href="Studies.dc.html" style="font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:#C6CFC4;border:1px solid rgba(198,207,196,.4);border-radius:20px;padding:2px 9px;white-space:nowrap" style-hover="border-color:rgba(217,179,104,.6);color:#E7CE9B">source pending</a>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.6fr);gap:20px;padding:16px 22px;background:#16211B;border-bottom:1px solid rgba(198,207,196,.14)">
+          <p style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8A9B84">Biological target</p>
+          <p style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8A9B84">Primary mechanism</p>
+          <p style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8A9B84">Downstream effects of green light PBM</p>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.6fr);gap:22px;padding:22px 24px;border-bottom:1px solid rgba(198,207,196,.14)">
+          <p style="font-size:14px;color:#EDE8DC;font-weight:400">Cytochrome c Oxidase (CCO)</p>
+          <p style="font-size:14px;color:#C6CFC4;font-weight:300">Absorption of photons at Complex IV of the mitochondrial electron transport chain.</p>
+          <p style="font-size:14px;color:#C6CFC4;font-weight:300">Increased mitochondrial membrane potential; massive elevation of ATP synthesis; transient ROS secondary messaging.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.6fr);gap:22px;padding:22px 24px;border-bottom:1px solid rgba(198,207,196,.14)">
+          <p style="font-size:14px;color:#EDE8DC;font-weight:400">Opsin 3 (OPN3)</p>
+          <p style="font-size:14px;color:#C6CFC4;font-weight:300">G protein-coupled photoreception in epidermal melanocytes, dermal fibroblasts, and neural cells.</p>
+          <p style="font-size:14px;color:#C6CFC4;font-weight:300">Modulates cAMP via Gαi (inhibitory) or activates CaMKII/p38 MAPK pathways depending on light intensity and specific wavelength.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.6fr);gap:22px;padding:22px 24px">
+          <p style="font-size:14px;color:#EDE8DC;font-weight:400">NF-κB Pathway</p>
+          <p style="font-size:14px;color:#C6CFC4;font-weight:300">ROS-mediated secondary messenger activation.</p>
+          <p style="font-size:14px;color:#C6CFC4;font-weight:300">Shifts macrophage phenotype from pro-inflammatory (M1) to anti-inflammatory (M2); promotes cellular survival and limits inflammation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s-3">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Neurobiological Pathways of Green Light-Induced Analgesia</h2>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">The most significant clinical advancements in green light therapy have occurred within the realm of pain management. The analgesic properties of green light are not mediated by local tissue penetration at the site of peripheral pain, but rather through a systemic, visually-mediated neurobiological cascade that modulates the central nervous system's endogenous pain control networks.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">The Retino-Thalamic-Cortical Pathway</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">In conditions characterized by extreme photophobia and hypersensitivity—such as migraine and traumatic brain injury (TBI)—ambient light exposure typically exacerbates pain. The trigeminovascular reflex, governed by the trigeminal ganglion's afferent ophthalmic (V1) branch, innervates the orbital blood vessels, the dura mater, and the cornea. This system releases potent nociceptive and vasoactive mediators, such as calcitonin gene-related peptide (CGRP), nitric oxide, and substance P, upon activation by sensory stimuli. The foundational work by Noseda, Bernstein, Burstein, et al. (2016) demonstrated that this resulting photophobia is heavily cone-driven, explaining exactly how specific wavelengths exacerbate or mitigate central light-induced pain.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Electrophysiological studies utilizing electroretinography (ERG) and visual evoked potentials (VEP) in human subjects demonstrate that different wavelengths of light generate vastly different electrical responses in the visual cortex and the retina. White, blue, and red light elicit massive electrical signals, strongly activating thalamic neurons located outside the main visual pathway. These relay neurons directly interface with dura-sensitive pain networks, directly translating visual stimulation into severe cranial pain.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">Green light, specifically isolated to a narrow band around 520 nm to 530 nm, is highly unique in this regard. It generates the absolute smallest electrical signals in both the retina and the cortex. Green light activates cone-driven retinal pathways to a much lesser extent than white, blue, or red light, and the targeted thalamic relay neurons are least responsive to green light. By effectively "quieting" cortical and thalamic hyperexcitability, green light breaks the photophobic feedback loop, creating a neurological environment where the visual system perceives light without triggering the debilitating trigeminovascular pain reflex.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Modulation of the Endogenous Opioid and Cannabinoid Systems</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">The analgesic efficacy of green light relies on the profound recruitment and upregulation of the endogenous opioid and endocannabinoid systems. Extensive preclinical models have mapped these effects directly to the rostral ventromedial medulla (RVM) and the spinal cord, which serve as critical anatomical hubs for the descending modulation of pain. Furthermore, research historically pointed to the involvement of intrinsically photosensitive retinal ganglion cells (ipRGCs).</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">However, recent Tier 1 mechanistic studies have introduced critical refinements and competing models to this circuitry. A landmark 2022 study by Tang et al. identified a highly specific vision-associated enkephalinergic circuit, demonstrating that green light analgesia is mediated almost entirely by cone-dominated retinal inputs projecting to proenkephalin (Penk)-positive neurons in the ventrolateral geniculate nucleus (vLGN), which then project to the dorsal raphe nucleus (DRN). Crucially, Tang et al. found that ablating cones completely abolished the analgesic effect, while ablating ipRGCs did not modulate it at all, indicating that atypical photoreceptors do not drive this specific narrow-band response. Expanding on this spectral specificity, Wu et al. (2023) demonstrated that different wavelengths activate opposing systems within the vLGN; while green light drives analgesia via glutamatergic pathways, red light actually facilitates neuropathic pain via GABAergic neurons.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Independent replications have mapped parallel analgesic circuits. Cao et al. (2023) discovered an alternative visual-somatosensory circuit where low-intensity green light activates glutamatergic projections from the secondary visual cortex (V2M) to GABAergic neurons in the anterior cingulate cortex (ACC), successfully driving antinociception. Conversely, Hu et al. (2022) proposed a separate visual circuit projecting to the periaqueductal gray (PAG) specifically for bright-light antinociception, which may operate via different mechanisms than narrow-band green light therapies.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">When stimulated by green light, prolonged exposure to GLED leads to a substantial, long-lasting increase in the expression of endogenous opioids. Specifically, green light therapy stimulates the massive secretion of beta-endorphin and proenkephalin directly into the cerebrospinal fluid (CSF). Notably, this elevation is localized entirely within the CSF; serum levels of these opioids remain unchanged, and dynorphin levels are unaffected. The antinociceptive effect of green light is entirely abolished by the administration of naloxone, confirming its strict dependence on the active engagement of mu- and delta-opioid receptors.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">Simultaneously, the endocannabinoid system (ECS) plays a synergistic, highly integrated role. The ECS functions as a retrograde signaling network. This network suppresses the presynaptic release of excitatory neurotransmitters such as glutamate while modulating gamma-aminobutyric acid (GABA). Green light therapy facilitates CB1 receptor-mediated GABAergic inhibition within the brainstem. The robust crosstalk between the upregulated endogenous opioids and the stimulated endocannabinoid system drastically raises nociceptive thresholds, completely reversing both thermal hyperalgesia and mechanical allodynia in models of acute and chronic pain.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Suppression of Neuroinflammation and Excitotoxicity</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Complementing its powerful neuromodulatory effects, green light PBM exerts decisive anti-inflammatory actions within the central and peripheral nervous systems. Chronic pain is frequently driven by sustained neuroinflammation, wherein the release of pro-inflammatory mediators sensitizes peripheral nociceptors, induces central sensitization, and downregulates the efficacy of mu-opioid receptors.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.8">Controlled exposure to GLED results in the marked reduction of major pro-inflammatory cytokines, including interleukin-1 beta (IL-1β), tumor necrosis factor-alpha (TNF-α), and interleukin-6 (IL-6), both at the site of peripheral injury and within the spinal dorsal horn. The suppression of these cytokines, alongside a reduction in the release of substance P and CGRP, directly mitigates neurogenic inflammation. Furthermore, green light upregulates the production of anti-inflammatory cytokines, notably interleukin-10 (IL-10), which acts to resolve inflammatory cascades and shift the local tissue microenvironment toward healing.</p>
+    </section>
+
+    <section id="s-4">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Clinical Applications in Primary Headache Disorders</h2>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Migraine and Chronic Headache</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Migraine is globally recognized as a leading cause of neurological disability. Traditional pharmacological prophylaxis often involves significant side effects, leading to exceedingly high discontinuation rates among patients.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:rgba(198,207,196,.14);border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden;margin-bottom:28px">
+        <div style="background:#141F19;padding:20px 22px">
+          <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:30px;color:#E7CE9B;line-height:1.1;margin-bottom:6px">7.9 → 2.4</p>
+          <p style="font-size:12px;color:#8A9B84;font-weight:300;line-height:1.5">Headache days per month, episodic migraine</p>
+          <div style="margin-top:9px"><a href="https://pubmed.ncbi.nlm.nih.gov/32903062/" target="_blank" rel="noopener" style="font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:#0F1712;background:#55BC5C;border-radius:20px;padding:2px 9px;white-space:nowrap">Martin 2021 · Cephalalgia</a></div>
+        </div>
+        <div style="background:#141F19;padding:20px 22px">
+          <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:30px;color:#E7CE9B;line-height:1.1;margin-bottom:6px">22.3 → 9.4</p>
+          <p style="font-size:12px;color:#8A9B84;font-weight:300;line-height:1.5">Headache days per month, chronic migraine</p>
+          <div style="margin-top:9px"><a href="https://pubmed.ncbi.nlm.nih.gov/32903062/" target="_blank" rel="noopener" style="font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:#0F1712;background:#55BC5C;border-radius:20px;padding:2px 9px;white-space:nowrap">Martin 2021 · Cephalalgia</a></div>
+        </div>
+        <div style="background:#141F19;padding:20px 22px">
+          <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:30px;color:#E7CE9B;line-height:1.1;margin-bottom:6px">8.0 → 3.2</p>
+          <p style="font-size:12px;color:#8A9B84;font-weight:300;line-height:1.5">Numeric Pain Scale during attacks</p>
+          <div style="margin-top:9px"><a href="https://pubmed.ncbi.nlm.nih.gov/32903062/" target="_blank" rel="noopener" style="font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:#0F1712;background:#55BC5C;border-radius:20px;padding:2px 9px;white-space:nowrap">Martin 2021 · Cephalalgia</a></div>
+        </div>
+      </div>
+
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Clinical trials evaluating daily exposure to narrow-band green light have demonstrated profound prophylactic and abortive therapeutic efficacy. In crossover studies where patients utilized white light emitting diodes (WLED) followed by green light emitting diodes (GLED) for 1 to 2 hours per day over 10 weeks, the GLED phases resulted in an average 60% reduction in the number of headache days per month. Among patients suffering from episodic migraine, headache days fell from an average of 7.9 to 2.4 days per month. For those with chronic migraine, days decreased from 22.3 to 9.4 per month. Subjective pain intensity during attacks dropped drastically, from an average of 8.0 to 3.2. Secondary quality of life metrics showed massive, statistically significant improvements.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.8">However, as the field matures, the methodological quality of these trials is undergoing stricter evidence grading. For instance, early foundational migraine studies (such as Martin et al., 2021 in Cephalalgia) relied on one-way crossover designs with small sample sizes (n=29), which inherently carry design caveats. Similarly, a 2023 large-scale observational study of the Allay Lamp (Lipton et al.) relied on an open-label diary from self-selected purchasers, which introduces selection bias despite reporting acute attack improvements in over 50% of episodes. Addressing these methodological gaps, more recent and rigorous trials—such as the 2023 Avulux lens RCT published in the Journal of Clinical Neuroscience—have utilized randomized, double-blind protocols (n=78) to provide high-tier clinical validation for green-permitting spectral filtration. <a href="https://pubmed.ncbi.nlm.nih.gov/37150129/" target="_blank" rel="noopener" style="display:inline-block;vertical-align:baseline;font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:#0F1712;background:#55BC5C;border-radius:20px;padding:2px 9px;white-space:nowrap">Avulux 2023 · PMID 37150129</a></p>
+    </section>
+
+    <section id="s-5">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Widespread, Neuropathic, and Post-Surgical Pain Management</h2>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Fibromyalgia and Chronic Widespread Pain</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Fibromyalgia is an intractable, centrally-mediated functional pain disorder characterized by widespread musculoskeletal hyperalgesia, extreme fatigue, sleep disturbances, and cognitive dysfunction. In early trials, adult fibromyalgia patients exposed to 1 to 2 hours of daily GLED for 10 weeks reported highly significant drops in their average pain intensity on the 10-point numeric pain scale (from a baseline of 8.4 to 4.9). It is worth noting that, similar to early migraine studies, the 2021 Martin et al. (Pain Medicine) fibromyalgia trial (n=21) utilized a preliminary one-way crossover design.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">Further investigations utilizing green-light filtering eyeglasses have corroborated stationary lamp findings. In a randomized controlled trial conducted at Duke University Health System, consistent use of green-lensed eyeglasses resulted in clinically meaningful declines in opioid consumption, with 33% of the green lens group achieving a ≥10% decline in oral morphine equivalents. However, a 2023 feasibility pilot evaluating these same Duke green lenses (Nelli, Wright, and Gulur) noted that while the intervention is highly feasible, the primary endpoints did not reach statistical significance, emphasizing the need for larger, adequately powered longitudinal trials. <a href="https://www.painphysicianjournal.com/current/pdf?article=NzY5OQ%3D%3D&journal=153" target="_blank" rel="noopener" style="display:inline-block;vertical-align:baseline;font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:#0F1712;background:#55BC5C;border-radius:20px;padding:2px 9px;white-space:nowrap">Nelli 2023 · Pain Physician</a> Similarly, emerging investigations into ambient green light for knee osteoarthritis (such as a 2025 study in the Canadian Journal of Pain) remain limited by small (n=19) crossover designs, though animal models (O'Brien et al., 2025) are currently succeeding in mapping specific lipidome changes that occur in osteoarthritic rodents exposed to green light.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">Neuropathic Pain Models</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Neuropathic pain, arising directly from nerve injury, ischemia, or pathology, is notoriously resistant to standard analgesics. Green light therapy has demonstrated the ability to rapidly increase paw withdrawal thresholds (PWTs) and completely reverse thermal hyperalgesia and mechanical allodynia in sophisticated models of peripheral neuropathy. The foundational rodent anchor establishing the 525 nm wavelength standard for this neuropathic relief was provided by Ibrahim et al. in 2017.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:40px">Interestingly, the analgesic effect of green light does not scale linearly with light intensity, with the absolute maximal response for thermal analgesia uniquely observed in the lowest 4-lux green light groups. Importantly, while preclinical data on nerve injury models is exceptionally robust, contemporary clinical reviews (such as Dai et al., 2025 in Frontiers in Pain Research) explicitly state a major translational gap: green light's therapeutic effect on strictly neuropathic pain has not yet been reported in clinical human trials.</p>
+
+      <h3 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(20px,2.2vw,24px);color:#E7CE9B;margin-bottom:20px">The GLOW Trial and Post-Surgical Pain</h3>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">In the acute post-surgical phase, preemptive and post-operative exposure to GLED actively prevents the development of hypersensitivity. Research derived from the GLOW (Green Light Exposure Elicits Anti-inflammation, Endogenous Opioid Release and Dampens Synaptic Potentiation) studies—specifically detailed by Martin et al. (2023) in The Journal of Pain—demonstrates that optimal results are achieved when exposure spans the perioperative period.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.8">Crucially, green light therapy acts synergistically with conventional non-steroidal anti-inflammatory drugs (NSAIDs) and opioids, heavily potentiating the antinociceptive effects of morphine and ibuprofen and mitigating the systemic risks of opioid tolerance.</p>
+    </section>
+
+    <section id="s-6">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Health Economics: Green Light Therapy Versus Pharmacological Prophylaxis</h2>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">The integration of green light therapy into standard clinical practice carries profound socioeconomic implications, particularly when contrasted directly with the current pharmacological gold standard for migraine prophylaxis: Calcitonin Gene-Related Peptide (CGRP) monoclonal antibodies (MAbs).</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">CGRP MAbs have demonstrated excellent efficacy, but their widespread utilization is heavily restricted by exorbitant acquisition costs approaching $6,900 annually in the United States. Health economic models estimate that the cost of a single migraine-free day gained via CGRP MAbs lies between $130 and $340.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">Green light therapy presents a radically disruptive, highly favorable cost-efficiency model. The intervention requires only a single, low-cost capital expenditure—the purchase of an NbGL-emitting lamp or precisely calibrated optical notch filter spectacles. There are no recurring pharmaceutical expenses, zero costs associated with managing systemic adverse events, and no risk of generating medication-overuse headache (MOH).</p>
+      <div style="background:#141F19;border:1px solid rgba(198,207,196,.2);border-left:3px solid #8A9B84;border-radius:0 12px 12px 0;padding:16px 20px">
+        <p style="font-size:13px;color:#C6CFC4;font-weight:300;line-height:1.7">The cost figures in this section — the $6,900 annual acquisition cost and the $130 to $340 per migraine-free day — are not yet cited individually. <a href="Studies.dc.html">Reading list →</a></p>
+      </div>
+    </section>
+
+    <section id="s-7">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:30px;line-height:1.15;text-wrap:pretty">Conclusions and Future Directions</h2>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">The integration of green light photobiomodulation into modern therapeutic frameworks represents one of the most promising frontiers in non-pharmacological medicine. The expansive scientific literature meticulously details how a narrow band of visible light—specifically peaking near 520 nm to 525 nm—can bypass traditional systemic pharmacokinetics to directly, safely, and powerfully modulate central nervous system activity, cellular bioenergetics, and immune homeostasis.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">The data demonstrate conclusively that the analgesic power of green light originates from a sophisticated orchestration of the visual system, utilizing cone-driven retinal pathways to minimize cortical hyperexcitability and trigger localized release of cerebrospinal endogenous opioids (beta-endorphin, proenkephalin) in the vLGN and DRN.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.85;margin-bottom:26px">However, as the field transitions from foundational animal modeling to widespread human application, the evidence grading is becoming more rigorous. As outlined by photoneuromodulation methodology frameworks like Ismail et al. (2025), future studies must rigorously standardize dosing parameters (irradiance, fluence, duration) and explicitly separate the divergent neurological effects of green, red, and white light—a mandate highly emphasized in synthesis reviews like the 2026 Frontiers in Pain Research and the 2023 Neuroscience Bulletin. Furthermore, future clinical trials must prioritize randomized blinding and robust controls; as demonstrated by a 2025 trial (Mahmood et al.) comparing green light to tDCS, a lack of blinding can result in sham groups improving equally across variables, muddying true efficacy signals.</p>
+      <p style="font-size:16.5px;color:#C6CFC4;font-weight:300;line-height:1.8">By addressing these design caveats and translating robust pre-clinical neuropathic models into human trials, green light therapy is poised to evolve from an adjunctive or experimental treatment into a primary, evidence-based pillar of global pain management, psychiatric care, and neurorehabilitation.</p>
+    </section>
+
+    <section id="s-refs" style="border-top:1px solid rgba(198,207,196,.14);padding-top:clamp(32px,3.4vw,52px)">
+      <h2 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:#EDE8DC;margin-bottom:10px;line-height:1.15">References</h2>
+      <p style="font-size:15px;color:#C6CFC4;font-weight:300;line-height:1.75;max-width:70ch;margin-bottom:28px">Tiered by the weight each source can carry. Where a title is not given it was not supplied in the source list; the DOI or PMID identifies the paper. Full records and design caveats are in the <a href="Studies.dc.html">reading list</a>.</p>
+
+      <div style="background:#141F19;border:1px solid rgba(85,188,92,.35);border-left:3px solid #55BC5C;border-radius:0 12px 12px 0;padding:24px 28px;margin-bottom:16px">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:14px">Tier 1 · priority reading</p>
+        <div style="display:flex;flex-direction:column;gap:15px">
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Tang et al. <em style="font-style:italic">Science Translational Medicine.</em> 2022;14:eabq6474. doi:10.1126/scitranslmed.abq6474 — vLGN-Penk → DRN circuit. <a href="https://www.science.org/doi/10.1126/scitranslmed.abq6474" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Noseda R, Bernstein CA, Burstein R, et al. <em style="font-style:italic">Brain.</em> 2016;139(7):1971–1986. PMID 27190022. doi:10.1093/brain/aww119 — cone-driven photophobia. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4939697" target="_blank" rel="noopener">Free full text →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Cao et al. <em style="font-style:italic">Cell Reports.</em> 2023;42(4):112290 — V2M → ACC circuit, independent replication. <a href="https://www.sciencedirect.com/science/article/pii/S2211124723003017" target="_blank" rel="noopener">Open access →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Ibrahim MM, et al. <em style="font-style:italic">Pain.</em> 2017;158(2):347–360. doi:10.1097/j.pain.0000000000000767 — rodent anchor, 525 nm. <a href="https://pubmed.ncbi.nlm.nih.gov/28092651/" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Martin LF, et al. <em style="font-style:italic">Journal of Pain.</em> 2023;24(3):509–529. doi:10.1016/j.jpain.2022.10.011 — GLOW, post-surgical mechanism. <a href="https://www.jpain.org/article/S1526-5900(22)00437-0/fulltext" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Avulux lens randomised controlled trial. <em style="font-style:italic">Journal of Clinical Neuroscience.</em> 2023. Randomised, double-blind, n = 78. <a href="https://pubmed.ncbi.nlm.nih.gov/37150129/" target="_blank" rel="noopener">Link →</a></p>
+        </div>
+      </div>
+
+      <div style="background:#141F19;border:1px solid rgba(217,179,104,.3);border-left:3px solid #D9B368;border-radius:0 12px 12px 0;padding:24px 28px;margin-bottom:16px">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:14px">Tier 2 · read with the design caveats</p>
+        <div style="display:flex;flex-direction:column;gap:15px">
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Martin LF, et al. Evaluation of green light exposure on headache frequency and quality of life in migraine patients. <em style="font-style:italic">Cephalalgia.</em> 2021;41(2):135–147. doi:10.1177/0333102420956711 — n = 29, one-way crossover; source of the headache-day and pain-score figures in section four. <a href="https://pubmed.ncbi.nlm.nih.gov/32903062/" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Martin LF, et al. Green Light Exposure Improves Pain and Quality of Life in Fibromyalgia Patients: A Preliminary One-Way Crossover Clinical Trial. <em style="font-style:italic">Pain Medicine.</em> 2021;22(1):118–130 — n = 21. <a href="https://academic.oup.com/painmedicine/article/22/1/118/5957437" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Nelli A, Wright MC, Gulur P. <em style="font-style:italic">Pain Physician.</em> 2023;26(4):403–410. doi:10.36076/ppj.2023.26.403 — Duke green lenses, feasibility pilot; <em style="font-style:italic">primary endpoint not significant.</em> <a href="https://www.painphysicianjournal.com/current/pdf?article=NzY5OQ%3D%3D&amp;journal=153" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Ambient green light in knee osteoarthritis. <em style="font-style:italic">Canadian Journal of Pain.</em> 2025. doi:10.1080/24740527.2025.2598285 — n = 19, crossover. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12867406/" target="_blank" rel="noopener">Free full text →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Lipton RB, et al. <em style="font-style:italic">Frontiers in Neurology.</em> 2023;14:1282236. doi:10.3389/fneur.2023.1282236 — Allay lamp; open-label diary, self-selected purchasers. <a href="https://doi.org/10.3389/fneur.2023.1282236" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Mahmood A, et al. <em style="font-style:italic">Brain Sciences.</em> 2025;15(11):1209 — green light vs tDCS; no blinding, and the sham improved on all variables. <a href="https://www.mdpi.com/2076-3425/15/11/1209" target="_blank" rel="noopener">Link →</a></p>
+        </div>
+      </div>
+
+      <div style="background:#141F19;border:1px solid rgba(143,214,159,.28);border-left:3px solid #8FD69F;border-radius:0 12px 12px 0;padding:24px 28px;margin-bottom:16px">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:14px">Additional · relevant to wavelength choice</p>
+        <div style="display:flex;flex-direction:column;gap:15px">
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Wu et al. <em style="font-style:italic">Neurobiology of Disease.</em> 2023;183:106164. doi:10.1016/j.nbd.2023.106164 — glutamatergic and GABAergic vLGN neurons; green <em style="font-style:italic">and red</em> light. <a href="https://doi.org/10.1016/j.nbd.2023.106164" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Hu et al. <em style="font-style:italic">Neuron.</em> 2022;110:1712–1727. doi:10.1016/j.neuron.2022.02.017 — visual circuit to PAG; a competing account based on bright light, not narrow-band green. <a href="https://doi.org/10.1016/j.neuron.2022.02.017" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">O&rsquo;Brien et al. <em style="font-style:italic">Pain.</em> 2025;166(6):1274–1284. doi:10.1097/j.pain.0000000000003458 — lipidome changes in osteoarthritic rats. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12006445/" target="_blank" rel="noopener">Free full text →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Ismail et al. <em style="font-style:italic">Journal of Visualized Experiments.</em> 2025;(217). doi:10.3791/67821 — photoneuromodulation methodology. <a href="https://doi.org/10.3791/67821" target="_blank" rel="noopener">Link →</a></p>
+        </div>
+      </div>
+
+      <div style="background:#141F19;border:1px solid rgba(0,184,176,.28);border-left:3px solid #00b8b0;border-radius:0 12px 12px 0;padding:24px 28px;margin-bottom:16px">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:14px">Reviews · orientation</p>
+        <div style="display:flex;flex-direction:column;gap:15px">
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Photobiomodulation mechanisms in pain therapy. <em style="font-style:italic">Frontiers in Pain Research.</em> 2026 — most current synthesis; separates green, red and white effects. <a href="https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1920821/full" target="_blank" rel="noopener">Link →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Dai et al. <em style="font-style:italic">Frontiers in Pain Research.</em> 2025 — green light and neuropathic pain, mini-review; notes that the effect has not been reported clinically. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12440971/" target="_blank" rel="noopener">Free full text →</a></p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Neural mechanisms of light therapy. <em style="font-style:italic">Neuroscience Bulletin.</em> 2023. doi:10.1007/s12264-023-01089-8 <a href="https://link.springer.com/article/10.1007/s12264-023-01089-8" target="_blank" rel="noopener">Link →</a></p>
+        </div>
+        <p style="font-size:12.5px;color:#8A9B84;font-weight:300;line-height:1.7;margin-top:14px">Both Frontiers reviews are more conservative than this document.</p>
+      </div>
+
+      <div style="background:#141F19;border:1px solid rgba(198,207,196,.2);border-left:3px solid #8A9B84;border-radius:0 12px 12px 0;padding:24px 28px">
+        <p style="font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:14px">Still uncited in this document</p>
+        <div style="display:flex;flex-direction:column;gap:15px">
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">Section two in full: the CCO, OPN3 and NF-κB mechanisms, the optical redox ratio and power-setting findings, and the mechanism table.</p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">The cytokine and neuroinflammation findings at the end of section three.</p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">The 33% / ≥10% oral morphine equivalent figure in section five. Note also that the &ldquo;randomized controlled trial conducted at Duke University Health System&rdquo; and the Nelli feasibility pilot are described as two separate studies one sentence apart. They appear to be the same trial — same lenses, same cohort — with the 33% figure and the non-significant primary endpoint being two findings from it rather than two studies that agree.</p>
+          <p style="font-size:13.5px;color:#C6CFC4;font-weight:300;line-height:1.7">The cost figures in section six.</p>
+        </div>
+      </div>
+    </section>
+
+    <div style="border-top:1px solid rgba(198,207,196,.14);padding-top:32px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+      <a href="Studies.dc.html" style="display:inline-block;border:1px solid rgba(217,179,104,.5);border-radius:10px;padding:13px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#E7CE9B" style-hover="background:rgba(217,179,104,.15)">← Reading list</a>
+      <a href="Light.dc.html" style="display:inline-block;border:1px solid rgba(198,207,196,.25);border-radius:10px;padding:13px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#C6CFC4" style-hover="border-color:rgba(217,179,104,.5)">The spectrum</a>
+    </div>
+
+    <p style="font-size:11.5px;color:#8A9B84;font-weight:300;line-height:1.7;opacity:.9">Calmlyte is a wellness product, not a medical device. Not intended to diagnose, treat, cure, or prevent any condition. Statements have not been evaluated by the FDA. The research summarised on this page was conducted independently of Calmlyte and does not evaluate Calmlyte products.</p>
+  </article>
+</div>
+
+<footer style="padding:64px clamp(24px,5vw,88px) 56px;text-align:center;border-top:1px solid rgba(198,207,196,.14)">
+  <svg width="38" height="38" viewBox="0 0 100 100" aria-hidden="true" style="margin:0 auto 14px">
+    <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+    <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+    <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+  </svg>
+  <p style="font-family:'Spectral',Georgia,serif;font-size:20px;color:#EDE8DC;margin-bottom:8px">Calmlyte</p>
+  <p style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#8A9B84;margin-bottom:22px">A calmer kind of light</p>
+  <p style="font-size:13px;color:#C6CFC4;font-weight:300">Questions? <a href="mailto:hello@calmlyte.com">hello@calmlyte.com</a></p>
+</footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { count: 0 };
+  componentDidMount() {
+    let n = 0;
+    try { n = (JSON.parse(localStorage.getItem('calmlyte-cart')) || []).reduce((a, i) => a + i.qty, 0); } catch (e) {}
+    this.setState({ count: n });
+  }
+  renderVals() {
+    return { cartLabel: this.state.count ? '(' + this.state.count + ')' : '' };
+  }
+}
+
+</script>
+</body>
+</html>

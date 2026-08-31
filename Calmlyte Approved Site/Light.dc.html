@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Sora:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:4px;border-radius:6px}
+@media(max-width:900px){html,body{height:auto!important;overflow:auto!important}#page{position:static!important;min-height:100vh;overflow:visible!important}#read{grid-template-columns:minmax(0,1fr)!important}}
+@media(max-width:760px){nav{padding:14px 20px!important}nav > div{gap:2px!important}nav > div > a{font-size:10px!important;letter-spacing:1px!important;padding:8px 9px!important}}
+@media(max-width:560px){nav > a > span{display:none}}
+@media(max-height:740px){html,body{height:auto!important;overflow:auto!important}#page{position:static!important;min-height:100vh;overflow:visible!important}}
+</style>
+</helmet>
+
+<div id="page" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#0F1712;overflow:hidden">
+
+  <div aria-hidden="true" style="{{ sceneStyle }}"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.55) 0%,rgba(15,23,18,.72) 55%,rgba(15,23,18,.88) 100%)"></div>
+  <div aria-hidden="true" style="{{ glowStyle }}"></div>
+
+  <nav style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px">
+    <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px">
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+      <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+    </div>
+    <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:2px">
+      <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+      <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shop</a>
+      <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;padding:8px 13px;border-bottom:1px solid #D9B368">Spectrum</a>
+      <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Studies</a>
+      <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">FAQ</a>
+      <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:20px;padding:7px 16px" style-hover="background:rgba(217,179,104,.14)">Cart {{ cartLabel }}</a>
+    </div>
+  </nav>
+
+  <div style="position:relative;z-index:10;flex:1;min-height:0;display:flex;flex-direction:column;padding:clamp(14px,2.2vh,28px) clamp(28px,4vw,72px) clamp(10px,1.6vh,20px)">
+
+    <div style="flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:clamp(6px,1vh,12px)">
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#8A9B84">Spectrum · move along the visible range</p>
+      <p style="font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#8A9B84">Drag the marker, or use the arrow keys</p>
+    </div>
+
+    <div id="read" style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(18px,2.6vh,30px) clamp(28px,4vw,72px);align-items:center">
+
+      <div style="min-width:0;display:flex;flex-direction:column;gap:clamp(8px,1.4vh,16px)">
+        <div style="display:flex;align-items:baseline;gap:clamp(12px,1.6vw,22px)">
+          <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(52px,7.4vw,116px);line-height:.9;letter-spacing:-.02em;color:#EDE8DC;white-space:nowrap">{{ nmLabel }}</p>
+          <div aria-hidden="true" style="{{ swatchStyle }}"></div>
+        </div>
+        <p style="{{ nameStyle }}">{{ colourName }}</p>
+        <p style="font-size:clamp(14px,1.15vw,16.5px);line-height:1.6;font-weight:300;color:#C6CFC4;max-width:52ch;text-wrap:pretty">{{ desc }}</p>
+      </div>
+
+      <div style="min-width:0;display:flex;flex-direction:column;gap:clamp(9px,1.2vh,13px)">
+
+        <div style="background:rgba(20,31,25,.72);border:1px solid rgba(198,207,196,.14);border-radius:12px;padding:clamp(13px,1.7vh,20px) clamp(15px,1.5vw,22px)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px">
+            <p style="font-size:10px;letter-spacing:2.2px;text-transform:uppercase;color:#8A9B84">Brightness to the eye</p>
+            <p style="font-size:13px;color:#EDE8DC;font-weight:400">{{ sensLabel }}</p>
+          </div>
+          <div style="height:6px;border-radius:3px;background:rgba(198,207,196,.12);overflow:hidden">
+            <div style="{{ sensBar }}"></div>
+          </div>
+        </div>
+
+        <div style="background:rgba(20,31,25,.72);border:1px solid rgba(198,207,196,.14);border-radius:12px;padding:clamp(13px,1.7vh,20px) clamp(15px,1.5vw,22px)">
+          <p style="font-size:10px;letter-spacing:2.2px;text-transform:uppercase;color:#8A9B84;margin-bottom:9px">Jump to a band</p>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <button onClick="{{ go460 }}" style="{{ chip460 }}"><span>Blue · screens, evening</span><span style="opacity:.8">460 nm</span></button>
+            <button onClick="{{ go495 }}" style="{{ chip495 }}"><span>Cyan-green support</span><span style="opacity:.8">490–500 nm</span></button>
+            <button onClick="{{ go525 }}" style="{{ chip525 }}"><span>Calmlyte green</span><span style="opacity:.8">520–530 nm</span></button>
+            <button onClick="{{ go555 }}" style="{{ chip555 }}"><span>Peak sensitivity</span><span style="opacity:.8">555 nm</span></button>
+            <button onClick="{{ go590 }}" style="{{ chip590 }}"><span>Amber support</span><span style="opacity:.8">590 nm</span></button>
+            <button onClick="{{ go645 }}" style="{{ chip645 }}"><span>Red light therapy</span><span style="opacity:.8">630–660 nm</span></button>
+          </div>
+        </div>
+        <div style="background:rgba(20,31,25,.72);border:1px solid rgba(198,207,196,.14);border-radius:12px;padding:clamp(13px,1.7vh,20px) clamp(15px,1.5vw,22px)">
+          <p style="font-size:10px;letter-spacing:2.2px;text-transform:uppercase;color:#8A9B84;margin-bottom:9px">Where the research sits</p>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;gap:11px">
+              <span style="flex:none;width:4px;border-radius:2px;background:#37b84a"></span>
+              <p style="font-size:11px;color:#C6CFC4;font-weight:300;line-height:1.45"><em style="font-style:normal;color:#EDE8DC">Green, 520–530 nm.</em> Migraine and chronic-pain studies, using low-intensity exposure through the visual pathway.</p>
+            </div>
+            <div style="display:flex;gap:11px">
+              <span style="flex:none;width:4px;border-radius:2px;background:#d94f3d"></span>
+              <p style="font-size:11px;color:#C6CFC4;font-weight:300;line-height:1.45"><em style="font-style:normal;color:#EDE8DC">Red, 630–660 nm.</em> Skin and surface-tissue studies, using higher-intensity exposure at the skin.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:none;margin-top:clamp(12px,2vh,26px)">
+      <div role="slider" tabIndex="0" aria-label="Wavelength in nanometres" aria-valuemin="380" aria-valuemax="700" aria-valuenow="{{ nm }}" aria-valuetext="{{ nmLabel }}" ref="{{ trackRef }}" onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onKeyDown="{{ onKey }}" style="position:relative;height:clamp(46px,7.4vh,78px);border-radius:8px;cursor:ew-resize;touch-action:none;user-select:none">
+        <div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.9"></div>
+        <div aria-hidden="true" style="position:absolute;top:-3px;bottom:-3px;left:43.75%;width:3.13%;border:1.5px solid rgba(237,232,220,.75);border-radius:4px;box-shadow:0 0 12px rgba(126,200,31,.45)"></div>
+        <div aria-hidden="true" style="{{ handleStyle }}"></div>
+      </div>
+      <div style="position:relative;display:flex;justify-content:space-between;gap:10px;font-size:10px;color:#8A9B84;margin-top:7px">
+        <span>380 nm · violet</span><span>700 nm · red</span>
+        <span style="position:absolute;left:45.3%;transform:translateX(-50%);color:#E7CE9B;white-space:nowrap">Calmlyte band</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:8px clamp(28px,4vw,72px);border-top:1px solid rgba(198,207,196,.14)">
+    <p style="font-size:11.5px;color:#8A9B84;font-weight:300;line-height:1.55">Educational. Describes light and lighting, not health outcomes. Not evaluated by the FDA.</p>
+    <a href="Studies.dc.html" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#E7CE9B">Read the studies →</a>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;scene&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;Deep wood&quot;, &quot;Morning&quot;, &quot;Rain&quot;, &quot;Dusk&quot;], &quot;default&quot;: &quot;Deep wood&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Forest scene&quot;},
+  &quot;sceneOpacity&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;min&quot;: 0, &quot;max&quot;: 0.7, &quot;step&quot;: 0.02, &quot;default&quot;: 0.42, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Forest scene&quot;}
+}">
+const SCENE_FILE = { 'Deep wood': 'haven', Morning: 'morning', Rain: 'rain', Dusk: 'dusk' };
+const LO = 380, HI = 700;
+
+const BANDS = [
+  [380, 420, 'Violet', 'The shortest visible wavelengths. High in energy, but the eye is barely sensitive here, so violet reads dim even at full output.'],
+  [420, 450, 'Deep blue', 'Short-wavelength light. Scatters readily, which is why the daytime sky reads blue, and why blue-heavy light feels sharp indoors.'],
+  [450, 490, 'Blue', 'The alerting end of the spectrum, and the band most associated with screens and late-evening light exposure.'],
+  [490, 510, 'Cyan-green', 'The transition from blue into green. Calmlyte uses a tone from here as its cooler support light.'],
+  [510, 520, 'Green', 'Green light, just short of the Calmlyte band. Sensitivity is climbing steeply toward the daytime peak.'],
+  [520, 531, 'Calmlyte green', 'The Calmlyte band. A narrow slice of green, high in visual sensitivity yet cooler than amber and softer than blue — the light the products are built around.'],
+  [531, 570, 'Yellow-green', 'Where daytime vision is most sensitive. At 555 nm a given power of light appears brighter to the eye than at any other wavelength.'],
+  [570, 592, 'Amber', 'Warm, low-contrast light — the quality you notice near sunset. Calmlyte uses a tone from here as its warmer support light.'],
+  [592, 630, 'Orange', 'Long-wavelength light. Appears warm and settled, and sensitivity is falling away from the peak.'],
+  [630, 701, 'Red', 'The long end of the visible range. Red penetrates further into tissue than green, which is why red-light devices target skin and surface tissue, and it appears dim to the eye at equal power.']
+];
+
+const PRESETS = [495, 525, 555, 590, 645];
+
+// the same stops the spectrum track is painted with, so every colour on the
+// page is sampled from one gradient rather than a second colour model
+const STOPS = [
+  [0, 0x6a, 0x2f, 0xb5], [0.14, 0x2f, 0x5b, 0xd0], [0.30, 0x00, 0xa2, 0xc7],
+  [0.44, 0x37, 0xb8, 0x4a], [0.52, 0x7e, 0xc8, 0x1f], [0.62, 0xe8, 0xd2, 0x1a],
+  [0.78, 0xf0, 0x92, 0x1a], [1, 0xd6, 0x28, 0x28]
+];
+
+function wl2rgb(w) {
+  const t = Math.max(0, Math.min(1, (w - LO) / (HI - LO)));
+  let i = 0;
+  while (i < STOPS.length - 2 && t > STOPS[i + 1][0]) i++;
+  const a = STOPS[i], b = STOPS[i + 1];
+  const f = b[0] === a[0] ? 0 : (t - a[0]) / (b[0] - a[0]);
+  return [1, 2, 3].map(k => Math.round(a[k] + (b[k] - a[k]) * f));
+}
+
+// photopic luminosity, standard gaussian approximation of V(lambda)
+function sensitivity(w) {
+  return Math.min(1, 1.019 * Math.exp(-285.4 * Math.pow(w / 1000 - 0.559, 2)));
+}
+
+class Component extends DCLogic {
+  state = { nm: 525, count: 0, dragging: false };
+  track = React.createRef();
+
+  componentDidMount() {
+    let n = 0;
+    try { n = (JSON.parse(localStorage.getItem('calmlyte-cart')) || []).reduce((a, i) => a + i.qty, 0); } catch (e) {}
+    this.setState({ count: n });
+  }
+
+  fromEvent(e) {
+    const el = this.track.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const t = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    this.setState({ nm: Math.round(LO + t * (HI - LO)) });
+  }
+
+  band() {
+    const n = this.state.nm;
+    return BANDS.find(b => n >= b[0] && n < b[1]) || BANDS[BANDS.length - 1];
+  }
+
+  renderVals() {
+    const nm = this.state.nm;
+    const b = this.band();
+    const [r, g, bl] = wl2rgb(nm);
+    const rgb = r + ',' + g + ',' + bl;
+    const pct = ((nm - LO) / (HI - LO)) * 100;
+    const sens = sensitivity(nm);
+    const isCalm = nm >= 520 && nm <= 530;
+    const scene = this.props.scene ?? 'Deep wood';
+
+    const chip = (target, tol) => {
+      const on = Math.abs(nm - target) <= (tol || (target === 645 ? 15 : 5));
+      return 'display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;' +
+        'font-family:inherit;font-size:11.5px;font-weight:300;cursor:pointer;border-radius:8px;padding:6px 12px;' +
+        'background:' + (on ? 'rgba(217,179,104,.16)' : 'transparent') +
+        ';border:1px solid ' + (on ? 'rgba(217,179,104,.55)' : 'rgba(198,207,196,.16)') +
+        ';color:' + (on ? '#E7CE9B' : '#C6CFC4') + ';transition:background .2s,border-color .2s,color .2s';
+    };
+
+    return {
+      cartLabel: this.state.count ? '(' + this.state.count + ')' : '',
+      nm: nm,
+      nmLabel: nm + ' nm',
+      colourName: b[2],
+      desc: b[3],
+      nameStyle: 'font-size:12px;letter-spacing:2.6px;text-transform:uppercase;color:' +
+        (isCalm ? '#E7CE9B' : '#8A9B84') + ';transition:color .3s',
+      swatchStyle: 'flex:none;width:clamp(38px,4.4vw,64px);height:clamp(38px,4.4vw,64px);border-radius:50%;background:rgb(' +
+        rgb + ');box-shadow:0 0 clamp(24px,4vw,54px) rgba(' + rgb + ',.55);transition:background .25s,box-shadow .25s',
+      glowStyle: 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 85% at 50% 118%,rgba(' +
+        rgb + ',' + (0.13 + 0.1 * sens).toFixed(3) + ') 0%,rgba(' + rgb + ',0) 62%);transition:background .3s',
+      sensLabel: Math.round(sens * 100) + '% of peak',
+      sensBar: 'height:100%;width:' + (sens * 100).toFixed(1) + '%;border-radius:3px;background:rgb(' + rgb +
+        ');transition:width .25s,background .25s',
+      handleStyle: 'position:absolute;top:-9px;bottom:-9px;left:' + pct.toFixed(2) +
+        '%;width:2px;transform:translateX(-50%);background:#EDE8DC;box-shadow:0 0 10px rgba(15,23,18,.85);transition:left ' +
+        (this.state.dragging ? '0s' : '.18s') + ' ease-out',
+      sceneStyle: 'position:absolute;inset:0;background-image:url(assets/forest-' + (SCENE_FILE[scene] || 'haven') +
+        '.webp);background-size:cover;background-position:center;background-repeat:no-repeat;opacity:' +
+        (this.props.sceneOpacity ?? 0.42),
+      trackRef: this.track,
+      onDown: e => {
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+        this.setState({ dragging: true });
+        this.fromEvent(e);
+      },
+      onMove: e => { if (this.state.dragging) this.fromEvent(e); },
+      onUp: () => this.setState({ dragging: false }),
+      onKey: e => {
+        const step = e.shiftKey ? 10 : 1;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); this.setState(s => ({ nm: Math.max(LO, s.nm - step) })); }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); this.setState(s => ({ nm: Math.min(HI, s.nm + step) })); }
+        if (e.key === 'Home') { e.preventDefault(); this.setState({ nm: LO }); }
+        if (e.key === 'End') { e.preventDefault(); this.setState({ nm: HI }); }
+      },
+      go460: () => this.setState({ nm: 460 }),
+      go495: () => this.setState({ nm: 495 }),
+      go525: () => this.setState({ nm: 525 }),
+      go555: () => this.setState({ nm: 555 }),
+      go590: () => this.setState({ nm: 590 }),
+      go645: () => this.setState({ nm: 645 }),
+      chip460: chip(460, 12), chip495: chip(495), chip525: chip(525), chip555: chip(555), chip590: chip(590), chip645: chip(645)
+    };
+  }
+}
+
+</script>
+</body>
+</html>

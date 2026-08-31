@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,300;1,400&amp;family=Sora:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:3px;border-radius:4px}
+@media(max-width:720px){#cols{grid-template-columns:minmax(0,1fr)!important;row-gap:24px!important}}
+@media(max-width:760px){nav{padding:14px 20px!important}nav > div{gap:0!important}nav > div > a{font-size:9.5px!important;letter-spacing:.8px!important;padding:8px 6px!important}#head{flex-direction:column!important;align-items:flex-start!important;gap:10px!important}}
+@media(max-width:560px){nav > a > span{display:none}}
+@media(max-height:660px),(max-width:720px){html,body{height:auto!important;overflow:auto!important}#page{position:static!important;min-height:100vh;overflow:visible!important}#body{overflow:visible!important}}
+</style>
+</helmet>
+
+<div id="page" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#0F1712;overflow:hidden">
+
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden">
+    <div style="{{ sceneStyle }}"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.55) 0%,rgba(15,23,18,.72) 55%,rgba(15,23,18,.88) 100%)"></div>
+  </div>
+
+  <nav style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px">
+    <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px">
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+      <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+    </div>
+    <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:2px">
+      <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+      <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shop</a>
+      <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Spectrum</a>
+      <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Studies</a>
+      <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;padding:8px 13px;border-bottom:1px solid #D9B368">FAQ</a>
+      <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:20px;padding:7px 16px" style-hover="background:rgba(217,179,104,.14)">Cart {{ cartLabel }}</a>
+    </div>
+  </nav>
+
+  <div id="body" style="position:relative;z-index:10;flex:1;min-height:0;overflow-y:auto;padding:clamp(20px,3.4vh,42px) clamp(32px,4.5vw,84px) clamp(18px,2.4vh,30px)">
+
+    <div id="head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:clamp(18px,2.6vh,32px)">
+      <div>
+        <p style="font-size:10px;letter-spacing:2.6px;text-transform:uppercase;color:#8A9B84;margin-bottom:7px">Sixteen questions</p>
+        <h1 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(28px,3.2vw,48px);line-height:1.05;letter-spacing:-.01em;color:#EDE8DC">Frequently asked</h1>
+      </div>
+      <p style="font-size:12px;font-weight:300;line-height:1.6;color:#8A9B84;max-width:34ch;text-align:right;text-wrap:pretty">Anything not answered here, write to <a href="mailto:hello@calmlyte.com">hello@calmlyte.com</a> and a person will reply.</p>
+    </div>
+
+    <div id="cols" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(18px,1.8vw,30px);row-gap:clamp(16px,2.2vh,26px);align-items:stretch">
+
+      <div style="display:contents">
+        <div style="background:rgba(20,31,25,.5);border:1px solid rgba(198,207,196,.14);border-radius:16px;padding:clamp(16px,2vh,22px) clamp(18px,1.8vw,26px) clamp(6px,.8vh,10px)">
+          <p style="font-size:9.5px;letter-spacing:2.4px;text-transform:uppercase;color:#8A9B84;padding-bottom:10px;border-bottom:1px solid rgba(198,207,196,.14);margin-bottom:2px">About Calmlyte</p>
+          <sc-for list="{{ g0 }}" as="q" hint-placeholder-count="4">
+            <div>
+              <button onClick="{{ q.toggle }}" style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.1vw,15.5px);line-height:1.4;text-align:left;cursor:pointer;background:none;border:0;width:100%;display:flex;align-items:baseline;gap:11px;padding:11px 0;color:#EDE8DC;transition:color .3s" style-hover="color:#E7CE9B">
+                <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:14px;height:1px;margin-top:.62em;background:#D9B368"></span>
+                </sc-if>
+                <sc-if value="{{ q.closed }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:9px;height:1px;margin-top:.62em;background:rgba(198,207,196,.34)"></span>
+                </sc-if>
+                <span style="flex:1;text-wrap:pretty">{{ q.q }}</span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:clamp(12px,.95vw,13.5px);line-height:1.65;font-weight:300;color:#C6CFC4;text-wrap:pretty;padding:0 0 14px 20px">{{ q.a }}</p>
+              </sc-if>
+              <sc-if value="{{ q.notLast }}" hint-placeholder-val="{{ true }}">
+                <div aria-hidden="true" style="height:1px;background:rgba(198,207,196,.09)"></div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:rgba(20,31,25,.5);border:1px solid rgba(198,207,196,.14);border-radius:16px;padding:clamp(16px,2vh,22px) clamp(18px,1.8vw,26px) clamp(6px,.8vh,10px)">
+          <p style="font-size:9.5px;letter-spacing:2.4px;text-transform:uppercase;color:#8A9B84;padding-bottom:10px;border-bottom:1px solid rgba(198,207,196,.14);margin-bottom:2px">The light</p>
+          <sc-for list="{{ g1 }}" as="q" hint-placeholder-count="4">
+            <div>
+              <button onClick="{{ q.toggle }}" style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.1vw,15.5px);line-height:1.4;text-align:left;cursor:pointer;background:none;border:0;width:100%;display:flex;align-items:baseline;gap:11px;padding:11px 0;color:#EDE8DC;transition:color .3s" style-hover="color:#E7CE9B">
+                <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:14px;height:1px;margin-top:.62em;background:#D9B368"></span>
+                </sc-if>
+                <sc-if value="{{ q.closed }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:9px;height:1px;margin-top:.62em;background:rgba(198,207,196,.34)"></span>
+                </sc-if>
+                <span style="flex:1;text-wrap:pretty">{{ q.q }}</span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:clamp(12px,.95vw,13.5px);line-height:1.65;font-weight:300;color:#C6CFC4;text-wrap:pretty;padding:0 0 14px 20px">{{ q.a }}</p>
+              </sc-if>
+              <sc-if value="{{ q.notLast }}" hint-placeholder-val="{{ true }}">
+                <div aria-hidden="true" style="height:1px;background:rgba(198,207,196,.09)"></div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:contents">
+        <div style="background:rgba(20,31,25,.5);border:1px solid rgba(198,207,196,.14);border-radius:16px;padding:clamp(16px,2vh,22px) clamp(18px,1.8vw,26px) clamp(6px,.8vh,10px)">
+          <p style="font-size:9.5px;letter-spacing:2.4px;text-transform:uppercase;color:#8A9B84;padding-bottom:10px;border-bottom:1px solid rgba(198,207,196,.14);margin-bottom:2px">The products</p>
+          <sc-for list="{{ g2 }}" as="q" hint-placeholder-count="4">
+            <div>
+              <button onClick="{{ q.toggle }}" style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.1vw,15.5px);line-height:1.4;text-align:left;cursor:pointer;background:none;border:0;width:100%;display:flex;align-items:baseline;gap:11px;padding:11px 0;color:#EDE8DC;transition:color .3s" style-hover="color:#E7CE9B">
+                <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:14px;height:1px;margin-top:.62em;background:#D9B368"></span>
+                </sc-if>
+                <sc-if value="{{ q.closed }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:9px;height:1px;margin-top:.62em;background:rgba(198,207,196,.34)"></span>
+                </sc-if>
+                <span style="flex:1;text-wrap:pretty">{{ q.q }}</span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:clamp(12px,.95vw,13.5px);line-height:1.65;font-weight:300;color:#C6CFC4;text-wrap:pretty;padding:0 0 14px 20px">{{ q.a }}</p>
+              </sc-if>
+              <sc-if value="{{ q.notLast }}" hint-placeholder-val="{{ true }}">
+                <div aria-hidden="true" style="height:1px;background:rgba(198,207,196,.09)"></div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:rgba(20,31,25,.5);border:1px solid rgba(198,207,196,.14);border-radius:16px;padding:clamp(16px,2vh,22px) clamp(18px,1.8vw,26px) clamp(6px,.8vh,10px)">
+          <p style="font-size:9.5px;letter-spacing:2.4px;text-transform:uppercase;color:#8A9B84;padding-bottom:10px;border-bottom:1px solid rgba(198,207,196,.14);margin-bottom:2px">Ordering</p>
+          <sc-for list="{{ g3 }}" as="q" hint-placeholder-count="4">
+            <div>
+              <button onClick="{{ q.toggle }}" style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.1vw,15.5px);line-height:1.4;text-align:left;cursor:pointer;background:none;border:0;width:100%;display:flex;align-items:baseline;gap:11px;padding:11px 0;color:#EDE8DC;transition:color .3s" style-hover="color:#E7CE9B">
+                <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:14px;height:1px;margin-top:.62em;background:#D9B368"></span>
+                </sc-if>
+                <sc-if value="{{ q.closed }}" hint-placeholder-val="{{ true }}">
+                  <span aria-hidden="true" style="flex:none;width:9px;height:1px;margin-top:.62em;background:rgba(198,207,196,.34)"></span>
+                </sc-if>
+                <span style="flex:1;text-wrap:pretty">{{ q.q }}</span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:clamp(12px,.95vw,13.5px);line-height:1.65;font-weight:300;color:#C6CFC4;text-wrap:pretty;padding:0 0 14px 20px">{{ q.a }}</p>
+              </sc-if>
+              <sc-if value="{{ q.notLast }}" hint-placeholder-val="{{ true }}">
+                <div aria-hidden="true" style="height:1px;background:rgba(198,207,196,.09)"></div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:9px clamp(32px,4.5vw,84px);border-top:1px solid rgba(198,207,196,.14)">
+    <p style="font-size:11px;color:#8A9B84;font-weight:300;line-height:1.55">Not a medical device. Not evaluated by the FDA to diagnose, treat, cure, or prevent any disease.</p>
+    <a href="Studies.dc.html" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#E7CE9B;white-space:nowrap">The research →</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;sceneOpacity&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;min&quot;: 0, &quot;max&quot;: 1, &quot;step&quot;: 0.02, &quot;default&quot;: 0.42, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Scene&quot;}
+}">
+const GROUPS = [
+  [
+    ['What is Calmlyte?', 'A green-light wellness brand. Our products deliver a narrow band of green light for use at home — a panel for a room, a handheld for close work, a mask for the face, and a belt for the back or waist.'],
+    ['Is Calmlyte a medical device?', 'No. Calmlyte is a general wellness product. It is not intended to diagnose, treat, cure, or prevent any condition. Follow the user manual and stop using it if you feel discomfort.'],
+    ['How is this different from red light therapy?', 'Wavelength. Red and near-infrared devices work at roughly 630 to 850 nm and are studied mainly for tissue and skin outcomes. Calmlyte works at 520 to 530 nm, where the research points instead toward pain, migraine, and sleep.'],
+    ['Where does the name come from?', 'From shinrin yoku, the Japanese practice of unhurried time spent among trees. Green light is the part of that experience we can bring indoors.']
+  ],
+  [
+    ['What spectrum does Calmlyte use?', 'A narrow band of visible green light, around 520 to 530 nm. Green sits in the middle of the visible spectrum, between blue and yellow, giving it a softer visual profile than blue light and a cooler tone than amber or red.'],
+    ['How long is a session?', 'Typically 10 to 45 minutes. Start at lower brightness and shorter durations, then adjust to what feels comfortable.'],
+    ['Do I look at the light, or does it shine on me?', 'Both, depending on the product. The panel and handheld are ambient — the light fills the space around you. The mask and belt sit against the body and treat one area directly.'],
+    ['Is it safe for my eyes?', 'Do not stare directly into the LEDs at close range. If you have photosensitivity, an eye condition, light-triggered migraine or epilepsy, or take photosensitising medication, speak to a qualified healthcare professional before use.']
+  ],
+  [
+    ['Which product should I start with?', 'The Panel if you want to change a whole room. The Handheld for a desk or travel. The Mask for face and wind-down. The Belt for the lower back or waist under clothing.'],
+    ['What comes in the box?', 'The device, a USB charging cable, a user manual, a remote control, and a storage bag.'],
+    ['Can I control brightness and timing?', 'Yes. Every product has adjustable brightness and a built-in timer, and connects by Bluetooth to the Calmlyte app.'],
+    ['Can I use more than one at once?', 'Yes. They are independent devices with no combined limit, though there is no evidence that stacking them improves results.']
+  ],
+  [
+    ['What is your return policy?', 'Thirty days from delivery. Return the product unused and in its original packaging for a full refund, less return shipping.'],
+    ['What is the warranty?', 'One year limited, covering manufacturing defects from the date of delivery.'],
+    ['Do you ship internationally?', 'Yes. Duties and import taxes are the responsibility of the recipient.'],
+    ['How do I reach a person?', 'Email hello@calmlyte.com. We answer every message ourselves.']
+  ]
+];
+
+class Component extends DCLogic {
+  state = { open: '0-0', count: 0 };
+
+  componentDidMount() {
+    let n = 0;
+    try { n = (JSON.parse(localStorage.getItem('calmlyte-cart')) || []).reduce((a, i) => a + i.qty, 0); } catch (e) {}
+    this.setState({ count: n });
+  }
+
+  group(gi) {
+    return GROUPS[gi].map((row, i) => {
+      const key = gi + '-' + i;
+      const on = this.state.open === key;
+      return {
+        q: row[0],
+        a: row[1],
+        open: on,
+        closed: !on,
+        notLast: i < GROUPS[gi].length - 1,
+        toggle: () => this.setState(s => ({ open: s.open === key ? '' : key }))
+      };
+    });
+  }
+
+  renderVals() {
+    return {
+      cartLabel: this.state.count ? '(' + this.state.count + ')' : '',
+      sceneStyle: 'position:absolute;inset:0;background-image:url(assets/forest-haven.webp);' +
+        'background-size:cover;background-position:center;background-repeat:no-repeat;opacity:' +
+        (this.props.sceneOpacity ?? 0.42),
+      g0: this.group(0), g1: this.group(1), g2: this.group(2), g3: this.group(3)
+    };
+  }
+}
+</script>
+</body>
+</html>

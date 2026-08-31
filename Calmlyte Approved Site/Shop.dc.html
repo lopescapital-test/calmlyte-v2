@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Sora:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:3px;border-radius:4px}
+@media(max-width:1000px){html,body{height:auto!important;overflow:auto!important}#page{position:static!important;min-height:100vh;overflow:visible!important}#body{grid-template-columns:minmax(0,1fr)!important;row-gap:clamp(22px,3vh,36px)!important}#grid{align-self:start!important}}
+@media(max-width:760px){nav{padding:14px 20px!important}nav > div{gap:2px!important}nav > div > a{font-size:10px!important;letter-spacing:1px!important;padding:8px 9px!important}}
+@media(max-width:620px){#grid{grid-template-columns:minmax(0,1fr)!important}}
+@media(max-width:560px){nav > a > span{display:none}}
+@media(max-height:760px){html,body{height:auto!important;overflow:auto!important}#page{position:static!important;min-height:100vh;overflow:visible!important}}
+</style>
+</helmet>
+
+<div id="page" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#0F1712;overflow:hidden">
+
+  <div aria-hidden="true" style="{{ sceneStyle }}"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.55) 0%,rgba(15,23,18,.72) 55%,rgba(15,23,18,.88) 100%)"></div>
+
+  <nav style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px">
+    <div aria-hidden="true" style="{{ spectrumWrap }}">
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+      <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+    </div>
+    <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:2px">
+      <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+      <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;padding:8px 13px;border-bottom:1px solid #D9B368">Shop</a>
+      <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Spectrum</a>
+      <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Studies</a>
+      <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">FAQ</a>
+      <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:20px;padding:7px 16px" style-hover="background:rgba(217,179,104,.14)">Cart {{ cartLabel }}</a>
+    </div>
+  </nav>
+
+  <div id="body" style="position:relative;z-index:10;flex:1;min-height:0;display:grid;grid-template-columns:clamp(290px,29%,415px) minmax(0,1fr);align-items:center;column-gap:clamp(24px,3vw,56px);padding:clamp(16px,2.4vh,30px) clamp(28px,4vw,72px)">
+
+    <header id="head" style="flex:none;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(16px,2.4vh,30px)">
+      <div style="display:flex;flex-direction:column;gap:clamp(9px,1.2vh,14px)">
+        <h1 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(16px,1.4vw,20px);line-height:1.35;color:#EDE8DC;text-wrap:pretty;margin-top:-5px">Calmlyte is inspired by <a href="Shinrin Yoku.dc.html" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(217,179,104,.45);text-underline-offset:4px;text-decoration-thickness:1px" style-hover="color:#E7CE9B;text-decoration-color:#D9B368">shinrin yoku</a>, the Japanese practice of bathing in the forest atmosphere.</h1>
+        <p style="font-size:clamp(13px,1.05vw,14.5px);line-height:1.65;font-weight:300;color:#C6CFC4;text-wrap:pretty">It uses a narrow band of visible green light, around 520 to 530 nm — the middle of the visible spectrum, between blue and yellow.</p>
+        <p style="font-size:clamp(13px,1.05vw,14.5px);line-height:1.65;font-weight:300;color:#C6CFC4;text-wrap:pretty">Research is still developing. Early studies suggest this range may:</p>
+      </div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:clamp(9px,1.25vh,15px)">
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:13.5px;font-weight:300;color:#C6CFC4;line-height:1.5"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#2E7D4F;transform:translateY(-2px)"></span><span>improve sleep</span></li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:13.5px;font-weight:300;color:#C6CFC4;line-height:1.5"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#379356;transform:translateY(-2px)"></span><span>manage chronic pain</span></li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:13.5px;font-weight:300;color:#C6CFC4;line-height:1.5"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#43A85B;transform:translateY(-2px)"></span><span>reduce migraine intensity</span></li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:13.5px;font-weight:300;color:#C6CFC4;line-height:1.5"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#55BC5C;transform:translateY(-2px)"></span><span>soften surface-level skin discoloration</span></li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:13.5px;font-weight:300;color:#C6CFC4;line-height:1.5"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#7EC81F;transform:translateY(-2px)"></span><span>support relaxation and internal regulation</span></li>
+      </ul>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <a href="Light.dc.html" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;padding:8px 16px" style-hover="background:rgba(217,179,104,.14)">The spectrum</a>
+        <a href="Studies.dc.html" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#C6CFC4;border:1px solid rgba(198,207,196,.22);border-radius:7px;padding:8px 16px" style-hover="border-color:rgba(217,179,104,.5)">Studies</a>
+      </div>
+    </header>
+
+    <div id="grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.6vw,22px)">
+      <article style="min-height:clamp(178px,25vh,215px);background:rgba(22,33,27,.78);border:1px solid rgba(198,207,196,.14);border-radius:14px;overflow:hidden;display:flex;align-items:stretch">
+        <a href="Product.dc.html?sku=handheld" style="display:block;position:relative;flex:none;width:min(46%,100%);min-height:0;background:#16211B">
+          <img src="assets/handheld-card.png" alt="Calmlyte Handheld resting on linen on a wood console, green LEDs lit" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="flex:1;min-width:0;padding:clamp(14px,1.8vh,22px) clamp(14px,1.4vw,20px);display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.4vh,16px)">
+          <div>
+            <p style="{{ tagStyle }}">Portable · daytime</p>
+            <h2 style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(18px,1.6vw,23px);line-height:1.15;color:#EDE8DC"><a href="Product.dc.html?sku=handheld" style="color:inherit" style-hover="color:#E7CE9B">Handheld</a></h2>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-family:'Spectral',Georgia,serif;font-size:clamp(16px,1.35vw,19px);font-weight:300;color:#EDE8DC">$450</span>
+            <button onClick="{{ add1 }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:9px 17px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">{{ addLabel }}</button>
+          </div>
+        </div>
+      </article>
+
+      <article style="min-height:clamp(178px,25vh,215px);background:rgba(22,33,27,.78);border:1px solid rgba(198,207,196,.14);border-radius:14px;overflow:hidden;display:flex;align-items:stretch">
+        <a href="Product.dc.html?sku=mask" style="display:block;position:relative;flex:none;width:min(46%,100%);min-height:0;background:#16211B">
+          <img src="assets/mask-hero.webp" alt="Calmlyte Mask on a wood console against a deep green wall, green LEDs lit" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="flex:1;min-width:0;padding:clamp(14px,1.8vh,22px) clamp(14px,1.4vw,20px);display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.4vh,16px)">
+          <div>
+            <p style="{{ tagStyle }}">Personal · evening</p>
+            <h2 style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(18px,1.6vw,23px);line-height:1.15;color:#EDE8DC"><a href="Product.dc.html?sku=mask" style="color:inherit" style-hover="color:#E7CE9B">Mask</a></h2>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-family:'Spectral',Georgia,serif;font-size:clamp(16px,1.35vw,19px);font-weight:300;color:#EDE8DC">$400</span>
+            <button onClick="{{ add2 }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:9px 17px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">{{ addLabel }}</button>
+          </div>
+        </div>
+      </article>
+
+      <article style="min-height:clamp(178px,25vh,215px);background:rgba(22,33,27,.78);border:1px solid rgba(198,207,196,.14);border-radius:14px;overflow:hidden;display:flex;align-items:stretch">
+        <a href="Product.dc.html?sku=panel" style="display:block;position:relative;flex:none;width:min(46%,100%);min-height:0;background:#16211B">
+          <img src="assets/panel-hero.webp" alt="Calmlyte Panel lit on a wood console against a deep green wall" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="flex:1;min-width:0;padding:clamp(14px,1.8vh,22px) clamp(14px,1.4vw,20px);display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.4vh,16px)">
+          <div>
+            <p style="{{ tagStyle }}">Desk · anytime</p>
+            <h2 style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(18px,1.6vw,23px);line-height:1.15;color:#EDE8DC"><a href="Product.dc.html?sku=panel" style="color:inherit" style-hover="color:#E7CE9B">Panel</a></h2>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-family:'Spectral',Georgia,serif;font-size:clamp(16px,1.35vw,19px);font-weight:300;color:#EDE8DC">$600</span>
+            <button onClick="{{ add0 }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:9px 17px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">{{ addLabel }}</button>
+          </div>
+        </div>
+      </article>
+
+      <article style="min-height:clamp(178px,25vh,215px);background:rgba(22,33,27,.78);border:1px solid rgba(198,207,196,.14);border-radius:14px;overflow:hidden;display:flex;align-items:stretch">
+        <a href="Product.dc.html?sku=belt" style="display:block;position:relative;flex:none;width:min(46%,100%);min-height:0;background:#16211B">
+          <img src="assets/belt-hero.webp" alt="Calmlyte Belt fastened on a wood table against a deep green wall, its green LED panel lit" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="flex:1;min-width:0;padding:clamp(14px,1.8vh,22px) clamp(14px,1.4vw,20px);display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.4vh,16px)">
+          <div>
+            <p style="{{ tagStyle }}">Wearable · morning</p>
+            <h2 style="font-family:'Spectral',Georgia,serif;font-weight:400;font-size:clamp(18px,1.6vw,23px);line-height:1.15;color:#EDE8DC"><a href="Product.dc.html?sku=belt" style="color:inherit" style-hover="color:#E7CE9B">Belt</a></h2>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-family:'Spectral',Georgia,serif;font-size:clamp(16px,1.35vw,19px);font-weight:300;color:#EDE8DC">$200</span>
+            <button onClick="{{ add3 }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:9px 17px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">{{ addLabel }}</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:20;flex:none;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:8px clamp(28px,4vw,72px);border-top:1px solid rgba(198,207,196,.14)">
+    <p style="font-size:11.5px;color:#8A9B84;font-weight:300;line-height:1.55">Not a medical device. Not evaluated by the FDA to diagnose, treat, cure, or prevent any disease.</p>
+  </div>
+
+  <div style="{{ toastStyle }}">{{ toastText }}</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;scene&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;Deep wood&quot;, &quot;Morning&quot;, &quot;Rain&quot;, &quot;Dusk&quot;], &quot;default&quot;: &quot;Deep wood&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Forest scene&quot;},
+  &quot;sceneOpacity&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;min&quot;: 0, &quot;max&quot;: 0.7, &quot;step&quot;: 0.02, &quot;default&quot;: 0.42, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Forest scene&quot;},
+  &quot;showSpectrum&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout&quot;},
+  &quot;showTags&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout&quot;},
+  &quot;addLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Add&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Layout&quot;}
+}">
+const SCENE_FILE = { 'Deep wood': 'haven', Morning: 'morning', Rain: 'rain', Dusk: 'dusk' };
+const KEY = 'calmlyte-cart';
+const ITEMS = [
+  { sku: 'small-panel', name: 'Panel', price: 600 },
+  { sku: 'handheld', name: 'Handheld', price: 450 },
+  { sku: 'mask', name: 'Mask', price: 400 },
+  { sku: 'belt', name: 'Belt', price: 200 }
+];
+
+class Component extends DCLogic {
+  state = { count: 0, toast: '' };
+  componentDidMount() { this.setState({ count: this.total() }); }
+  read() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+  total() { return this.read().reduce((n, i) => n + i.qty, 0); }
+  add(p) {
+    const cart = this.read();
+    const hit = cart.find(i => i.sku === p.sku);
+    if (hit) hit.qty += 1; else cart.push({ sku: p.sku, name: p.name, price: p.price, qty: 1 });
+    localStorage.setItem(KEY, JSON.stringify(cart));
+    clearTimeout(this._t);
+    this.setState({ count: this.total(), toast: p.name + ' added to cart' });
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+  renderVals() {
+    const shown = !!this.state.toast;
+    const scene = this.props.scene ?? 'Deep wood';
+    const showSpec = this.props.showSpectrum ?? true;
+    return {
+      sceneStyle: 'position:absolute;inset:0;background-image:url(assets/forest-' + (SCENE_FILE[scene] || 'haven') +
+        '.webp);background-size:cover;background-position:center;background-repeat:no-repeat;opacity:' +
+        (this.props.sceneOpacity ?? 0.42),
+      spectrumWrap: 'position:absolute;left:0;right:0;bottom:0;height:3px;' + (showSpec ? '' : 'display:none'),
+      tagStyle: 'font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;color:#8A9B84;margin-bottom:4px;line-height:1.6;min-height:3.2em;' +
+        ((this.props.showTags ?? true) ? '' : 'display:none'),
+      addLabel: (this.props.addLabel ?? 'Add'),
+      cartLabel: this.state.count ? '(' + this.state.count + ')' : '',
+      add0: () => this.add(ITEMS[0]),
+      add1: () => this.add(ITEMS[1]),
+      add2: () => this.add(ITEMS[2]),
+      add3: () => this.add(ITEMS[3]),
+      toastText: this.state.toast,
+      toastStyle: 'position:absolute;left:50%;bottom:24px;transform:translate(-50%,' + (shown ? '0' : '20px') + ');background:#16211B;border:1px solid rgba(217,179,104,.5);color:#EDE8DC;font-size:13px;font-weight:300;border-radius:10px;padding:12px 22px;opacity:' + (shown ? '1' : '0') + ';pointer-events:none;transition:opacity .35s,transform .35s;z-index:210'
+    };
+  }
+}
+
+</script>
+</body>
+</html>

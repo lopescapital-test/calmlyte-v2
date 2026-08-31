@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Sora:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0F1712;color:#EDE8DC;font-family:'Sora',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:#E7CE9B;text-decoration:none}
+a:hover{color:#D9B368}
+:focus-visible{outline:2px solid #D9B368;outline-offset:3px;border-radius:4px}
+/* Nav responsive ladder from calmlyte/assets/site.css — inline styles need
+   !important to be overridden at breakpoints. */
+@media(max-width:760px){
+  nav{padding:14px 20px!important}
+  nav > div{gap:2px!important}
+  nav > div > a{font-size:10px!important;letter-spacing:1px!important;padding:8px 9px!important}
+  nav > div > a:last-child{padding:6px 14px!important;margin-left:6px!important}
+}
+@media(max-width:560px){
+  nav > a > span{display:none}
+  nav > div > a{padding:8px 6px!important}
+}
+</style>
+</helmet>
+
+<div style="background:#0F1712;min-height:100vh;display:flex;flex-direction:column">
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;background:rgba(15,23,18,.92);backdrop-filter:blur(14px)">
+  <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,#6a2fb5 0%,#2f5bd0 15%,#00a2c7 32%,#37b84a 46%,#7ec81f 51%,#e8d21a 63%,#f0921a 79%,#d62828 100%);opacity:.8"></div>
+    <div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:30px;transform:translateX(-50%);border-radius:2px;background:#7ec81f;box-shadow:0 0 10px 2px rgba(126,200,31,.75)"></div>
+  </div>
+  <a href="Shop.dc.html" style="display:flex;align-items:center;gap:11px;color:#EDE8DC;text-decoration:none">
+      <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="flex:none">
+        <defs>
+          <linearGradient id="clStroke" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#24382B"></stop>
+            <stop offset=".45" stop-color="#3f8f4a"></stop>
+            <stop offset="1" stop-color="#8FD69F"></stop>
+          </linearGradient>
+          <radialGradient id="clGlow" cx="50%" cy="34%" r="50%">
+            <stop offset="0" stop-color="#7ec81f" stop-opacity=".42"></stop>
+            <stop offset="1" stop-color="#7ec81f" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:22px;letter-spacing:.03em;line-height:1">Calmlyte</span>
+    </a>
+  <div style="display:flex;align-items:center;gap:2px">
+    <a href="Shinrin Yoku.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shinrin yoku</a>
+    <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Shop</a>
+    <a href="Light.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Spectrum</a>
+    <a href="Studies.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">Studies</a>
+    <a href="FAQ.dc.html" style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#C6CFC4;padding:8px 13px;border-bottom:1px solid transparent" style-hover="color:#E7CE9B">FAQ</a>
+    <a href="Cart.dc.html" style="margin-left:12px;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#0F1712;background:#D9B368;border:1px solid #D9B368;border-radius:20px;padding:7px 18px;font-weight:500">Cart {{ cartLabel }}</a>
+  </div>
+</nav>
+
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:min(620px,80vh);overflow:hidden;pointer-events:none">
+  <div style="position:absolute;inset:0;background-image:url('assets/forest-haven.webp');background-size:cover;background-position:center;opacity:.42"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,23,18,.55) 0%,rgba(15,23,18,.72) 55%,rgba(15,23,18,.98) 100%)"></div>
+</div>
+
+<div style="position:relative;z-index:2;flex:1;max-width:1120px;width:100%;margin:0 auto;padding:clamp(120px,9vw,168px) clamp(24px,5vw,88px) clamp(64px,5vw,104px)">
+
+  <p style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#E7CE9B;margin-bottom:18px">Cart</p>
+  <h1 style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(34px,4.6vw,50px);line-height:1.05;letter-spacing:-.01em;margin-bottom:clamp(34px,3vw,52px)">Your <em style="font-style:italic;color:#E7CE9B">order</em></h1>
+
+  <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+    <div style="border:1px dashed rgba(198,207,196,.25);border-radius:16px;padding:clamp(40px,6vw,80px) clamp(24px,4vw,48px);text-align:center">
+      <svg width="52" height="52" viewBox="0 0 100 100" aria-hidden="true" style="margin:0 auto 22px;opacity:.9">
+        <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+        <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+        <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+      </svg>
+      <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:26px;color:#EDE8DC;margin-bottom:10px">Nothing here yet</p>
+      
+      <a href="Shop.dc.html" style="display:inline-block;background:#D9B368;color:#0F1712;border-radius:10px;padding:15px 30px;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase" style-hover="background:#E7CE9B">Browse the shop</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:clamp(28px,4vw,64px);align-items:start">
+
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid rgba(198,207,196,.14);border-radius:16px;background:#141F19;overflow:hidden">
+        <sc-for list="{{ items }}" as="item" hint-placeholder-count="2">
+          <div style="display:grid;grid-template-columns:100px minmax(0,1fr) auto;gap:20px;align-items:center;padding:20px;border-bottom:1px solid rgba(198,207,196,.14)">
+            <div style="width:100px;height:100px;border-radius:10px;overflow:hidden;background:#16211B;border:1px solid rgba(198,207,196,.14)">
+              <div role="img" aria-label="{{ item.name }}" style="{{ item.imgStyle }}"></div>
+            </div>
+            <div style="min-width:0">
+              <p style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#8A9B84;margin-bottom:2px">{{ item.tag }}</p>
+              <p style="font-family:'Spectral',Georgia,serif;font-size:20px;color:#EDE8DC;margin-bottom:8px">{{ item.name }}</p>
+              <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:0;border:1px solid rgba(198,207,196,.25);border-radius:8px;overflow:hidden">
+                  <button onClick="{{ item.dec }}" aria-label="Decrease quantity" style="background:none;border:none;color:#C6CFC4;font-family:inherit;font-size:16px;width:34px;height:32px;cursor:pointer;line-height:1" style-hover="background:rgba(217,179,104,.14);color:#E7CE9B">−</button>
+                  <span style="min-width:34px;text-align:center;font-size:14px;color:#EDE8DC">{{ item.qty }}</span>
+                  <button onClick="{{ item.inc }}" aria-label="Increase quantity" style="background:none;border:none;color:#C6CFC4;font-family:inherit;font-size:16px;width:34px;height:32px;cursor:pointer;line-height:1" style-hover="background:rgba(217,179,104,.14);color:#E7CE9B">+</button>
+                </div>
+                <button onClick="{{ item.remove }}" style="background:none;border:none;color:#8A9B84;font-family:inherit;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:6px 0" style-hover="color:#E7CE9B">Remove</button>
+              </div>
+            </div>
+            <p style="font-size:18px;font-weight:300;color:#EDE8DC;white-space:nowrap">{{ item.lineTotal }}</p>
+          </div>
+        </sc-for>
+        <div style="padding:16px 20px">
+          <a href="Shop.dc.html" style="font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:#8A9B84" style-hover="color:#E7CE9B">← Continue shopping</a>
+        </div>
+      </div>
+
+      <aside style="background:#16211B;border:1px solid rgba(198,207,196,.14);border-radius:16px;padding:clamp(22px,2.6vw,32px);position:sticky;top:96px">
+        <p style="font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#8A9B84;margin-bottom:22px">Order summary</p>
+        <div style="display:flex;justify-content:space-between;gap:16px;font-size:14px;font-weight:300;color:#C6CFC4;padding-bottom:12px">
+          <span>Subtotal</span><span style="color:#EDE8DC">{{ subtotal }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:16px;font-size:14px;font-weight:300;color:#C6CFC4;padding-bottom:12px">
+          <span>Shipping</span><span style="color:#8A9B84">Free · US</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:16px;font-size:14px;font-weight:300;color:#C6CFC4;padding-bottom:16px;border-bottom:1px solid rgba(198,207,196,.14)">
+          <span>Tax</span><span style="color:#8A9B84">Calculated at checkout</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:18px 0 22px">
+          <span style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#C6CFC4">Total</span>
+          <span style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:30px;color:#E7CE9B">{{ subtotal }}</span>
+        </div>
+        <button onClick="{{ checkout }}" style="width:100%;background:#D9B368;color:#0F1712;border:none;border-radius:10px;padding:17px 28px;font-family:inherit;font-weight:500;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer" style-hover="background:#E7CE9B">Checkout</button>
+        <p style="font-size:12.5px;color:#8A9B84;font-weight:300;line-height:1.6;margin-top:18px">Free US shipping. 30-day returns.</p>
+      </aside>
+
+    </div>
+  </sc-if>
+
+  <div style="margin-top:clamp(56px,5vw,88px);border-top:1px solid rgba(198,207,196,.14);padding-top:clamp(36px,3.5vw,56px)">
+    <p style="font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#8A9B84;margin-bottom:24px">Also in the range</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <article style="background:#141F19;border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:rgba(217,179,104,.45)">
+        <a href="Product.dc.html?sku=panel" style="display:block;height:130px;overflow:hidden" aria-label="Calmlyte Panel">
+          <img src="assets/panel-hero.webp" alt="Calmlyte Panel" style="width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:11px">
+          <a href="Product.dc.html?sku=panel" style="font-family:'Spectral',Georgia,serif;font-size:16px;color:#EDE8DC;text-decoration:none" style-hover="color:#E7CE9B">Panel</a>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-size:14px;font-weight:300;color:#C6CFC4">$600</span>
+            <button onClick="{{ add_small_panel }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 15px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">Add</button>
+          </div>
+        </div>
+      </article>
+      <article style="background:#141F19;border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:rgba(217,179,104,.45)">
+        <a href="Product.dc.html?sku=handheld" style="display:block;height:130px;overflow:hidden" aria-label="Calmlyte Handheld">
+          <img src="assets/handheld-card.png" alt="Calmlyte Handheld" style="width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:11px">
+          <a href="Product.dc.html?sku=handheld" style="font-family:'Spectral',Georgia,serif;font-size:16px;color:#EDE8DC;text-decoration:none" style-hover="color:#E7CE9B">Handheld</a>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-size:14px;font-weight:300;color:#C6CFC4">$450</span>
+            <button onClick="{{ add_handheld }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 15px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">Add</button>
+          </div>
+        </div>
+      </article>
+      <article style="background:#141F19;border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:rgba(217,179,104,.45)">
+        <a href="Product.dc.html?sku=mask" style="display:block;height:130px;overflow:hidden" aria-label="Calmlyte Mask">
+          <img src="assets/mask-hero.webp" alt="Calmlyte Mask" style="width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:11px">
+          <a href="Product.dc.html?sku=mask" style="font-family:'Spectral',Georgia,serif;font-size:16px;color:#EDE8DC;text-decoration:none" style-hover="color:#E7CE9B">Mask</a>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-size:14px;font-weight:300;color:#C6CFC4">$400</span>
+            <button onClick="{{ add_mask }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 15px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">Add</button>
+          </div>
+        </div>
+      </article>
+      <article style="background:#141F19;border:1px solid rgba(198,207,196,.14);border-radius:12px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:rgba(217,179,104,.45)">
+        <a href="Product.dc.html?sku=belt" style="display:block;height:130px;overflow:hidden" aria-label="Calmlyte Belt">
+          <img src="assets/belt-hero.webp" alt="Calmlyte Belt" style="width:100%;height:100%;object-fit:cover">
+        </a>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:11px">
+          <a href="Product.dc.html?sku=belt" style="font-family:'Spectral',Georgia,serif;font-size:16px;color:#EDE8DC;text-decoration:none" style-hover="color:#E7CE9B">Belt</a>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-size:14px;font-weight:300;color:#C6CFC4">$200</span>
+            <button onClick="{{ add_belt }}" style="background:none;color:#E7CE9B;border:1px solid rgba(217,179,104,.5);border-radius:7px;font-family:inherit;font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 15px;cursor:pointer;white-space:nowrap" style-hover="background:#D9B368;color:#0F1712;border-color:#D9B368">Add</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+<footer style="padding:56px clamp(24px,5vw,88px) 56px;text-align:center;border-top:1px solid rgba(198,207,196,.14)">
+  <svg width="38" height="38" viewBox="0 0 100 100" aria-hidden="true" style="margin:0 auto 14px">
+    <circle cx="50" cy="42" r="42" fill="url(#clGlow)"></circle>
+    <path d="M43 82 L50 10 L57 82 Z" fill="url(#clStroke)"></path>
+    <rect x="26" y="84" width="48" height="2.6" rx="1.3" fill="#8A9B84" opacity=".55"></rect>
+  </svg>
+  <p style="font-family:'Spectral',Georgia,serif;font-size:20px;color:#EDE8DC;margin-bottom:8px">Calmlyte</p>
+  <p style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#8A9B84;margin-bottom:22px">A calmer kind of light</p>
+  <p style="font-size:13px;color:#C6CFC4;font-weight:300">Questions? <a href="mailto:hello@calmlyte.com">hello@calmlyte.com</a></p>
+</footer>
+
+<div style="{{ toastStyle }}">{{ toastText }}</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const KEY = 'calmlyte-cart';
+const META = {
+  'small-panel': { img: 'assets/panel-hero.webp', tag: 'Desk · anytime', price: 600, name: 'Panel' },
+  'handheld': { img: 'assets/handheld-card.png', tag: 'Portable · daytime', price: 450, name: 'Handheld' },
+  'mask': { img: 'assets/mask-hero.webp', tag: 'Personal · evening', price: 400, name: 'Mask' },
+  'belt': { img: 'assets/belt-hero.webp', tag: 'Wearable · morning', price: 200, name: 'Belt' }
+};
+
+class Component extends DCLogic {
+  state = { cart: [], ready: false, toast: '' };
+
+  componentDidMount() {
+    let c = [];
+    try { c = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
+    this.setState({ cart: c, ready: true });
+  }
+
+  save(cart) {
+    localStorage.setItem(KEY, JSON.stringify(cart));
+    this.setState({ cart });
+  }
+
+  bump(sku, d) {
+    const cart = this.state.cart
+      .map(i => i.sku === sku ? Object.assign({}, i, { qty: i.qty + d }) : i)
+      .filter(i => i.qty > 0);
+    this.save(cart);
+  }
+
+  remove(sku) {
+    this.save(this.state.cart.filter(i => i.sku !== sku));
+  }
+
+  add(sku) {
+    const m = META[sku] || {};
+    const cart = this.state.cart.slice();
+    const hit = cart.find(i => i.sku === sku);
+    if (hit) hit.qty += 1;
+    else cart.push({ sku: sku, name: m.name || sku, price: m.price || 0, qty: 1 });
+    localStorage.setItem(KEY, JSON.stringify(cart));
+    clearTimeout(this._t);
+    this.setState({ cart: cart, toast: (m.name || sku) + ' added to cart' });
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+
+  money(n) {
+    return '$' + n.toLocaleString('en-US');
+  }
+
+  renderVals() {
+    const cart = this.state.cart;
+    const count = cart.reduce((a, i) => a + i.qty, 0);
+    const sub = cart.reduce((a, i) => a + ((META[i.sku] || {}).price ?? i.price ?? 0) * i.qty, 0);
+    const shown = !!this.state.toast;
+
+    return {
+      cartLabel: count ? '(' + count + ')' : '',
+      hasItems: cart.length > 0,
+      isEmpty: this.state.ready && cart.length === 0,
+      subtotal: this.money(sub),
+      add_small_panel: () => this.add('small-panel'),
+      add_handheld: () => this.add('handheld'),
+      add_mask: () => this.add('mask'),
+      add_belt: () => this.add('belt'),
+      items: cart.map(i => {
+        const m = META[i.sku] || {};
+        return {
+          sku: i.sku,
+          name: m.name || i.name || i.sku,
+          tag: m.tag || '',
+          imgStyle: 'width:100%;height:100%;background-color:#16211B' +
+            (m.img ? ';background-image:url(' + m.img + ');background-size:cover;background-position:center;background-repeat:no-repeat' : ''),
+          qty: i.qty,
+          lineTotal: this.money((m.price ?? i.price ?? 0) * i.qty),
+          inc: () => this.bump(i.sku, 1),
+          dec: () => this.bump(i.sku, -1),
+          remove: () => this.remove(i.sku)
+        };
+      }),
+      checkout: () => {
+        clearTimeout(this._t);
+        this.setState({ toast: 'Checkout opens soon — email hello@calmlyte.com' });
+        this._t = setTimeout(() => this.setState({ toast: '' }), 3200);
+      },
+      toastText: this.state.toast,
+      toastStyle: 'position:fixed;left:50%;bottom:28px;transform:translate(-50%,' + (shown ? '0' : '20px') + ');background:#16211B;border:1px solid rgba(217,179,104,.5);color:#EDE8DC;font-size:13px;font-weight:300;border-radius:10px;padding:12px 22px;opacity:' + (shown ? '1' : '0') + ';pointer-events:none;transition:opacity .35s,transform .35s;z-index:210'
+    };
+  }
+}
+
+</script>
+</body>
+</html>
