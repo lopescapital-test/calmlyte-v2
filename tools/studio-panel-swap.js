@@ -50,7 +50,7 @@ const HOLDER_FRONT = '#E0E0E0';  // studio shot, light grey backdrop
 const ALT_HERO = 'Calmlyte Studio Panel standing on its floor stand in a room with a window and two potted plants, its full-height green LED array lit and casting green light across the wood floor';
 /* The card derivative is a tighter reframe of the hero, so its alt describes the
    closer view rather than repeating the full-room wording. */
-const ALT_CARD = 'Calmlyte Studio Panel lit against a deep green wall, its full-height green LED array facing into the room';
+const ALT_CARD = 'Calmlyte Studio Panel standing on its floor stand against a deep green wall between two potted plants, its full-height green LED array lit';
 const ALT_SIDE = 'Calmlyte Studio Panel at an angle on its floor stand, unlit, showing the two control dials on its side edge';
 const ALT_REAR = 'Calmlyte Studio Panel from behind on its floor stand, showing the cooling fan array across the rear housing';
 const ALT_FRONT = 'Calmlyte Studio Panel face-on on its floor stand, unlit, showing the full LED lens array';
