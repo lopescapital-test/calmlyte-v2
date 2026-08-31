@@ -12,18 +12,21 @@
 
 const fs = require('fs');
 const path = require('path');
-const { PRODUCTS, VARIANTS_FILE } = require('./shopify-catalog');
+const { PRODUCTS, SHOP_DOMAIN, VARIANTS_FILE } = require('./shopify-catalog');
+const CHECKOUT = require('./checkout-wiring');
 
 const OUT_DEFAULT = path.resolve(__dirname, '..', 'build');
 
 /* ------------------------------------------------------------------ *
  * Commerce gate.
  *
- * False means the cart's Checkout button must still be the inert stub the
- * approved artboard defines. Turning checkout on is a deliberate edit here plus
- * an explicit instruction — never a side effect of another change.
+ * The flag lives with the code it gates, in tools/checkout-wiring.js, so there is
+ * one switch rather than two that can disagree. Closed means the cart's Checkout
+ * button must still be the inert stub the approved artboard defines; open means
+ * real checkout code must be present and correct. Either way it is asserted, not
+ * assumed.
  * ------------------------------------------------------------------ */
-const SHOPIFY_CHECKOUT_ENABLED = false;
+const SHOPIFY_CHECKOUT_ENABLED = CHECKOUT.CHECKOUT_ENABLED;
 
 /* The stub, verbatim from Cart.dc.html. A literal, so a change to the handler is
    caught rather than inferred. */
@@ -99,21 +102,133 @@ function verify(outDir) {
     }
   }
 
-  /* 3 — checkout must be the inert stub while the commerce gate is closed. */
-  if (!SHOPIFY_CHECKOUT_ENABLED) {
-    const cartPath = path.join(OUT, 'cart.html');
-    if (!fs.existsSync(cartPath)) {
-      failures.push('cart.html: missing from the build');
-    } else if (!read('cart.html').includes(CHECKOUT_STUB_MARKER)) {
-      failures.push('cart.html: checkout is no longer the inert stub, but SHOPIFY_CHECKOUT_ENABLED is false');
+  /* 3 — the checkout button must match the gate, in both directions. */
+  const cartPath = path.join(OUT, 'cart.html');
+  if (!fs.existsSync(cartPath)) {
+    failures.push('cart.html: missing from the build');
+  } else if (!SHOPIFY_CHECKOUT_ENABLED) {
+    /* Gate closed: the artboard's inert stub, and no commerce anywhere. */
+    if (!read('cart.html').includes(CHECKOUT_STUB_MARKER)) {
+      failures.push('cart.html: checkout is no longer the inert stub, but the commerce gate is closed');
     }
     for (const f of all) {
       const lower = read(f).toLowerCase();
       for (const marker of COMMERCE_MARKERS) {
         if (lower.includes(marker)) {
-          failures.push(`${f}: commerce marker "${marker}" present while SHOPIFY_CHECKOUT_ENABLED is false`);
+          failures.push(`${f}: commerce marker "${marker}" present while the commerce gate is closed`);
         }
       }
+    }
+  } else {
+    /* Gate open. Checkout takes money, so every property it depends on is
+       asserted rather than trusted to have survived the last edit. */
+    const cart = read('cart.html');
+    const variants = JSON.parse(fs.readFileSync(path.join(__dirname, VARIANTS_FILE), 'utf8'));
+
+    /* 3-i  the stub must be gone — otherwise the substitution silently no-oped
+            and the button still does nothing. */
+    if (cart.includes(CHECKOUT_STUB_MARKER)) {
+      failures.push('cart.html: the inert stub is still present while the commerce gate is open — the substitution did not apply');
+    }
+
+    /* 3-ii the real handler, and the guards that make it safe. Each of these is
+            a behaviour the brief asked for; asserting the marker means a future
+            edit cannot quietly drop one. */
+    const REQUIRED = [
+      ['cartCreate mutation',        'mutation CartCreate'],
+      ['redirect to checkoutUrl',    'window.location.href = out.cart.checkoutUrl'],
+      ['empty-cart guard',           'if (!cart.length)'],
+      ['double-submit guard',        'if (this._checkingOut) return;'],
+      ['unknown-variant guard',      'if (!gid)'],
+      ['subtotal parity check',      'subtotal mismatch:'],
+      ['request timeout',            'abort.abort()'],
+      ['failure keeps the cart',     'checkout failed:']
+    ];
+    for (const [label, marker] of REQUIRED) {
+      if (!cart.includes(marker)) failures.push(`cart.html: ${label} missing from the checkout handler`);
+    }
+
+    /* 3-iii the SKU -> variant map, compared pair by pair against the verified
+             file.
+     *
+     *       Whole quoted values, not substrings. Matching /gid:...\/\d+/ inside
+     *       the page finds the right GID inside a wrong one — a trailing
+     *       character appended to a merchandiseId passes a substring check and
+     *       then fails at Shopify. And comparing the two as *sets* would accept a
+     *       map whose entries had been swapped, which charges the customer for a
+     *       different product than the one they picked. Both were live holes here
+     *       until a fault-injection run appended an X to a GID and nothing
+     *       failed. */
+    const block = /var VARIANTS = \{([\s\S]*?)\n\s*\};/.exec(cart);
+    if (!block) {
+      failures.push('cart.html: no VARIANTS map found in the checkout handler');
+    } else {
+      const pairs = new Map(
+        [...block[1].matchAll(/"([^"]+)"\s*:\s*"([^"]*)"/g)].map(m => [m[1], m[2]])
+      );
+      const skus = Object.keys(PRODUCTS);
+      if (pairs.size !== skus.length) {
+        failures.push(`cart.html: VARIANTS map has ${pairs.size} entries, expected ${skus.length}`);
+      }
+      for (const sku of skus) {
+        const want = variants.variants[sku].variantId;
+        if (!pairs.has(sku)) {
+          failures.push(`cart.html: VARIANTS map has no entry for SKU "${sku}"`);
+        } else if (pairs.get(sku) !== want) {
+          failures.push(`cart.html: SKU "${sku}" maps to "${pairs.get(sku)}", verified GID is "${want}"`);
+        }
+      }
+      for (const sku of pairs.keys()) {
+        if (!skus.includes(sku)) failures.push(`cart.html: VARIANTS map sells unknown SKU "${sku}"`);
+      }
+    }
+
+    /* No ProductVariant GID anywhere in the build may be outside the verified
+       set — one that is was never checked against a SKU or a price. */
+    const verified = new Set(Object.keys(PRODUCTS).map(sku => variants.variants[sku].variantId));
+    for (const f of all) {
+      for (const m of read(f).matchAll(/gid:\/\/shopify\/ProductVariant\/[0-9]+[0-9A-Za-z_-]*/g)) {
+        if (!verified.has(m[0])) failures.push(`${f}: unverified variant "${m[0]}" shipped in the build`);
+      }
+    }
+
+    /* 3-iv the request must go to this shop and no other host. */
+    if (!cart.includes(SHOP_DOMAIN)) {
+      failures.push(`cart.html: checkout does not reference ${SHOP_DOMAIN}`);
+    }
+    for (const m of cart.matchAll(/[A-Za-z0-9-]+\.myshopify\.com/g)) {
+      if (m[0] !== SHOP_DOMAIN) failures.push(`cart.html: checkout references a foreign shop "${m[0]}"`);
+    }
+
+    /* 3-v  a Storefront public token is expected in the page — that is how the
+            Storefront API is designed to be called from a browser. A privileged
+            token is not, ever, on any page. This is the assertion that matters
+            most: it is the one thing here that could publish a secret. */
+    for (const f of all) {
+      const text = read(f);
+      for (const m of text.matchAll(/shp(?:at|ca|pa|ss)_[A-Za-z0-9]{4,}/g)) {
+        failures.push(`${f}: a privileged Shopify token (${m[0].slice(0, 6)}…) reached the build`);
+      }
+    }
+    if (!/'[0-9a-f]{32}'/.test(cart) && !/"[0-9a-f]{32}"/.test(cart)) {
+      failures.push('cart.html: no Storefront public token embedded — the Checkout button cannot work');
+    }
+
+    /* 3-vi checkout belongs on the cart page alone. A token or a mutation on
+            another page means the substitution leaked. */
+    for (const f of all) {
+      if (f === 'cart.html') continue;
+      const text = read(f);
+      if (text.includes('cartCreate') || /X-Shopify-Storefront-Access-Token/i.test(text)) {
+        failures.push(`${f}: checkout code leaked outside cart.html`);
+      }
+    }
+
+    /* 3-vii no third-party payment processor. Shopify hosts the payment page;
+             nothing else should be in here. */
+    const lower = cart.toLowerCase();
+    for (const marker of ['stripe', 'paypal', 'braintree', 'adyen', 'klarna', 'payment_intent', 'checkout.session']) {
+      if (lower.includes(marker)) failures.push(`cart.html: unexpected payment marker "${marker}"`);
     }
   }
 
@@ -257,7 +372,7 @@ function report(result) {
   console.log('\nASSERTIONS');
   console.log(`  design-tool routes in output ... ${has('design-tool') ? 'FAIL' : 'pass'}`);
   console.log(`  bindings resolved ............. ${has('binding') ? 'FAIL' : 'pass'}`);
-  console.log(`  checkout inert (gate closed) .. ${has('checkout') || has('commerce marker') ? 'FAIL' : 'pass'}`);
+  console.log(`  checkout matches the gate ..... ${has('checkout') || has('commerce marker') || has('variant') || has('token') || has('shop') || has('payment marker') ? 'FAIL' : 'pass'}`);
   console.log(`  withdrawn Mask fully removed .. ${has('withdrawn Mask') ? 'FAIL' : 'pass'}`);
   console.log(`  no internal markers shipped ... ${has('internal marker') ? 'FAIL' : 'pass'}`);
   console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);

@@ -22,10 +22,23 @@ const path = require('path');
 const { verify: verifyBuild, report: reportAssertions } = require('./verify-build');
 const SWAP = require('./studio-panel-swap');
 const HOLDERS = require('./image-holders');
+const CHECKOUT = require('./checkout-wiring');
 
-/* Artboard-level string rules, applied in order. Both sets assert their match
-   counts, so a rule that stops matching fails the build. */
-const ARTBOARD_RULES = SWAP.RULES.concat(HOLDERS.RULES);
+/* Artboard-level string rules, applied in order. Every set asserts its match
+   counts, so a rule that stops matching fails the build.
+ *
+ * Built on first use rather than at require time. CHECKOUT.rules() reads the
+ * resolved variants and the token from the environment and throws a explanatory
+ * error when checkout is enabled without them — at require time that error
+ * surfaces as a module-load stack trace with the explanation buried in it, which
+ * is the opposite of useful to whoever is running the build. */
+let _artboardRules = null;
+function artboardRules() {
+  if (!_artboardRules) {
+    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules());
+  }
+  return _artboardRules;
+}
 
 const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'Calmlyte Approved Site');
@@ -358,7 +371,7 @@ function slice(src, openRe, closeTag) {
    silently leaving the Mask in place. */
 function applyProductSwap(src, file) {
   let out = src;
-  for (const rule of ARTBOARD_RULES) {
+  for (const rule of artboardRules()) {
     if (rule.file !== file) continue;
     let found;
     if (rule.fromRe) {
@@ -557,6 +570,14 @@ function checkAssetRefs() {
 /* ------------------------------------------------------------------ */
 
 function main() {
+  /* Validate configuration before touching build/. artboardRules() is what reads
+     the resolved variants and the token, so calling it here means a missing or
+     wrong token fails while the previous output is still on disk. Called after
+     the rm, a config error left no build/ at all — harmless on Vercel, where a
+     failed build simply is not promoted, but locally it destroys the working
+     output to report a problem that was knowable first. */
+  artboardRules();
+
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
 
@@ -619,4 +640,12 @@ function main() {
   process.exitCode = reportAssertions(verifyBuild(OUT));
 }
 
-main();
+try {
+  main();
+} catch (err) {
+  /* A configuration error — no token, a privileged token, missing resolved
+     variants — is an operator problem with a specific fix. Print the fix, not a
+     stack trace through the module loader. */
+  console.error('\nBUILD FAILED\n\n' + err.message + '\n');
+  process.exitCode = 1;
+}
