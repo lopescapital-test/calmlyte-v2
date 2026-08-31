@@ -120,6 +120,9 @@ const OPTIMIZED = {
    'Calmlyte Approved Site/' so that directory stays byte-identical to the set
    recorded in Legal Review. */
 const ADDED_ASSETS = {
+  /* Shop-card only. A tighter reframe of the same original render; the PDP
+     gallery keeps the full-room hero below. */
+  'assets/studio-panel/studio-panel-card.webp': 'studio-panel-card.webp',
   'assets/studio-panel/studio-panel-hero.webp': 'studio-panel-hero.webp',
   'assets/studio-panel/studio-panel-side.webp': 'studio-panel-side.webp',
   'assets/studio-panel/studio-panel-rear.webp': 'studio-panel-rear.webp',

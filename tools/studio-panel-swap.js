@@ -48,6 +48,9 @@ const HOLDER_FRONT = '#E0E0E0';  // studio shot, light grey backdrop
    actually in frame. Three of the four show the panel unlit on a studio
    background; only the hero is lit and in a room setting. */
 const ALT_HERO = 'Calmlyte Studio Panel standing on its floor stand beside a wood console, its full green LED array lit';
+/* The card derivative is a tighter reframe of the hero, so its alt describes the
+   closer view rather than repeating the full-room wording. */
+const ALT_CARD = 'Calmlyte Studio Panel lit against a deep green wall, its full-height green LED array facing into the room';
 const ALT_SIDE = 'Calmlyte Studio Panel at an angle on its floor stand, unlit, showing the two control dials on its side edge';
 const ALT_REAR = 'Calmlyte Studio Panel from behind on its floor stand, showing the cooling fan array across the rear housing';
 const ALT_FRONT = 'Calmlyte Studio Panel face-on on its floor stand, unlit, showing the full LED lens array';
@@ -83,11 +86,28 @@ const PDP_ENTRY = `  '${SKU}': {
 /* Each rule: { file, from, to, count }. `count` is asserted by the build. */
 const RULES = [
   /* ---------------- Shop.dc.html : product card ---------------- */
+  /* Shop card image — a dedicated card derivative, not the PDP hero.
+   *
+   * The hero render frames the panel full-height in a square, so the panel is
+   * only 24% of the frame width and reads as a vertical strip at card size. No
+   * CSS fixes that: in the 201x214 card box `cover` discards ~6% of the width,
+   * which is the whole repositioning budget, and the panel already runs 94% of
+   * the frame height so any zoom cuts its top or base.
+   *
+   * studio-panel-card.webp is a reframe of the same original render — an 845x900
+   * crop at (131,0) of large panel.png — that brings the panel to 36% of the
+   * frame width while keeping its top and the room context (wall shadows, plant,
+   * console). Its aspect ratio (0.939) matches the widest card box, so no
+   * viewport crops it vertically and the panel top is never lost; narrower
+   * mobile boxes trim only side context, and the panel sits at 32–68% of the
+   * width so it stays clear of those edges.
+   *
+   * Card only. The PDP gallery still uses studio-panel-hero.webp. */
   {
     file: 'Shop.dc.html',
-    label: 'shop card image + alt',
+    label: 'shop card image + alt (dedicated card derivative)',
     from: `<img src="assets/mask-hero.webp" alt="Calmlyte Mask on a wood console against a deep green wall, green LEDs lit"`,
-    to: `<img src="assets/studio-panel-hero.webp" alt="${ALT_HERO}"`,
+    to: `<img src="assets/studio-panel-card.webp" alt="${ALT_CARD}"`,
     count: 1
   },
   {
