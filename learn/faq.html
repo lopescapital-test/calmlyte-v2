@@ -7,13 +7,26 @@
 
 <title>Calmlyte FAQ | Green Light, Settings & Ordering</title>
 <meta name="description" content="Answers about Calmlyte green-light products: the 520–530 nm spectrum, the four settings, sessions, shipping, and the difference between a wellness product and a medical device.">
-<link rel="canonical" href="[FACTS: absolute URL once domain is live, e.g. https://calmlyte.com/learn/faq.html]">
+<!-- TODO: set canonical + absolute og:image URL once domain is live -->
+<!-- <link rel="canonical" href="https://calmlyte.com/learn/faq.html"> -->
 <meta name="theme-color" content="#0F1712">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Calmlyte FAQ">
 <meta property="og:description" content="Answers about Calmlyte green-light products, the four settings, sessions, and ordering.">
 
 <!-- GEO: FAQPage structured data — high-value for AI answer engines. Every answer here is claim-safe. -->
+<!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication.
+     Applies to the "Is Calmlyte a medical device?" Q&A in the FAQPage schema below, which mirrors
+     "not intended to diagnose, treat, cure". The marker sits above the block because an HTML
+     comment inside a ld+json script would invalidate the JSON.
+     EDITED 2026-08-29 (Brief D §8.1, counsel: "make this align with the rest of our page").
+     The "What is green light therapy?" Q&A was added below to mirror the visible copy; the
+     medical-device answer is retained because §7 retains it in the visible copy. Schema follows
+     visible copy, it does not lead it. The Q&A order matches the page.
+     NOTE the direction of this change: it puts the claim language into machine-readable data,
+     which is the one edit in this pass that widens rather than narrows regulatory surface.
+     Inert while noindex holds — JSON-LD is what search engines consume, so this must be part of
+     the go-live decision, not a detail discovered after it. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -23,6 +36,8 @@
       "acceptedAnswer": { "@type": "Answer", "text": "Calmlyte is a green-light wellness lighting brand. Its products create a soft, forest-inspired green-light environment for the spaces you live and work in, with four built-in settings for different times of day." } },
     { "@type": "Question", "name": "What light spectrum does Calmlyte use?",
       "acceptedAnswer": { "@type": "Answer", "text": "Calmlyte is built around a narrow-band 520–530 nm green spectrum, with 490–500 nm cyan-green and 590 nm amber support depending on the product and setting." } },
+    { "@type": "Question", "name": "What is green light therapy?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Green light therapy uses a specific narrow band of green light (around 520–530 nm) to help manage chronic pain, reduce migraine intensity, improve sleep, and improve the appearance of uneven skin tone." } },
     { "@type": "Question", "name": "Is Calmlyte a medical device?",
       "acceptedAnswer": { "@type": "Answer", "text": "No. Calmlyte is a general wellness product, not a medical device. It is not intended to diagnose, treat, cure, or prevent any condition." } },
     { "@type": "Question", "name": "What are the four Calmlyte settings?",
@@ -75,6 +90,13 @@
 
 <div class="wrap">
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Learn &nbsp;/&nbsp; FAQ</div>
+
+  <!-- Clearance banner added 2026-08-29 (Brief D §10 banner coverage). Previously this block
+       existed only on learn/green-light.html, so six of seven pages carried unreviewed claim-era
+       copy with nothing marking their status. Text is identical on all seven — keep it that way.
+       Renders unconditionally: .counsel is display:block while copy is staged (see the
+       REVERT AT GO-LIVE note in assets/site.css). -->
+  <span class="counsel"><strong>COPY MODIFIED · PENDING COUNSEL RE-REVIEW · NOT PUBLISHED.</strong> Claim language added 2026-08-29 from counsel-supplied copy. The wavelength was corrected in house from 520–525 nm to the product spec of 520–530 nm; counsel has confirmed the correction. Publication conditions — page context, regulatory posture, and disclaimer strategy — remain unconfirmed. Remains noindex pending sign-off.</span>
   <h1 class="serif">Frequently asked questions</h1>
   <p class="intro">Answers about Calmlyte's green-light products, the four settings, sessions, and ordering. If you don't find what you're looking for, reach us at <a href="mailto:hello@calmlyte.com" style="color:var(--gold-soft)">hello@calmlyte.com</a>.</p>
 
@@ -84,6 +106,20 @@
     <div class="q serif">What is Calmlyte?</div>
     <div class="a">Calmlyte is a green-light wellness lighting brand. Its products create a soft, forest-inspired green-light environment in the spaces you live and work in, with four built-in settings for different times of day.</div>
 
+    <!-- STAGED CLAIM 2026-08-29 (Brief D §3: all four clauses, de-mapped from SKUs).
+         One of exactly TWO claim locations on the site — the other is learn/green-light.html.
+         Product pages carry no claim language. Do not repeat this string elsewhere.
+         String deltas are now CLOSED: counsel confirmed the skin clause (Q2) and the 520–530 nm
+         wavelength correction; the per-SKU subsetting delta was retired when claims were de-mapped.
+         Sits immediately above the "Is Calmlyte a medical device? No." answer that contradicts it —
+         that adjacency is deliberate and retained per §7. Mirrored into the FAQPage schema above
+         per Brief D §8.1 (schema follows visible copy). Still NOT cleared for publication —
+         what remains open is posture, not wording. -->
+    <!-- POSTURE 2026-08-29: retained per counsel instruction; coexists with claim language on this page. Not resolved. -->
+    <div class="q serif claim-staged">What is green light therapy?</div>
+    <div class="a claim-staged">Green light therapy uses a specific narrow band of green light (around 520–530 nm) to help manage chronic pain, reduce migraine intensity, improve sleep, and improve the appearance of uneven skin tone.</div>
+
+    <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
     <div class="q serif">Is Calmlyte a medical device?</div>
     <div class="a">No. Calmlyte is a general wellness product, not a medical device. It is not intended to diagnose, treat, cure, or prevent any condition. Always follow the user manual and discontinue use if discomfort occurs.</div>
 
@@ -106,18 +142,70 @@
     <div class="q serif">Can I control brightness and settings?</div>
     <div class="a">Yes. Calmlyte products offer adjustable brightness, and most connect by Bluetooth app with the four built-in settings. <span class="facts">[FACTS: confirm which SKUs have app control vs. remote-only]</span></div>
 
-    <div class="q serif">Do I need to wear the included glasses?</div>
-    <div class="a">Use the included protective glasses when using a product at close range or higher brightness, and do not stare directly into the LEDs. Individuals with photosensitivity, eye conditions, light-triggered migraines, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.</div>
+    <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication.
+         This answer told people with light-triggered migraines to consult a professional before
+         use, while the staged Q&A above claims reduced migraine intensity. Both on this page.
+         RESOLVED 2026-08-29 (Brief E §1): counsel directed removal of the migraine clause only.
+         "light-triggered migraines" has been removed from this answer. Photosensitivity, eye
+         conditions, epilepsy, photosensitizing medications and do-not-stare are UNCHANGED and stay.
+         NOTE: this page phrased it "light-triggered migraines" where the four PDPs said "migraines
+         triggered by light". Brief E stated the text was identical in all five locations — it was
+         not. A literal replace on the PDP wording would have left the contradiction standing here,
+         on one of only two pages carrying the migraine benefit claim. Both forms were handled.
+         Record note: Brief E labelled this "option (b)"; in the counsel memo (b) meant deleting the
+         block entirely. The narrow edit — memo option (a) — is what was executed. See README.
+         STILL OPEN on this answer: the protective-glasses instruction below. See the PENDING
+         comment on it. -->
+    <!-- GLASSES INSTRUCTION REWRITTEN 2026-08-29 (Brief E), wording signed off before applying.
+         Previous question: "Do I need to wear the included glasses?"
+         Previous answer, verbatim: "Use the included protective glasses when using a product at
+         close range or higher brightness, and do not stare directly into the LEDs. Individuals
+         with photosensitivity, eye conditions, epilepsy, or those taking photosensitizing
+         medications should consult a qualified healthcare professional before use."
+         Both the question ("the included") and the answer ("a product") asserted that protective
+         glasses ship with every SKU. That is FALSE for the Mask, which ships none — so fixing
+         products/mask.html alone would have left this page telling Mask owners to use eyewear they
+         do not have, on the page a confused customer checks first.
+         Confirmation state as of this edit: Panel SHIPS glasses (visible spec row,
+         products/panel.html:194). Mask does NOT (Brief E §3). Handheld and Belt are UNCONFIRMED
+         [FACTS] — this wording deliberately asserts nothing either way for them and stays true
+         however they resolve. Do not add them to the eyewear sentence without confirmation.
+         The unconditional instruction (do not stare) now leads, so it applies to every product
+         regardless of what ships in the box. -->
+    <div class="q serif">Do I need to wear protective glasses?</div>
+    <div class="a">Do not stare directly into the LEDs on any Calmlyte product. The Panel includes protective glasses — use them when using it at close range or higher brightness. Not every Calmlyte product ships with eyewear. Individuals with photosensitivity, eye conditions, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.</div>
   </div>
 
   <div class="faq-group">
     <h2 class="serif">Choosing a product</h2>
 
     <div class="q serif">Which product should I start with?</div>
-    <div class="a">Calmlyte comes in two forms. The <a href="../products/handheld.html">Handheld</a> is portable for desks and travel, built for short daytime resets. The <a href="../products/mask.html">Mask</a> is a personal evening product for close-range use during wind-down and reading. Choose the Handheld for daytime and the Mask for evening.</div>
+    <!-- D-2 2026-08-29 (Brief A): was "Calmlyte comes in two forms", describing only Handheld and
+         Mask. Stale since the Panel and Belt returned to the lineup on 2026-08-22. Descriptors and
+         settings below are reused verbatim from the homepage product cards (index.html:189-230) so
+         the two surfaces cannot drift again. No claim language here, per Brief D §3. -->
+    <div class="a">Calmlyte comes in four forms. The <a href="../products/panel.html">Panel</a> is a green-forward panel for desks and side tables, and the only product that carries all four settings. The <a href="../products/handheld.html">Handheld</a> is portable green light for desks and travel, built for short daytime resets on Focus and Haven. The <a href="../products/belt.html">Belt</a> is a wearable green-light wrap for decompression, worn during quiet hours on Stillness and Haven. The <a href="../products/mask.html">Mask</a> is a personal green-and-amber evening light for close-range use during wind-down and reading, on Dusk and Stillness. Start with the Panel if you want to change a room, and with a wearable or the Handheld if you want the light with you.</div>
 
+    <!-- BOX CONTENTS REWRITTEN 2026-08-29 (Brief E), wording signed off before applying.
+         Previous answer, verbatim: "Contents vary by product and typically include the device,
+         power or charging cable, protective glasses, and a user manual. See each product page for
+         details."
+         Two defects. (1) "typically include ... protective glasses" is FALSE for the Mask, which
+         ships none — the same false statement as the glasses answer above, in a second place on
+         this page. (2) "See each product page for details" is a DEAD POINTER: the "In the box"
+         row uses tr.facts-row (display:none) on the Handheld, Belt and Mask, so only the Panel
+         shows contents at all. A customer sent to check has nowhere to look.
+         This wording asserts ONLY what is confirmed: the Panel list is verbatim from its visible
+         spec row (products/panel.html:194), and the Mask's lack of eyewear is confirmed by
+         Brief E §3. It deliberately makes NO universal claim across the range — Handheld and Belt
+         contents are still [FACTS] unconfirmed, and "every Calmlyte ships with X" would repeat
+         the error this edit exists to fix.
+         The email route replaces the dead pointer and is TEMPORARY. Once Handheld and Belt
+         contents are confirmed and the facts-row rows are made visible, point at the product
+         pages again and drop the "we're confirming" sentence. See the launch-blocker section in
+         README.md — this answer is load-bearing on hello@calmlyte.com being a real inbox. -->
     <div class="q serif">What comes in the box?</div>
-    <div class="a">Contents vary by product and typically include the device, power or charging cable, protective glasses, and a user manual. See each product page for details. <span class="facts">[FACTS: confirm per-SKU box contents]</span></div>
+    <div class="a">Contents vary by product. The Panel ships with the panel, an adjustable stand, a power cable, protective glasses, a remote control, and a user manual. The Mask does not include protective glasses. We're confirming full box contents for the rest of the range — email <a href="mailto:hello@calmlyte.com" style="color:var(--gold-soft)">hello@calmlyte.com</a> and we'll tell you exactly what ships with yours. <span class="facts">[FACTS: confirm per-SKU box contents]</span></div>
   </div>
 
   <div class="faq-group">
@@ -136,6 +224,7 @@
     <div class="a">Email <a href="mailto:hello@calmlyte.com" style="color:var(--gold-soft)">hello@calmlyte.com</a>. <span class="facts">[FACTS: replace with real monitored inbox]</span></div>
   </div>
 
+  <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
   <p class="disclaimer">Calmlyte is a wellness product, not a medical device. Not intended to diagnose, treat, cure, or prevent any condition. Statements have not been evaluated by the FDA.</p>
 </div>
 

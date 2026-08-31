@@ -7,22 +7,33 @@
 
 <title>Calmlyte Handheld | 520–530 nm Green Light</title>
 <meta name="description" content="The Calmlyte Handheld is a portable green-light device built around a narrow-band 520–530 nm green spectrum, designed for short daytime resets at your desk or on the go.">
-<link rel="canonical" href="[FACTS: absolute URL once domain is live, e.g. https://calmlyte.com/products/handheld.html]">
+<!-- TODO: set canonical + absolute og:image URL once domain is live -->
+<!-- <link rel="canonical" href="https://calmlyte.com/products/handheld.html"> -->
 <meta name="theme-color" content="#0F1712">
 
 <meta property="og:type" content="product">
 <meta property="og:title" content="Calmlyte Handheld | 520–530 nm Green Light">
 <meta property="og:description" content="A portable green-light device built around a narrow-band 520–530 nm green spectrum.">
-<meta property="og:image" content="[FACTS: absolute product image URL once domain live]">
+<!-- <meta property="og:image" content="https://calmlyte.com/assets/PLACEHOLDER.webp"> --> <!-- TODO: absolute product image URL once domain is live -->
 <meta name="twitter:card" content="summary_large_image">
 
+<!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication.
+     Applies to "category": "Wellness lighting" in the Product schema below. The marker sits
+     above the block because an HTML comment inside a ld+json script would invalidate the JSON.
+     NOT edited in this pass (Brief B rev 2, R-4): machine-readable data asserts general-wellness
+     while visible copy now asserts health claims. Inert under noindex; launch blocker once lifted. -->
+<!-- D-4 2026-08-29 (Brief A): the "image" and "offers.url" keys were REMOVED from the schema
+     below. They held [FACTS:] placeholder text, which is a malformed value for a URL field —
+     JSON has no comment syntax, so unlike the canonical/og:image tags above they could not be
+     commented out in place. Absent optional keys are valid; malformed ones are not.
+     RESTORE both once the domain is live: "image" takes the absolute product image URL,
+     "offers.url" the absolute product page URL. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Calmlyte Handheld",
   "description": "A portable green-light device built around a narrow-band 520–530 nm green spectrum.",
-  "image": "[FACTS: absolute image URL]",
   "brand": { "@type": "Brand", "name": "Calmlyte" },
   "category": "Wellness lighting",
   "width": "8.2 in",
@@ -38,7 +49,6 @@
     "price": "450.00",
     "priceCurrency": "USD",
     "availability": "https://schema.org/InStock",
-    "url": "[FACTS: final absolute product URL]",
     "warranty": "1-year limited warranty"
   }
 }
@@ -79,6 +89,13 @@
 <div class="pdp-hero">
   <div class="pdp-inner">
   <div class="crumbs"><a href="../index.html">Calmlyte</a> &nbsp;/&nbsp; Products &nbsp;/&nbsp; Handheld</div>
+
+  <!-- Clearance banner added 2026-08-29 (Brief D §10 banner coverage). Previously this block
+       existed only on learn/green-light.html, so six of seven pages carried unreviewed claim-era
+       copy with nothing marking their status. Text is identical on all seven — keep it that way.
+       Renders unconditionally: .counsel is display:block while copy is staged (see the
+       REVERT AT GO-LIVE note in assets/site.css). -->
+  <span class="counsel"><strong>COPY MODIFIED · PENDING COUNSEL RE-REVIEW · NOT PUBLISHED.</strong> Claim language added 2026-08-29 from counsel-supplied copy. The wavelength was corrected in house from 520–525 nm to the product spec of 520–530 nm; counsel has confirmed the correction. Publication conditions — page context, regulatory posture, and disclaimer strategy — remain unconfirmed. Remains noindex pending sign-off.</span>
   <div class="pdp-grid reveal">
     <div class="pdp-gallery">
       <figure class="pdp-figure">
@@ -140,6 +157,13 @@
 
 <section class="pdp-sec reveal">
   <h3 class="h3">Overview</h3>
+  <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication.
+       UPDATE 2026-08-29 (Brief D §3): counsel de-mapped claims from SKUs — "these are the benefits
+       of green light, we aren't going to say which product helps with which". The per-SKU claim
+       staged here on 2026-08-29 has been reverted; claim language now lives only on
+       learn/green-light.html and learn/faq.html. This marker is retained per standing constraint.
+       Its basis has narrowed: the conflict is no longer same-page copy, it is between this
+       sentence and the site-level claim posture. Counsel still adjudicates. -->
   <p>Keep the Handheld at your desk or carry it with you for a short green-light reset during screen-heavy days or work breaks. It offers adjustable brightness and a rechargeable battery. Calmlyte is designed as ambient wellness lighting, not as a medical treatment or therapeutic device.</p>
 </section>
 
@@ -160,7 +184,20 @@
     <tr><th>Suggested session</th><td>Use the Handheld for short daytime resets. Start with lower brightness and shorter sessions, then adjust based on comfort and preference.</td></tr>
     <tr><th>Warranty</th><td>1-year limited warranty</td></tr>
   </table>
-  <p class="pdp-safety"><span>Do not stare directly into the LEDs. Use the included protective glasses when using the device at close range or higher brightness. Discontinue use if light feels uncomfortable. Individuals with photosensitivity, eye conditions, migraines triggered by light, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.</span></p>
+  <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication.
+       UPDATE 2026-08-29 (Brief D §3): the migraine claim was reverted from this page when counsel
+       de-mapped claims from SKUs. The contradiction is no longer same-page, but it is not gone —
+       a reader meets "reduce migraine intensity" on learn/green-light.html or learn/faq.html and
+       this consult-a-professional warning on the product page for the thing they are buying.
+       Still unadjudicated: see §12, "migraine claim vs. safety warning coexistence wording".
+       RESOLVED 2026-08-29 (Brief E §1): counsel directed removal of the migraine clause only.
+         "migraines triggered by light" has been removed from this block. Photosensitivity, eye
+         conditions, epilepsy, photosensitizing medications, do-not-stare and discontinue-use are
+         UNCHANGED and stay. Record note: Brief E labelled this "option (b)"; in the counsel memo
+         (b) meant deleting the block entirely. The narrow edit described in Brief E — memo option
+         (a) — is what was executed. The memo and brief numbering diverged; see README.
+         This block is otherwise intact and stays intact. -->
+  <p class="pdp-safety"><span>Do not stare directly into the LEDs. Use the included protective glasses when using the device at close range or higher brightness. Discontinue use if light feels uncomfortable. Individuals with photosensitivity, eye conditions, epilepsy, or those taking photosensitizing medications should consult a qualified healthcare professional before use.</span></p>
   </div>
 </section>
 
@@ -175,6 +212,7 @@
       <div class="faq-q serif">Where is it meant to be used?</div>
       <div class="faq-a">The Handheld is designed for desks, offices, travel, and screen-heavy days — a portable green-light reset you can use in short sessions wherever you are.</div>
     </div>
+    <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
     <div class="faq-item">
       <div class="faq-q serif">Is this a medical device?</div>
       <div class="faq-a">No. Calmlyte is a general wellness product, not a medical device. It is not intended to diagnose, treat, cure, or prevent any condition. Always follow the user manual and discontinue use if discomfort occurs.</div>
@@ -182,6 +220,7 @@
   </div>
 </section>
 
+<!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
 <p class="disclaimer">Calmlyte is a wellness product, not a medical device. Not intended to diagnose, treat, cure, or prevent any condition. Statements have not been evaluated by the FDA.</p>
 
 <footer>

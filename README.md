@@ -32,12 +32,102 @@ tree; git history is the recovery path. Removed so far: the retired-lineup asset
 per-setting Panel renders plus three `stage-*.webp` on 2026-08-22.
 
 ## Internal review view
-`[FACTS]` notes and the counsel banner on `learn/green-light.html` are hidden from
-visitors. Append `?debug` to any URL to reveal them (e.g.
-`products/handheld.html?debug`). Spec rows whose only value is a `[FACTS]` note carry
-`class="facts-row"` and hide the entire row, so no empty cell is ever shown.
+`[FACTS]` notes are hidden from visitors. Append `?debug` to any URL to reveal them
+(e.g. `products/handheld.html?debug`). Spec rows whose only value is a `[FACTS]` note
+carry `class="facts-row"` and hide the entire row, so no empty cell is ever shown.
+`index.html` gained the same `?debug` script on 2026-08-29; before that the homepage
+had no review view at all.
 The homepage accepts both #haven and legacy #/haven hashes; arriving on a mode
 hash skips the intro gate.
+
+**The counsel banner on `learn/green-light.html` is no longer `?debug`-gated.** As of
+2026-08-29 `.counsel` in `assets/site.css` is `display:block`, so the banner renders on
+a normal page load. This is deliberate and temporary: health-claim copy is staged on
+the site pending counsel review, and a status banner nobody sees is worse than none —
+a reviewer would load the page, see no marking, and reasonably conclude the copy was
+cleared.
+
+## GO-LIVE CHECKLIST — claim-copy staging (added 2026-08-29)
+Do **all** of these in one atomic change, or none. None of it is authorised yet;
+publication requires counsel's written approval of page context and net impression,
+claim-to-SKU mapping, disclaimer strategy, and regulatory posture.
+1. Restore `.counsel { display:none }` in `assets/site.css` (search: `REVERT AT GO-LIVE`).
+2. Remove the `.counsel` banner from all **7** HTML files (it was on 1 until 2026-08-29).
+3. Lift `noindex,nofollow` from all 7 HTML files — same commit, not before.
+4. Resolve every `<!-- COUNSEL REVIEW 2026-08-29 -->` marker per counsel's adjudication.
+   Unresolved markers mean the copy is not cleared. `grep -rn "COUNSEL REVIEW" .`
+5. Confirm every `class="claim-staged"` block. `grep -rn "claim-staged" .` — expect
+   **exactly two**, on `learn/green-light.html` and `learn/faq.html`. More than two means
+   claim copy has leaked back onto product pages, which counsel de-mapped on 2026-08-29.
+6. JSON-LD:
+   - `Product` `"category": "Wellness lighting"` on all four PDPs is **still unresolved** —
+     counsel gave a direction, not a value. Proposals are with Jake; nothing applied.
+   - `"image"` and `"offers.url"` were **removed** from all four `Product` schemas on
+     2026-08-29 because they held `[FACTS:]` placeholder text. Restore both with real
+     absolute URLs once the domain is live. `grep -rn "D-4 2026-08-29" .`
+   - `learn/faq.html` `FAQPage` now **contains the claim language** (the green-light-therapy
+     Q&A was added to mirror visible copy per counsel). JSON-LD is what search engines
+     consume — this is part of the go-live decision, not a detail to discover after it.
+7. Restore commented-out `<link rel="canonical">` and `og:image` tags on the 6 subpages
+   with real absolute URLs. `grep -rn "TODO: set canonical" .`
+
+### LAUNCH BLOCKER — box contents are invisible on 3 of 4 product pages (2026-08-29)
+`tr.facts-row` is `display:none` in `assets/site.css`, and the **"In the box" row uses it on
+the Handheld, Belt, and Mask.** Only `products/panel.html:194` has a plain `<tr>`, so the
+Panel is the only SKU whose contents a customer can actually see.
+
+This started as an internal-notes hygiene issue with no customer impact. It is now a
+product-information gap with one: the FAQ's "What comes in the box?" answer states contents
+"typically include ... protective glasses", which is **false for the Mask**, and a customer
+who wants to check has nowhere to look. The FAQ answer cannot be written accurately while
+the per-SKU lists it should point to do not render.
+
+Resolve **before** launch, not after:
+1. Confirm actual box contents for Handheld and Belt (still `[FACTS:]`).
+2. Convert the "In the box" rows to visible `<tr>` on all four PDPs.
+3. Then the FAQ answer can point at them instead of routing customers to email.
+
+### LAUNCH BLOCKER — `hello@calmlyte.com` must be a real, monitored inbox (2026-08-29)
+Still flagged `[FACTS: replace with real monitored inbox]`, and **its status changed on
+2026-08-29 from decorative to load-bearing.** The FAQ's "What comes in the box?" answer now
+routes customers there, because the per-SKU contents lists it used to point at do not render
+(see the blocker above). For a Handheld or Belt buyer it is currently **the only path to
+finding out what ships in their box** — a question the page itself can no longer answer.
+
+Both blockers resolve together: confirm the contents, make the rows visible, point the FAQ
+back at the product pages, and the email stops being load-bearing. Until then the inbox has
+to be real and monitored before this page ships.
+
+### Superseded instructions — do not follow the older document (2026-08-29)
+Two live briefs disagreed about safety language. Recording the resolution so nobody
+re-applies the retired one:
+
+- **Brief C §2.6 is SUPERSEDED by Brief E §1.** C 2.6 said the light-triggered-migraine
+  consult language "stays regardless of clearance." Counsel subsequently directed its
+  removal. The migraine clause is gone from all five safety locations. Everything else in
+  those blocks — photosensitivity, eye conditions, epilepsy, photosensitizing medications,
+  do-not-stare, discontinue-use — is unchanged and stays.
+- **Brief C §1.7 is SUPERSEDED by Brief E §1 and §3** for safety blocks only. C 1.7 said
+  not to touch them in Track 1; Brief E authorises exactly two edits (the migraine clause,
+  and the Mask glasses instruction). No other safety edit is authorised by anything.
+
+**Option-label divergence — read before acting on the written record.** Brief E §1 says
+"counsel selected option (b)". In the counsel memo of the same date, **(b) meant deleting
+the safety block entirely** and (a) meant removing the migraine clause only. Brief E
+describes and supplies replacement text for **(a)**, and (a) is what was executed. The
+memo and the brief numbered the options differently. The underlying record is an undated,
+unsigned call summary. **Anyone reading "counsel selected (b)" against the memo would
+conclude the epilepsy and photosensitivity warnings were authorised for deletion. They
+were not.** Get this corrected in writing before it is relied on.
+
+### Known divergence, logged deliberately (Brief D §5)
+Counsel elected on 2026-08-29 to keep the existing **10–45 minute** session guidance.
+That is a materially different usage pattern from the protocols in the literature the
+pain and migraine claims rest on. This was a decision, not an oversight. It is recorded
+here so it is not rediscovered later and mistaken for a defect.
+
+The equivalent entry in Brief A, D-6 lives outside this repo and needs the same items
+added by whoever holds it — this section is not a substitute for that.
 
 ## Product lineup (2026-08-22)
 The line is **Panel ($600), Handheld ($450), Belt ($200) and Mask ($400).**

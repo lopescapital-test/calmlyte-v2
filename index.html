@@ -108,6 +108,11 @@
 <!-- FIX: with JS unavailable the gate can never be dismissed, so it would cover the
      whole site. Hide it and restore scrolling when scripting is off. -->
 <noscript><style>.gate{display:none!important}body.gated{overflow:auto!important}</style></noscript>
+<!-- Internal review view: append ?debug to the URL to reveal FACTS/counsel notes.
+     Normal visitors (and JS-off) never see them. Added 2026-08-29 (Brief B rev 2,
+     R-2) so the homepage matches products/*.html and learn/*.html, which have
+     carried this since their own review passes. -->
+<script>if(/(?:^|[?&])debug(?:[=&]|$)/.test(location.search))document.documentElement.className+=" debug";</script>
 </head>
 <body class="gated">
 
@@ -166,9 +171,20 @@
   <div class="phero-inner">
   <section class="shop" id="shop">
   <div class="shop-head">
+    <!-- Clearance banner added 2026-08-29 (Brief D §10 banner coverage). Previously this block
+         existed only on learn/green-light.html, so six of seven pages carried unreviewed claim-era
+         copy with nothing marking their status. Text is identical on all seven — keep it that way.
+         Renders unconditionally: .counsel is display:block while copy is staged (see the
+         REVERT AT GO-LIVE note in assets/site.css). -->
+    <span class="counsel"><strong>COPY MODIFIED · PENDING COUNSEL RE-REVIEW · NOT PUBLISHED.</strong> Claim language added 2026-08-29 from counsel-supplied copy. The wavelength was corrected in house from 520–525 nm to the product spec of 520–530 nm; counsel has confirmed the correction. Publication conditions — page context, regulatory posture, and disclaimer strategy — remain unconfirmed. Remains noindex pending sign-off.</span>
     <p class="eyebrow">520–530&nbsp;nm · narrow-band green light</p>
     <h1 class="h1">Four forms. One <em>spectrum</em>.</h1>
     <p class="lede" style="margin:0 auto">Every Calmlyte product is built around the same narrow-band 520–530 nm green spectrum. Choose the form that fits the moment — a panel for the room, a portable handheld for daytime, a wearable belt for quiet hours, a personal mask for evening.</p>
+    <!-- CLAIM REMOVED 2026-08-29 (Brief D §3). The brand-level claim block staged here on
+         2026-08-29 has been reverted. Counsel de-mapped claims from products; claim language
+         now lives on learn/green-light.html and learn/faq.html ONLY — two locations, no more.
+         The homepage describes the products; the Learn and FAQ pages describe green light.
+         Do not reintroduce claim copy here without written counsel approval. -->
   </div>
   <div class="pgrid four">
     <div class="pcard reveal">
@@ -195,19 +211,15 @@
       </a>
       <div class="pcard-row"><span class="pcard-price">$450</span><button class="addbtn" data-sku="handheld" data-price="450" data-name="Handheld">Add</button></div>
     </div>
+    <!-- CARD ORDER 2026-08-29 (Brief E §4 / Brief C 1.2): Panel, Handheld, Mask, Belt.
+         Mask and Belt were swapped from the previous Belt-then-Mask order; transition-delay values
+         move with the cards so the reveal stagger still runs left to right.
+         Card COPY is deliberately unchanged. Brief C 1.2 supplied replacement lines to strip claim
+         language, but these lines never carried any — and the replacements were less accurate:
+         they dropped the Mask's amber (it is 520-530 nm green WITH 590 nm amber, per its own spec
+         table and schema) and described the Belt as "close-range", which is the Mask's descriptor.
+         Card 1 stays "Panel", not "Signature Panel": the rename is report-only this pass. -->
     <div class="pcard reveal" style="transition-delay:.2s">
-      <a class="pcard-link" href="products/belt.html">
-        <div class="pcard-img"><img src="assets/belt/belt.webp" alt="Calmlyte Belt wrap coiled on a wood table, green LEDs lit inside" loading="lazy"></div>
-        <div class="pcard-body">
-          <p class="pcard-tag">Wearable · quiet hours</p>
-          <p class="pcard-name">Belt</p>
-          <p class="pcard-desc">A wearable green-light wrap for decompression.</p>
-          <p class="pcard-modes">Settings · Stillness &amp; Haven</p>
-        </div>
-      </a>
-      <div class="pcard-row"><span class="pcard-price">$200</span><button class="addbtn" data-sku="belt" data-price="200" data-name="Belt">Add</button></div>
-    </div>
-    <div class="pcard reveal" style="transition-delay:.3s">
       <a class="pcard-link" href="products/mask.html">
         <div class="pcard-img"><img src="assets/mask/mask.webp" alt="Calmlyte Mask resting on a wood table with a soft green glow beneath it" loading="lazy"></div>
         <div class="pcard-body">
@@ -219,8 +231,21 @@
       </a>
       <div class="pcard-row"><span class="pcard-price">$400</span><button class="addbtn" data-sku="mask" data-price="400" data-name="Mask">Add</button></div>
     </div>
+    <div class="pcard reveal" style="transition-delay:.3s">
+      <a class="pcard-link" href="products/belt.html">
+        <div class="pcard-img"><img src="assets/belt/belt.webp" alt="Calmlyte Belt wrap coiled on a wood table, green LEDs lit inside" loading="lazy"></div>
+        <div class="pcard-body">
+          <p class="pcard-tag">Wearable · quiet hours</p>
+          <p class="pcard-name">Belt</p>
+          <p class="pcard-desc">A wearable green-light wrap for decompression.</p>
+          <p class="pcard-modes">Settings · Stillness &amp; Haven</p>
+        </div>
+      </a>
+      <div class="pcard-row"><span class="pcard-price">$200</span><button class="addbtn" data-sku="belt" data-price="200" data-name="Belt">Add</button></div>
+    </div>
   </div>
   <div class="shop-foot"><a class="herolink" href="#when">See when to use each setting ↓</a></div>
+  <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
   <p class="shop-note smallnote">Calmlyte is a wellness product that shapes the light and atmosphere of a room. It is not a medical device and is not intended to diagnose, treat, cure, or prevent any condition. <a href="learn/faq.html">Safety &amp; questions →</a></p>
   </section>
   </div>
@@ -266,6 +291,7 @@
       </div>
     </div>
   </div>
+  <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
   <p class="when-disc">Calmlyte is wellness lighting with gentle settings for different moments. It is not a medical device and is not intended to diagnose, treat, cure, or prevent any disease.</p>
 </section>
 
@@ -307,6 +333,7 @@
 <footer>
   <p class="fbrand">Calmlyte</p>
   <p class="ftag">A calmer kind of light</p>
+  <!-- COUNSEL REVIEW 2026-08-29: conflicts with new claim language. Retained pending adjudication. -->
   <p class="fnote">Calmlyte is wellness lighting emitting narrow-band 520–530&nbsp;nm green light, with four ambiance modes. It is not a medical device and has not been evaluated by the FDA to diagnose, treat, cure, or prevent any disease or condition. All orders ship free within the US, made to order and delivered in 10–14 business days, with 30-day returns.</p>
   <p class="fmail">Questions? <a href="mailto:hello@calmlyte.com">hello@calmlyte.com</a></p>
 </footer>

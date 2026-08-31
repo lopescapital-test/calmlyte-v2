@@ -152,8 +152,11 @@ footer .fmail a:hover{text-decoration:underline}
 html.debug .facts{display:inline}
 tr.facts-row{display:none}
 html.debug tr.facts-row{display:table-row}
-.counsel{background:rgba(217,179,104,.08);border:1px dashed rgba(217,179,104,.6);border-radius:8px;color:var(--gold-soft);font-size:13px;padding:10px 14px;margin:14px 0;max-width:64ch;display:none}
-html.debug .counsel{display:block}
+/* REVERT AT GO-LIVE (Brief B rev 2, R-2) — .counsel was display:none, revealed only
+   by ?debug. While claim copy is staged for counsel it renders unconditionally, so
+   nobody can load a page and read unreviewed copy with no status banner on it.
+   Restore `display:none` in the SAME change that lifts noindex, never before. */
+.counsel{background:rgba(217,179,104,.08);border:1px dashed rgba(217,179,104,.6);border-radius:8px;color:var(--gold-soft);font-size:13px;padding:10px 14px;margin:14px 0;max-width:64ch;display:block}
 
 /* ---------- shared responsive ---------- */
 @media(max-width:640px){
