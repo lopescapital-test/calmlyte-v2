@@ -47,7 +47,7 @@ const HOLDER_FRONT = '#E0E0E0';  // studio shot, light grey backdrop
 /* Alt text, written after viewing each supplied render so it describes what is
    actually in frame. Three of the four show the panel unlit on a studio
    background; only the hero is lit and in a room setting. */
-const ALT_HERO = 'Calmlyte Studio Panel standing on its floor stand beside a wood console, its full green LED array lit';
+const ALT_HERO = 'Calmlyte Studio Panel standing on its floor stand in a room with a window and two potted plants, its full-height green LED array lit and casting green light across the wood floor';
 /* The card derivative is a tighter reframe of the hero, so its alt describes the
    closer view rather than repeating the full-room wording. */
 const ALT_CARD = 'Calmlyte Studio Panel lit against a deep green wall, its full-height green LED array facing into the room';
