@@ -215,6 +215,67 @@ const NAV_RESPONSIVE = `
 }`;
 
 /* ------------------------------------------------------------------ *
+ * Favicons and social preview.
+ *
+ * Supplied assets, copied verbatim — nothing is re-encoded or resized. The
+ * four favicon files go to the build root because that is where the paths in
+ * the <head> point and where browsers probe for /favicon.ico regardless of
+ * markup. The preview image joins the other assets under /assets/.
+ *
+ * Kept outside 'Calmlyte Approved Site/' so that directory stays byte-identical
+ * to the set recorded in Legal Review.
+ * ------------------------------------------------------------------ */
+const FAVICON_SRC = path.join(ROOT, 'assets', '8.30.26', 'favicon');
+const FAVICON_ROOT_FILES = [
+  'favicon.ico',
+  'favicon-16x16.png',
+  'favicon-32x32.png',
+  'apple-touch-icon.png'
+];
+const SOCIAL_IMAGE = 'calmlyte-social-preview.jpg';
+
+/* Absolute URLs, because og:image and og:url must be absolute to resolve for a
+   scraper that has only the markup. The homepage is "/" rather than
+   "/index.html" so a share of the landing page and a share of the site root do
+   not read as two different pages. */
+const SITE_ORIGIN = 'https://www.calmlyte.com';
+const CANONICAL = {
+  'index.html': '/',
+  'shop.html': '/shop.html',
+  'product.html': '/product.html',
+  'faq.html': '/faq.html',
+  'light.html': '/light.html',
+  'studies.html': '/studies.html',
+  'research.html': '/research.html',
+  'cart.html': '/cart.html'
+};
+
+/* og:title / og:description / og:url come from the page's own META entry and the
+   canonical map, so a share card says what the page says. No new copy. */
+function socialTags(route) {
+  const meta = META[route];
+  const q = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  const url = SITE_ORIGIN + CANONICAL[route];
+  const img = `${SITE_ORIGIN}/assets/${SOCIAL_IMAGE}`;
+  return `<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calmlyte">
+<meta property="og:title" content="${q(meta.title)}">
+<meta property="og:description" content="${q(meta.desc)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${img}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${q(meta.title)}">
+<meta name="twitter:description" content="${q(meta.desc)}">
+<meta name="twitter:image" content="${img}">`;
+}
+
+/* ------------------------------------------------------------------ *
  * Policy footer.
  *
  * Four links to the policy pages Shopify serves. Shopify is the source of
@@ -578,7 +639,7 @@ function buildPage(file, route) {
 <meta name="robots" content="noindex,nofollow">
 <title>${meta.title}</title>
 <meta name="description" content="${meta.desc.replace(/"/g, '&quot;')}">
-<!-- No canonical until the live domain is confirmed. -->
+${socialTags(route)}
 ${helmet.trim()}
 ${hover.length ? '<style>\n' + hover.join('\n') + '\n</style>' : ''}
 <style data-build="responsive">/* Build-added layout only. No copy, colour, or type. Desktop unaffected. */
@@ -645,6 +706,21 @@ function copyAssets() {
     report.assetsCopied.push({ name: f, bytes: s.size });
   }
   fs.copyFileSync(path.join(ROOT, 'tools', 'dc-runtime.js'), path.join(to, 'dc.js'));
+
+  /* Favicons to the build root; social preview alongside the other assets.
+     Supplied files, copied byte-for-byte. A missing one is reported rather than
+     silently skipped, because a 404 favicon is invisible until someone notices
+     the tab is blank. */
+  for (const f of FAVICON_ROOT_FILES.concat([SOCIAL_IMAGE])) {
+    const src = path.join(FAVICON_SRC, f);
+    if (!fs.existsSync(src)) {
+      report.unresolved.push(`favicon asset missing: assets/8.30.26/favicon/${f}`);
+      continue;
+    }
+    const dest = f === SOCIAL_IMAGE ? path.join(to, f) : path.join(OUT, f);
+    fs.copyFileSync(src, dest);
+    report.assetsCopied.push({ name: f === SOCIAL_IMAGE ? 'assets/' + f : '/' + f, bytes: fs.statSync(src).size });
+  }
 
   /* Assets added outside the approved artboard set. */
   for (const [from, name] of Object.entries(ADDED_ASSETS)) {

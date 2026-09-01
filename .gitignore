@@ -37,3 +37,11 @@ Calmlyte Approved Site/uploads/
 # publishable, but an Admin token is not and must never land here.
 .env
 .env.*
+
+# Deployed favicon and social-preview assets. Not a source drop: these are the
+# exact bytes the build copies to the output root and /assets, so they have to be
+# in the tracked set or a clean checkout — which is what Vercel builds — has
+# nothing to copy and the build fails. Re-included as a directory because the
+# assets/*/*/ rule above excludes it, and git will not descend into an excluded
+# directory to pick individual files back out. ~150 KB total.
+!assets/8.30.26/favicon/

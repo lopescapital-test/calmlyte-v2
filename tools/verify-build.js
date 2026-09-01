@@ -274,6 +274,69 @@ function verify(outDir) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
   }
 
+  /* 4c — favicons and social preview: the tags on every page, and the files they
+   *      point at actually present in the output.
+   *
+   *      Both halves matter. Tags without files give a blank tab and a broken
+   *      share card; files without tags are dead weight. And og:url is checked
+   *      per page against the canonical map — a share card that carries the
+   *      wrong page's URL sends every reader to the wrong place, which no amount
+   *      of correct markup elsewhere reveals. */
+  const HEAD_TAGS = [
+    '<link rel="icon" href="/favicon.ico" sizes="any">',
+    'sizes="32x32" href="/favicon-32x32.png"',
+    'sizes="16x16" href="/favicon-16x16.png"',
+    'rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"',
+    'property="og:type" content="website"',
+    'property="og:site_name" content="Calmlyte"',
+    'property="og:title"',
+    'property="og:description"',
+    'property="og:url"',
+    'property="og:image"',
+    'property="og:image:width" content="1200"',
+    'property="og:image:height" content="630"',
+    'name="twitter:card" content="summary_large_image"',
+    'name="twitter:title"',
+    'name="twitter:description"',
+    'name="twitter:image"'
+  ];
+  const SOCIAL_URL = 'https://www.calmlyte.com/assets/calmlyte-social-preview.jpg';
+  const CANON = {
+    'index.html': 'https://www.calmlyte.com/',
+    'shop.html': 'https://www.calmlyte.com/shop.html',
+    'product.html': 'https://www.calmlyte.com/product.html',
+    'faq.html': 'https://www.calmlyte.com/faq.html',
+    'light.html': 'https://www.calmlyte.com/light.html',
+    'studies.html': 'https://www.calmlyte.com/studies.html',
+    'research.html': 'https://www.calmlyte.com/research.html',
+    'cart.html': 'https://www.calmlyte.com/cart.html'
+  };
+  for (const f of pages) {
+    const text = read(f);
+    const head = text.slice(0, text.indexOf('</head>'));
+    for (const tag of HEAD_TAGS) {
+      if (!head.includes(tag)) failures.push(`${f}: head is missing ${tag}`);
+    }
+    for (const prop of ['og:image', 'twitter:image']) {
+      const re = new RegExp(`(?:property|name)="${prop}" content="([^"]+)"`);
+      const m = re.exec(head);
+      if (m && m[1] !== SOCIAL_URL) failures.push(`${f}: ${prop} is "${m[1]}", expected ${SOCIAL_URL}`);
+    }
+    const want = CANON[f];
+    const got = (/property="og:url" content="([^"]+)"/.exec(head) || [])[1];
+    if (want && got !== want) failures.push(`${f}: og:url is "${got}", expected "${want}"`);
+    /* Titles and descriptions must be the page's own, not another page's. */
+    const ogT = (/property="og:title" content="([^"]+)"/.exec(head) || [])[1];
+    const twT = (/name="twitter:title" content="([^"]+)"/.exec(head) || [])[1];
+    const docT = (/<title>([^<]*)<\/title>/.exec(head) || [])[1];
+    if (ogT !== docT) failures.push(`${f}: og:title "${ogT}" does not match <title> "${docT}"`);
+    if (twT !== docT) failures.push(`${f}: twitter:title "${twT}" does not match <title> "${docT}"`);
+  }
+  for (const f of ['favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png',
+                   'apple-touch-icon.png', path.join('assets', 'calmlyte-social-preview.jpg')]) {
+    if (!fs.existsSync(path.join(OUT, f))) failures.push(`${f}: referenced in every head but not in the build`);
+  }
+
   /* 4b — the policy footer must be on every page, with all four links.
    *
    *      The site promises free US shipping, 30-day returns and a 1-year
@@ -405,6 +468,7 @@ function report(result) {
   console.log(`  no internal markers shipped ... ${has('internal marker') ? 'FAIL' : 'pass'}`);
   console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);
   console.log(`  policy footer on every page ... ${has('policy') ? 'FAIL' : 'pass'}`);
+  console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  prices match Shopify catalogue  ${has('Shopify') || has('priced SKUs') ? 'FAIL' : 'pass'}`);
   console.log(`  variant GIDs .................. ${result.variantsResolved ? 'resolved' : 'not resolved yet (no token)'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);
