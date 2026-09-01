@@ -274,6 +274,34 @@ function verify(outDir) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
   }
 
+  /* 4b — the policy footer must be on every page, with all four links.
+   *
+   *      The site promises free US shipping, 30-day returns and a 1-year
+   *      warranty; the documents backing those promises live on Shopify, and
+   *      these links are the only route to them. A page that quietly loses the
+   *      footer is a page making commitments with nothing behind them, so the
+   *      count is asserted rather than eyeballed. Whole URLs are compared, since
+   *      a link to the wrong slug still looks right in a nav. */
+  const POLICY_SLUGS = ['privacy-policy', 'terms-of-service', 'shipping-policy', 'refund-policy'];
+  for (const f of pages) {
+    const text = read(f);
+    if (!text.includes('class="cl-policy"')) {
+      failures.push(`${f}: policy footer missing`);
+      continue;
+    }
+    for (const slug of POLICY_SLUGS) {
+      const url = `https://${SHOP_DOMAIN}/policies/${slug}`;
+      const n = text.split(`href="${url}"`).length - 1;
+      if (n !== 1) failures.push(`${f}: policy footer has ${n} link(s) to ${slug}, expected 1`);
+    }
+    /* No policy link may point anywhere but this shop. */
+    for (const m of text.matchAll(/href="(https?:\/\/[^"]*\/policies\/[^"]*)"/g)) {
+      if (!m[1].startsWith(`https://${SHOP_DOMAIN}/policies/`)) {
+        failures.push(`${f}: policy link points off-store: ${m[1]}`);
+      }
+    }
+  }
+
   /* 5 — the site and the Shopify catalogue must agree on SKU and price.
    *
    *     The site states a price on three surfaces — the Shop card, the PDP entry
@@ -376,6 +404,7 @@ function report(result) {
   console.log(`  withdrawn Mask fully removed .. ${has('withdrawn Mask') ? 'FAIL' : 'pass'}`);
   console.log(`  no internal markers shipped ... ${has('internal marker') ? 'FAIL' : 'pass'}`);
   console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);
+  console.log(`  policy footer on every page ... ${has('policy') ? 'FAIL' : 'pass'}`);
   console.log(`  prices match Shopify catalogue  ${has('Shopify') || has('priced SKUs') ? 'FAIL' : 'pass'}`);
   console.log(`  variant GIDs .................. ${result.variantsResolved ? 'resolved' : 'not resolved yet (no token)'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);

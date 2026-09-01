@@ -214,6 +214,71 @@ const NAV_RESPONSIVE = `
   #dc-root nav > div:last-of-type > a[style*="border-radius:20px"]{position:absolute!important;top:12px!important;right:16px!important;margin-left:0!important;padding:6px 14px!important}
 }`;
 
+/* ------------------------------------------------------------------ *
+ * Policy footer.
+ *
+ * Four links to the policy pages Shopify serves. Shopify is the source of
+ * truth: the text lives there, is edited there, and is not duplicated on this
+ * site, so there is one version of each document rather than two that drift.
+ *
+ * Added at build time because the approved artboards may not be edited, and
+ * because no artboard has a shared footer to add them to — three pages carry a
+ * <footer>, five carry only a fine-print strip, and five are fixed full-viewport
+ * layouts with overflow:hidden and no room below the fold.
+ *
+ * Injected as the last child of each page's wrapper div, which is the one
+ * structure all eight pages share: every built page has exactly one root child,
+ * a wrapper DIV, and its markup ends with that wrapper's closing tag. On the
+ * five flex-column pages the row takes flex:none and the content area absorbs
+ * its 40px; measured at 1440x900 and at 1440x780 — the tightest band before the
+ * artboards' own max-height:760 query turns those pages into scrolling ones —
+ * with no clipping on any page. On the three scrolling pages it lands below the
+ * existing footer.
+ *
+ * Links open in a new tab: they leave calmlyte.com for a Shopify-operated
+ * domain, and a reader checking a return window mid-purchase should not lose
+ * the page they were on. Drop the target attribute to change that.
+ * ------------------------------------------------------------------ */
+const POLICY_BASE = 'https://e6hqgs-hu.myshopify.com/policies/';
+const POLICY_LINKS = [
+  ['Privacy', 'privacy-policy'],
+  ['Terms', 'terms-of-service'],
+  ['Shipping', 'shipping-policy'],
+  ['Returns', 'refund-policy']
+];
+
+const POLICY_FOOTER =
+  '\n  <div class="cl-policy">' +
+  POLICY_LINKS.map(([label, slug]) =>
+    `<a href="${POLICY_BASE}${slug}" target="_blank" rel="noopener noreferrer">${label}</a>`
+  ).join('') +
+  '</div>\n';
+
+const POLICY_CSS = `
+/* Policy footer — build-added element, so it carries a class rather than
+   matching on an approved style string. Type and colour follow the fine-print
+   strip the artboards already use (#8A9B84, 10px, uppercase, gold on hover). */
+.cl-policy{position:relative;z-index:20;flex:none;display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:10px clamp(28px,4vw,72px) 12px;border-top:1px solid rgba(198,207,196,.12);font-size:10px;letter-spacing:1.4px;text-transform:uppercase}
+.cl-policy a{color:#8A9B84;text-decoration:none}
+.cl-policy a:hover{color:#E7CE9B}
+@media (max-width:560px){
+  .cl-policy{gap:14px;padding:9px 16px 11px;font-size:9.5px;letter-spacing:1px}
+}`;
+
+/* Append the policy row as the last child of the page wrapper. Asserted, not
+   assumed: if the markup ever stops ending with the wrapper's closing tag the
+   build fails rather than dropping the row somewhere arbitrary. */
+function addPolicyFooter(markup, route) {
+  const trimmed = markup.trimEnd();
+  const at = trimmed.lastIndexOf('</div>');
+  if (at < 0 || at !== trimmed.length - '</div>'.length) {
+    report.policyFailures.push(`${route}: markup does not end with the page wrapper's </div> — policy footer not added`);
+    return markup;
+  }
+  report.policyPages.push(route);
+  return trimmed.slice(0, at) + POLICY_FOOTER + trimmed.slice(at);
+}
+
 const RESPONSIVE = {
   'product.html': `
 /* Hero: gallery stacks above the buy column. */
@@ -254,6 +319,8 @@ const report = {
   pages: [],
   hoverRules: 0,
   responsivePages: [],
+  policyPages: [],
+  policyFailures: [],
   removed: {},
   bindings: new Set(),
   unresolved: [],
@@ -485,7 +552,7 @@ function extract(file) {
 function buildPage(file, route) {
   const { body, helmet, logic: rawLogic, props } = extract(file);
   const hover = [];
-  const markup = transformBody(body, hover);
+  const markup = addPolicyFooter(transformBody(body, hover), route);
 
   /* Image paths also appear inside the page logic (product galleries, cart
      thumbnails), so the same substitution has to reach there. */
@@ -500,7 +567,7 @@ function buildPage(file, route) {
 
   /* Layout-only, all inside max-width queries. Emitted after the approved
      helmet so it resolves ties, never before it. */
-  const responsive = NAV_RESPONSIVE + (RESPONSIVE[route] || '');
+  const responsive = NAV_RESPONSIVE + POLICY_CSS + (RESPONSIVE[route] || '');
   if (RESPONSIVE[route]) report.responsivePages.push(route);
 
   const html = `<!DOCTYPE html>
