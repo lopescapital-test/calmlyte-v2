@@ -482,6 +482,33 @@ Legal Review/06-RECONCILIATION-2026-09-01.md
 Shopify text agrees with the drafts, what it drops that had previously been decided, and
 what it adds.
 
+### 17.1 The committed drafts are stale — read this before opening them
+
+The committed `Legal Review/` drafts are stale historical drafts from the earlier
+Stripe/GitHub Pages phase. They are not the live policy source of truth. The live
+Shopify policy pages are the operational source of truth for Privacy, Terms,
+Shipping, Return/Refund, and Warranty language.
+
+Do not update or commit the `Legal Review/` drafts unless Jake explicitly requests a
+legal-doc reconciliation pass.
+
+**Why this warning exists, concretely.** There are two different versions of these
+files, and the one in git is the older one:
+
+| `Legal Review/01-privacy-policy.md` | Stripe | GitHub Pages | Shopify | Vercel |
+|---|---|---|---|---|
+| **Committed on `main`** (from `3c15b8c`, 2026-07-02) | 5 | 1 | **0** | **0** |
+| Corrected rewrite, held locally and uncommitted | 2 | 2 | 17 | 3 |
+
+So a fresh clone opens a privacy policy describing **Stripe Payment Links on GitHub
+Pages**, with the Mask and Panel Pro in the lineup — a stack that no longer exists.
+The corrected rewrites and `06-RECONCILIATION-2026-09-01.md` are local-only and are
+deliberately not committed.
+
+The practical consequence: if you need to know what Calmlyte has told customers, read
+the live Shopify policy pages listed in §11. Do not read these files for that purpose,
+and do not port language out of them into Shopify.
+
 ## 18. Current outstanding launch items
 
 Still needed before public launch / noindex removal:
