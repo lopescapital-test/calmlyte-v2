@@ -25,6 +25,8 @@ const HOLDERS = require('./image-holders');
 const CHECKOUT = require('./checkout-wiring');
 const PDP = require('./pdp-conversion');
 const FAQFIX = require('./faq-corrections');
+const HERO = require('./pdp-hero-copy');
+const FAQRETIRE = require('./faq-retire');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -39,7 +41,7 @@ function artboardRules() {
   if (!_artboardRules) {
     /* PDP.RULES last: two of them anchor on the Studio Panel entry that
        SWAP.RULES injects, so they must run after it. */
-    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(FAQFIX.RULES);
+    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES);
   }
   return _artboardRules;
 }
@@ -57,7 +59,9 @@ const ROUTES = {
   'Shinrin Yoku.dc.html': 'index.html',
   'Shop.dc.html': 'shop.html',
   'Product.dc.html': 'product.html',
-  'FAQ.dc.html': 'faq.html',
+  /* FAQ.dc.html is deliberately not built — see tools/faq-retire.js. The
+     artboard stays in the approved set, unedited; restoring the page means
+     putting this line back. */
   'Light.dc.html': 'light.html',
   'Studies.dc.html': 'studies.html',
   'Research.dc.html': 'research.html',
@@ -100,10 +104,6 @@ const META = {
   'product.html': {
     title: 'Calmlyte | Product',
     desc: 'Product details, specifications, imagery, and safety information for the Calmlyte range.'
-  },
-  'faq.html': {
-    title: 'Calmlyte FAQ | Frequently Asked',
-    desc: 'Answers about Calmlyte products, the spectrum, sessions, box contents, shipping, returns, and warranty.'
   },
   'light.html': {
     title: 'The Calmlyte Spectrum | Move Along the Visible Range',
@@ -794,6 +794,29 @@ function main() {
     console.error('\nBUILD FAILED — product swap did not apply cleanly:');
     for (const f of report.swapFailures) console.error('  ' + f);
     process.exit(1);
+  }
+
+  /* Rules whose target artboard is not in ROUTES.
+   *
+   * A rule's match count is only asserted while the file it targets is being
+   * built. Drop that file from ROUTES — as happened when the FAQ page was
+   * retired — and every rule aimed at it stops being evaluated and stops
+   * protecting anything, without a word. That is the one failure mode this
+   * pipeline had no visibility into, so dormant rules are listed rather than
+   * left to be rediscovered.
+   *
+   * Dormant is not an error: the FAQ corrections are deliberately kept so that
+   * restoring the route also restores the fixes. It just has to be visible. */
+  const built = new Set(Object.keys(ROUTES));
+  const dormant = artboardRules().filter(r => !built.has(r.file));
+  if (dormant.length) {
+    console.log('\nDORMANT RULES (target artboard not in ROUTES — not evaluated)');
+    const byFile = {};
+    for (const r of dormant) (byFile[r.file] = byFile[r.file] || []).push(r.label);
+    for (const [file, labels] of Object.entries(byFile)) {
+      console.log(`  ${file} — not built, so ${labels.length} rule(s) do not run:`);
+      for (const l of labels) console.log(`      ${l}`);
+    }
   }
 
   console.log('\nEXCLUDED ASSETS (withdrawn product, not shipped)');

@@ -274,6 +274,78 @@ function verify(outDir) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
   }
 
+  /* 4g — vercel.json: the retired route redirects, and noindex still applies.
+   *
+   *      Two things live in that file that nothing else can enforce. The
+   *      X-Robots-Tag header is half of the noindex posture — the meta tags in
+   *      the pages are the other half, and a page-level check cannot see a
+   *      config-level deletion. And /faq.html now only resolves because of a
+   *      redirect; drop it and a URL that used to work starts 404ing silently.
+   *
+   *      The redirect is also checked for coherence: its destination must be a
+   *      page that exists, and its source must not be, because a rebuilt
+   *      faq.html and a redirect away from it are contradictory instructions. */
+  {
+    const vjPath = path.resolve(__dirname, '..', 'vercel.json');
+    if (!fs.existsSync(vjPath)) {
+      failures.push('vercel.json: missing');
+    } else {
+      let vj = null;
+      try { vj = JSON.parse(fs.readFileSync(vjPath, 'utf8')); }
+      catch (e) { failures.push(`vercel.json: not valid JSON (${e.message})`); }
+
+      if (vj) {
+        const hdr = (vj.headers || []).find(h => h.source === '/(.*)');
+        const robots = hdr && (hdr.headers || []).find(
+          x => x.key === 'X-Robots-Tag' && /noindex/.test(x.value) && /nofollow/.test(x.value));
+        if (!robots) {
+          failures.push('vercel.json: the site-wide X-Robots-Tag noindex header is gone');
+        }
+
+        const r = (vj.redirects || []).find(x => x.source === '/faq.html');
+        if (!r) {
+          failures.push('vercel.json: /faq.html no longer redirects — the retired route would 404');
+        } else {
+          if (r.destination !== '/shop.html') {
+            failures.push(`vercel.json: /faq.html redirects to "${r.destination}", expected /shop.html`);
+          }
+          const dest = r.destination.replace(/^\//, '');
+          if (dest && !pages.includes(dest)) {
+            failures.push(`vercel.json: /faq.html redirects to "${r.destination}", which is not a built page`);
+          }
+          if (pages.includes('faq.html')) {
+            failures.push('vercel.json: /faq.html both redirects and is built — contradictory');
+          }
+        }
+      }
+    }
+  }
+
+  /* 4f — the FAQ page is retired. It must be gone, and nothing may point at it.
+   *
+   *      A stale link would already fail assertion 1 as an unmapped
+   *      design-tool route, but only because faq.html is no longer a route. If
+   *      the page were ever half-restored the link would resolve and the nav
+   *      item would quietly come back, so the end state is asserted directly:
+   *      no page, no href, no nav item. The product-page Questions module is
+   *      what replaced it, and it is asserted separately in 4d. */
+  {
+    const RETIRE = require('./faq-retire');
+    if (pages.includes('faq.html')) {
+      failures.push('faq.html: the FAQ page is retired but was built');
+    }
+    for (const f of all) {
+      const text = read(f);
+      const hrefs = (text.match(/href="faq\.html"/g) || []).length;
+      if (hrefs) failures.push(`${f}: ${hrefs} link(s) to the retired faq.html`);
+      if (text.includes(RETIRE.NAV_ITEM)) {
+        failures.push(`${f}: the FAQ nav item is still present`);
+      }
+      /* The nav item after route mapping, which is what would actually ship. */
+      if (/>FAQ<\/a>/.test(text)) failures.push(`${f}: a nav item still reads "FAQ"`);
+    }
+  }
+
   /* 4e — US-only must hold across the whole built site.
    *
    *      The store enforces it (one country at checkout) and the policies state
@@ -313,15 +385,44 @@ function verify(outDir) {
    *      the approved FAQ answers verbatim — a paraphrase would defeat it. */
   if (pages.includes('product.html')) {
     const PDP = require('./pdp-conversion');
+    const HERO = require('./pdp-hero-copy');
     const prod = read('product.html');
 
-    if (!prod.includes(PDP.HERO_TEXT)) {
-      failures.push('product.html: the green-light hero paragraph is missing');
+    /* The claim paragraph, once, above the price. */
+    if (!prod.includes(HERO.CLAIM)) {
+      failures.push('product.html: the claim paragraph is missing');
+    } else if (prod.indexOf(HERO.CLAIM) > prod.indexOf('{{ price }}')) {
+      failures.push('product.html: the claim paragraph is below the price, expected above it');
     }
-    /* It must sit above the price, not below it — stating the mechanism after
-       the ask is not the same change. */
-    if (prod.indexOf(PDP.HERO_TEXT) > prod.indexOf('{{ price }}')) {
-      failures.push('product.html: the hero paragraph is below the price, expected above it');
+
+    /* It must not be set smaller than the body copy. Checking the rendered style
+       string rather than trusting the rule: the whole point of Jake's
+       instruction was that an earlier pass had set it two-and-a-half points
+       smaller than the lede, so "same size as body" is the property to assert,
+       not "a paragraph exists". */
+    const claimP = new RegExp(`<p style="([^"]*)"[^>]*>${HERO.CLAIM.slice(0, 40).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
+    const m = claimP.exec(prod);
+    if (!m) {
+      failures.push('product.html: could not find the claim paragraph to check its size');
+    } else if (!m[1].includes(HERO.BODY)) {
+      failures.push(`product.html: the claim paragraph is not body size/weight — got "${m[1]}"`);
+    }
+
+    /* Each product's own two sentences, and the binding that carries the second. */
+    for (const sku of Object.keys(HERO.COPY)) {
+      const c = HERO.COPY[sku];
+      if (!prod.includes(`lede: '${c.lede}'`)) {
+        failures.push(`product.html: "${sku}" does not carry its new lede`);
+      }
+      if (!prod.includes(`spectrum: '${c.spectrum}'`)) {
+        failures.push(`product.html: "${sku}" does not carry its spectrum sentence`);
+      }
+      if (prod.includes(c.oldLede)) {
+        failures.push(`product.html: "${sku}" still carries the old lede`);
+      }
+    }
+    if (!prod.includes('spectrum: p.spectrum')) {
+      failures.push('product.html: renderVals does not expose spectrum');
     }
     if (prod.includes('More questions')) {
       failures.push('product.html: the outbound "More questions" link is still present');
@@ -391,7 +492,6 @@ function verify(outDir) {
     'index.html': 'https://www.calmlyte.com/',
     'shop.html': 'https://www.calmlyte.com/shop.html',
     'product.html': 'https://www.calmlyte.com/product.html',
-    'faq.html': 'https://www.calmlyte.com/faq.html',
     'light.html': 'https://www.calmlyte.com/light.html',
     'studies.html': 'https://www.calmlyte.com/studies.html',
     'research.html': 'https://www.calmlyte.com/research.html',
@@ -557,6 +657,8 @@ function report(result) {
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
   console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
+  console.log(`  FAQ page retired .............. ${has('faq.html') || has('FAQ nav item') || has('reads "FAQ"') ? 'FAIL' : 'pass'}`);
+  console.log(`  vercel.json redirect + robots . ${has('vercel.json') ? 'FAIL' : 'pass'}`);
   console.log(`  prices match Shopify catalogue  ${has('Shopify') || has('priced SKUs') ? 'FAIL' : 'pass'}`);
   console.log(`  variant GIDs .................. ${result.variantsResolved ? 'resolved' : 'not resolved yet (no token)'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);

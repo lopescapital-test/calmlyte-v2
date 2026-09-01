@@ -16,8 +16,10 @@
  * On the FAQ copy
  * ---------------
  * No new question or answer text is written here. Every pair is lifted verbatim
- * from the approved GROUPS array in FAQ.dc.html, so the product page and the FAQ
- * page cannot drift apart or say different things.
+ * from the approved GROUPS array in FAQ.dc.html. That artboard is no longer built
+ * — the FAQ page was retired once these modules replaced it, see
+ * tools/faq-retire.js — so it now serves purely as the approved source of this
+ * copy rather than as a page anyone reads.
  *
  * Which pairs appear is a per-product decision, because not every approved answer
  * is true of every active product, and one is no longer true of the store at all.
@@ -27,9 +29,9 @@
  *   "Do you ship internationally?"  answers "Yes. Duties and import taxes are the
  *                                   responsibility of the recipient." Checkout offers
  *                                   only the United States and the published shipping
- *                                   policy says so explicitly. This one is a live
- *                                   defect on faq.html, not something introduced here,
- *                                   and is worth fixing at source.
+ *                                   policy says so explicitly. It was a live defect
+ *                                   on faq.html; that page has since been corrected
+ *                                   and then retired altogether.
  *   "What is Calmlyte?"             brand-level; the hero above already says it.
  *   "Which product should I start   a cross-sell. On a product page the visitor has
  *    with?"                         already chosen, and "the rest of the range" module
@@ -60,29 +62,12 @@
 
 const FILE = 'Product.dc.html';
 
-/* ------------------------------------------------------------------ *
- * 1. Hero paragraph
- * ------------------------------------------------------------------ */
-
-/* Jake's wording, used verbatim. 520–530 nm is the site-wide wavelength
-   standard and matches every spec table and the Shop lede. */
-const HERO_TEXT =
-  'Green light therapy uses a specific narrow band of green light around 520–530 nm ' +
-  'to help manage chronic pain, reduce migraine intensity, improve sleep, and support ' +
-  'the appearance of surface-level skin tone.';
-
-/* The price paragraph, verbatim from the artboard — the insertion point. */
-const PRICE_P =
-  `      <p style="font-family:'Spectral',Georgia,serif;font-weight:300;font-size:clamp(30px,3.4vw,38px);color:#E7CE9B;margin-bottom:24px">{{ price }}</p>`;
-
-/* Deliberately subordinate to the lede above it: the lede is 17px #EDE8DC, this
-   is the site's secondary body size and colour, so it reads as supporting detail
-   rather than competing with the product description. */
-const HERO_P =
-  `      <p style="font-size:14.5px;color:#C6CFC4;font-weight:300;line-height:1.7;margin-bottom:30px;text-wrap:pretty">${HERO_TEXT}</p>`;
+/* Hero copy — including the claim paragraph that used to live here — moved to
+   tools/pdp-hero-copy.js when Jake rewrote it, so all four products' hero text
+   sits in one place rather than being split across two modules. */
 
 /* ------------------------------------------------------------------ *
- * 2a. The outbound FAQ link
+ * 1. The outbound FAQ link
  * ------------------------------------------------------------------ */
 
 /* Removed, not disabled — a visible link that does nothing is worse than no
@@ -90,7 +75,7 @@ const HERO_P =
 const MORE_QUESTIONS = ` <a href="FAQ.dc.html" style="white-space:nowrap">More questions →</a>`;
 
 /* ------------------------------------------------------------------ *
- * 2b. The questions module
+ * 2. The questions module
  * ------------------------------------------------------------------ */
 
 /* Anchor: the opening tag of the section that follows Specifications. Unique in
@@ -165,13 +150,6 @@ function faqLiteral(sku) {
 const RULES = [
   {
     file: FILE,
-    label: 'hero: green-light paragraph above the price',
-    from: PRICE_P,
-    to: HERO_P + '\n' + PRICE_P,
-    count: 1
-  },
-  {
-    file: FILE,
     label: 'specs: remove the outbound "More questions" link',
     from: MORE_QUESTIONS,
     to: '',
@@ -201,4 +179,4 @@ const RULES = [
   }))
 );
 
-module.exports = { RULES, HERO_TEXT, A, PER_SKU, MORE_QUESTIONS };
+module.exports = { RULES, A, PER_SKU, MORE_QUESTIONS };
