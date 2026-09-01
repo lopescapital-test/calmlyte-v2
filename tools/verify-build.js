@@ -274,6 +274,92 @@ function verify(outDir) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
   }
 
+  /* 4e — US-only must hold across the whole built site.
+   *
+   *      The store enforces it (one country at checkout) and the policies state
+   *      it, but the FAQ said "Yes" to international shipping for a while after
+   *      the decision was made. That is the failure mode worth guarding: a
+   *      decision taken in one place and not propagated to a page that answers
+   *      questions about it. A customer who reads the FAQ and believes they can
+   *      order finds no country to select. */
+  {
+    const FAQFIX = require('./faq-corrections');
+    for (const f of all) {
+      const text = read(f);
+      for (const phrase of FAQFIX.FORBIDDEN) {
+        if (text.includes(phrase)) {
+          failures.push(`${f}: claims international shipping — "${phrase}"`);
+        }
+      }
+    }
+    if (pages.includes('faq.html')) {
+      const faq = read('faq.html');
+      if (faq.includes('Do you ship internationally?') &&
+          !faq.includes(FAQFIX.US_ONLY_ANSWER)) {
+        failures.push('faq.html: the international-shipping question is not answered with the US-only text');
+      }
+    }
+  }
+
+  /* 4d — product page conversion changes.
+   *
+   *      The point of both is that the reader stays put: the mechanism is stated
+   *      before the price, and objections are answered below the specs instead of
+   *      on another page. So the assertion checks the outbound link is gone, the
+   *      questions module is present, and every SKU has a non-empty question set.
+   *
+   *      The question text is compared against tools/pdp-conversion.js rather
+   *      than merely counted, because the whole point is that these answers are
+   *      the approved FAQ answers verbatim — a paraphrase would defeat it. */
+  if (pages.includes('product.html')) {
+    const PDP = require('./pdp-conversion');
+    const prod = read('product.html');
+
+    if (!prod.includes(PDP.HERO_TEXT)) {
+      failures.push('product.html: the green-light hero paragraph is missing');
+    }
+    /* It must sit above the price, not below it — stating the mechanism after
+       the ask is not the same change. */
+    if (prod.indexOf(PDP.HERO_TEXT) > prod.indexOf('{{ price }}')) {
+      failures.push('product.html: the hero paragraph is below the price, expected above it');
+    }
+    if (prod.includes('More questions')) {
+      failures.push('product.html: the outbound "More questions" link is still present');
+    }
+    if (!prod.includes('>Questions</h2>')) {
+      failures.push('product.html: the questions module is missing');
+    }
+    if (!prod.includes('faqs: (p.faqs || [])')) {
+      failures.push('product.html: renderVals does not expose faqs');
+    }
+    for (const sku of Object.keys(PDP.PER_SKU)) {
+      const at = prod.indexOf(`sku: '${sku}'`);
+      if (at < 0) { failures.push(`product.html: no PDP entry for "${sku}"`); continue; }
+      const seg = prod.slice(at, at + 6000);
+      const open = seg.indexOf('faqs: [');
+      if (open < 0) { failures.push(`product.html: "${sku}" has no faqs array`); continue; }
+      const arr = seg.slice(open, seg.indexOf('\n    ],', open));
+      const asked = [...arr.matchAll(/\['([^']+)'/g)].map(m => m[1]);
+      const want = PDP.PER_SKU[sku].map(k => PDP.A[k][0]);
+      if (asked.length !== want.length) {
+        failures.push(`product.html: "${sku}" has ${asked.length} question(s), expected ${want.length}`);
+      }
+      /* Question and answer are both checked inside this SKU's own array, not
+         across the whole page. A page-wide `includes` would let one product's
+         paraphrased answer hide behind another product's correct copy of it —
+         which is exactly what happened when this check was fault-injected. */
+      for (const key of PDP.PER_SKU[sku]) {
+        const [q, a] = PDP.A[key];
+        if (!asked.includes(q)) {
+          failures.push(`product.html: "${sku}" is missing the question "${q}"`);
+        }
+        if (!arr.includes(a.replace(/'/g, "\\'"))) {
+          failures.push(`product.html: "${sku}" — the answer to "${q}" is not the approved text`);
+        }
+      }
+    }
+  }
+
   /* 4c — favicons and social preview: the tags on every page, and the files they
    *      point at actually present in the output.
    *
@@ -469,6 +555,8 @@ function report(result) {
   console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);
   console.log(`  policy footer on every page ... ${has('policy') ? 'FAIL' : 'pass'}`);
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
+  console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
+  console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
   console.log(`  prices match Shopify catalogue  ${has('Shopify') || has('priced SKUs') ? 'FAIL' : 'pass'}`);
   console.log(`  variant GIDs .................. ${result.variantsResolved ? 'resolved' : 'not resolved yet (no token)'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);

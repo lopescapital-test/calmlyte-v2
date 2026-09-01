@@ -23,6 +23,8 @@ const { verify: verifyBuild, report: reportAssertions } = require('./verify-buil
 const SWAP = require('./studio-panel-swap');
 const HOLDERS = require('./image-holders');
 const CHECKOUT = require('./checkout-wiring');
+const PDP = require('./pdp-conversion');
+const FAQFIX = require('./faq-corrections');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -35,7 +37,9 @@ const CHECKOUT = require('./checkout-wiring');
 let _artboardRules = null;
 function artboardRules() {
   if (!_artboardRules) {
-    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules());
+    /* PDP.RULES last: two of them anchor on the Studio Panel entry that
+       SWAP.RULES injects, so they must run after it. */
+    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(FAQFIX.RULES);
   }
   return _artboardRules;
 }
