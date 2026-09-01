@@ -408,21 +408,67 @@ function verify(outDir) {
       failures.push(`product.html: the claim paragraph is not body size/weight — got "${m[1]}"`);
     }
 
-    /* Each product's own two sentences, and the binding that carries the second. */
+    /* Each product's own lede, and the old one gone. */
     for (const sku of Object.keys(HERO.COPY)) {
       const c = HERO.COPY[sku];
       if (!prod.includes(`lede: '${c.lede}'`)) {
         failures.push(`product.html: "${sku}" does not carry its new lede`);
       }
-      if (!prod.includes(`spectrum: '${c.spectrum}'`)) {
-        failures.push(`product.html: "${sku}" does not carry its spectrum sentence`);
-      }
       if (prod.includes(c.oldLede)) {
         failures.push(`product.html: "${sku}" still carries the old lede`);
       }
     }
-    if (!prod.includes('spectrum: p.spectrum')) {
-      failures.push('product.html: renderVals does not expose spectrum');
+
+    /* Exactly two body paragraphs in the hero. The wavelength moved onto the
+       image, so repeating it in prose would undo the change the brief asked
+       for — hence the check that it is not back in the copy area. */
+    const heroOpen = prod.indexOf('{{ lede }}');
+    const heroClose = prod.indexOf('<div style="display:flex;align-items:center;justify-content:space-between;');
+    if (heroOpen < 0 || heroClose < 0 || heroClose < heroOpen) {
+      failures.push('product.html: could not locate the hero copy block');
+    } else {
+      /* From the lede's own text to the start of the CTA row. Every <p> in that
+         span is a body paragraph after the lede, so the total is that plus one.
+         Bounded at the CTA row rather than at {{ price }}, which sits inside the
+         price paragraph and so counted it as hero copy. */
+      const heroCopy = prod.slice(heroOpen, heroClose);
+      const paras = (heroCopy.match(/<p style="/g) || []).length + 1;
+      if (paras !== 2) {
+        failures.push(`product.html: ${paras} hero body paragraphs, expected 2`);
+      }
+      if (/520|530|narrow-band/.test(heroCopy)) {
+        failures.push('product.html: the wavelength is back in the hero prose — it belongs on the pill');
+      }
+    }
+
+    /* The spectrum pill: present once, inside the figure, and the figure
+       positioned so the pill anchors to the image rather than to some ancestor
+       further up the page. */
+    const fig = /<figure style="([^"]*)"[\s\S]*?<\/figure>/.exec(prod);
+    if (!fig) {
+      failures.push('product.html: no <figure> found for the hero image');
+    } else {
+      if (!/position:relative/.test(fig[1])) {
+        failures.push('product.html: the hero <figure> is not positioned — the pill would anchor elsewhere');
+      }
+      if (!fig[0].includes(HERO.PILL_TEXT)) {
+        failures.push(`product.html: the "${HERO.PILL_TEXT}" pill is not inside the hero figure`);
+      }
+    }
+    const pills = prod.split(HERO.PILL_TEXT).length - 1;
+    if (pills !== 1) {
+      failures.push(`product.html: "${HERO.PILL_TEXT}" appears ${pills} time(s), expected 1`);
+    }
+
+    /* Price and Add to cart in one flex row. Checked as containment, not
+       adjacency: the point of the change is that they share a row, and the
+       rendered geometry is confirmed in-browser separately. */
+    const row = /<div style="display:flex;align-items:center;justify-content:space-between;[^"]*">([\s\S]*?)<\/div>/.exec(prod);
+    if (!row) {
+      failures.push('product.html: no price/CTA row found');
+    } else {
+      if (!row[1].includes('{{ price }}')) failures.push('product.html: the price is not in the CTA row');
+      if (!row[1].includes('Add to cart')) failures.push('product.html: Add to cart is not in the CTA row');
     }
     if (prod.includes('More questions')) {
       failures.push('product.html: the outbound "More questions" link is still present');
