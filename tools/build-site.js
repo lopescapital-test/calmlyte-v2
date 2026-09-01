@@ -159,16 +159,59 @@ const ADDED_ASSETS = {
  * ------------------------------------------------------------------ */
 
 /* Six nav items plus the wordmark do not fit a 375 px screen at any legible
-   size. The approved ladder already hides the wordmark at 560; this lets the
-   link row drop to its own centred line rather than clipping off-screen. */
+   size, so below 560 the header becomes two deliberate rows: the mark, then the
+   links.
+ *
+ * The first version of this got the links on screen but read as three separate
+ * things stacked by accident. The mark sat left at a 10px inset while the links
+ * were centred, so it floated above nothing; the links ran at 9.5px with a 4px
+ * padding and no gap, which butted them into one another; and the active link's
+ * gold underline landed 5px above the spectrum rail, close enough that the two
+ * lines read as one thick smear.
+ *
+ * What changed:
+ *   - both rows share one 16px inset, so the mark's left edge lines up with the
+ *     first link rather than sitting on its own axis;
+ *   - the link row is a single line that scrolls horizontally instead of
+ *     wrapping. Wrapping produced ragged two-line stacks that moved as the Cart
+ *     count changed width; one scrolling row keeps a stable, readable order and
+ *     buys each item real spacing;
+ *   - 20px gap, 10.5px type and the approved letter-spacing back, so the items
+ *     are separate words again rather than a texture;
+ *   - 13px of padding under the link row. The rail is absolutely positioned to
+ *     the nav's own bottom edge, so padding there moves the rail down and opens
+ *     a 10px channel between the active underline and the rail.
+ *
+ * The wordmark stays hidden: that is the approved artboard's own rule at 560
+ * (nav > a > span{display:none}), not something this layer introduced.
+ *
+ * Header grows from about 75px to about 90px. Three pages have a fixed nav —
+ * Product, Cart and Research — so their top clearance is checked against the
+ * taller header. */
 const NAV_RESPONSIVE = `
 @media (max-width:560px){
-  #dc-root nav{flex-wrap:wrap!important;padding:8px 10px!important;gap:2px 12px!important}
-  #dc-root nav > a{flex:0 0 auto!important}
-  #dc-root nav > div:last-of-type{flex:1 0 100%!important;justify-content:center!important;flex-wrap:wrap!important;gap:0!important}
-  #dc-root nav > div:last-of-type > a{padding:5px 4px!important;font-size:9.5px!important;letter-spacing:.4px!important}
-  /* the Cart pill carries its own margin and pill padding — both too wide here */
-  #dc-root nav > div:last-of-type > a[style*="border-radius:20px"]{margin-left:4px!important;padding:5px 9px!important}
+  #dc-root nav{flex-wrap:wrap!important;justify-content:flex-start!important;align-items:center!important;gap:10px 0!important;padding:12px 0 13px!important}
+  /* Row one: the mark left, the Cart pill right. Capped short of the pill so the
+     full-width anchor does not put an invisible "go to Shop" tap target under
+     it. */
+  #dc-root nav > a{flex:1 0 100%!important;max-width:calc(100% - 120px)!important;padding-left:16px!important}
+  /* Row two: one scrolling line, never wrapped. */
+  #dc-root nav > div:last-of-type{flex:1 0 100%!important;flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important;gap:20px!important;padding:0 16px!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important}
+  #dc-root nav > div:last-of-type::-webkit-scrollbar{display:none!important}
+  #dc-root nav > div:last-of-type > a{flex:0 0 auto!important;white-space:nowrap!important;padding:6px 0!important;font-size:10.5px!important;letter-spacing:1.1px!important}
+  /* Cart lifts out of the scrolling row and pins to the mark's row.
+   *
+   *   Left in the row it sat 122px past the right edge — reachable only by
+   *   scrolling a row with no visible affordance, which is the wrong place for
+   *   the one link that leads to a purchase. Pinned, it is always on screen, it
+   *   balances a row that otherwise holds a lone 30px mark, and taking its
+   *   ~98px out of the scroll row leaves the five section links needing only a
+   *   short scroll — enough to hint the row moves without hiding anything that
+   *   matters.
+   *
+   *   Absolute against the nav, which the artboard already sets position:relative.
+   *   top:12px centres the 31px pill against the 30px mark at y=12. */
+  #dc-root nav > div:last-of-type > a[style*="border-radius:20px"]{position:absolute!important;top:12px!important;right:16px!important;margin-left:0!important;padding:6px 14px!important}
 }`;
 
 const RESPONSIVE = {
