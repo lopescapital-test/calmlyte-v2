@@ -42,11 +42,17 @@ const COMMERCE_MARKERS = [
 
 const ROBOTS_TAG = '<meta name="robots" content="noindex,nofollow">';
 
-/* Every page that may start a checkout. Three since 2026-09-02: the cart's
-   Checkout button, the product page's CTA, and the Shop page's four ADD
-   buttons. Declared once at module scope because assertion 3 and assertion 4j
-   both depend on the same list, and two copies could disagree. */
-const CHECKOUT_PAGES = ['cart.html', 'product.html', 'shop.html'];
+/* Every page that may start a checkout: the cart's Checkout button and the
+   product page's CTA.
+ *
+   The Shop page briefly belonged here — its ADD buttons went straight to
+   Shopify — and was removed on 2026-09-02 when Jake corrected the funnel to
+   route those cards to the product page instead. Assertion 3-vi asserts
+   membership in both directions, so shop.html carrying a token or a mutation
+   now fails, and assertion 4j names the rest of the commerce leftovers
+   directly. Declared once at module scope because several assertions depend on
+   the same list, and two copies could disagree. */
+const CHECKOUT_PAGES = ['cart.html', 'product.html'];
 
 /* Slice one handler out of a built page, from `from` to the brace that closes
    the first `{` after it, skipping strings and comments.
@@ -315,7 +321,7 @@ function verify(outDir) {
             CTA is bound to a handler that was never injected. */
     for (const f of all) {
       const text = read(f);
-      const carries = text.includes('cartCreate') || /X-Shopify-Storefront-Access-Token/i.test(text);
+      const carries = /cartcreate/i.test(text) || /X-Shopify-Storefront-Access-Token/i.test(text);
       if (carries && !CHECKOUT_PAGES.includes(f)) {
         failures.push(`${f}: checkout code leaked onto a page that must not carry it`);
       }
@@ -605,168 +611,160 @@ function verify(outDir) {
     }
   }
 
-  /* 4j — the Shop page's four ADD buttons go straight to Shopify checkout, and
-   *      all three checkouts are still one implementation.
+  /* 4j — the Shop page's card buttons go to the product page, and this page
+   *      touches no commerce at all.
    *
-   *      Per Jake 2026-09-02. As on the product page the label is unchanged, so
-   *      there is no visible difference between a card that opens checkout and
-   *      one that quietly fills the local cart. Four buttons rather than one
-   *      also means a rule could apply to three of them and not the fourth,
-   *      which no amount of clicking around would reliably surface.
+   *      Jake's correction of 2026-09-02, reversing the direct-checkout pass.
+   *      Four buttons means a rule can apply to three of them and miss the
+   *      fourth with nothing to see, so each is checked individually — the same
+   *      reason the previous version of this assertion existed.
    *
-   *      So the checks are: every key repointed, none left calling the old
-   *      method, the old method gone rather than merely unused, one copy of the
-   *      handler rather than four, and nothing on the page writing to
-   *      localStorage from a click. The badge is asserted the other way round —
-   *      componentDidMount must still read the cart, or an existing cart would
-   *      stop showing at all, which the brief does not ask for. */
+   *      The strongest check here is the last one: every route these buttons
+   *      emit must actually resolve to a product on the PDP. A button that
+   *      navigates to a URL the product page cannot key silently shows whatever
+   *      the fallback is, which is a real product, just the wrong one. */
   if (pages.includes('shop.html')) {
-    const SHOPBUY = require('./shop-buy-now');
+    const SHOPVIEW = require('./shop-view-product');
     const shop = read('shop.html');
 
-    if (!SHOPIFY_CHECKOUT_ENABLED) {
-      /* Gate closed: the artboard's own add(), and no direct checkout. */
-      if (!shop.includes(SHOPBUY.ADD_METHOD_OLD)) {
-        failures.push('shop.html: add() is not the artboard method while the commerce gate is closed');
-      }
-      if (shop.includes(SHOPBUY.METHOD)) {
-        failures.push(`shop.html: ${SHOPBUY.METHOD} is named on the page while the commerce gate is closed`);
-      }
-      for (const [i, key] of SHOPBUY.KEYS.entries()) {
-        if (!shop.includes(SHOPBUY.keyOld(key, i))) {
-          failures.push(`shop.html: with the gate closed ${key} should still call this.add(ITEMS[${i}])`);
-        }
-      }
-    } else {
-      /* 4j-i  all four keys repointed, and none left behind. Checked per key
-               rather than by counting, because three of four is the failure
-               that looks like success. */
-      for (const [i, key] of SHOPBUY.KEYS.entries()) {
-        if (!shop.includes(SHOPBUY.keyNew(key, i))) {
-          failures.push(`shop.html: ${key} does not call this.${SHOPBUY.METHOD}(ITEMS[${i}]) — that card still fills the local cart`);
-        }
-        if (shop.includes(SHOPBUY.keyOld(key, i))) {
-          failures.push(`shop.html: ${key} still calls this.add(ITEMS[${i}])`);
-        }
-      }
+    /* 4j-i  the label the customer actually reads.
+     *
+     *       Two declarations feed it and only one wins. The artboard declares
+     *       addLabel as a design-tool prop with its own default, and that
+     *       default is supplied at runtime, so renderVals' `?? 'Add'` fallback
+     *       never evaluates. Rewriting the fallback alone built cleanly,
+     *       asserted cleanly against the source string, and still rendered
+     *       "Add" — so the prop default is checked in its own right, and the
+     *       fallback too, because the two disagreeing about what this button
+     *       says is its own kind of trap. */
+    /*       Checked in its resolved form. The build reads the artboard's prop
+     *       schema and emits the resolved values as a JSON blob, so neither the
+     *       schema's escaped default nor renderVals' fallback appears in the
+     *       page as written — matching either of those against the built output
+     *       finds nothing and passes vacuously. `"addLabel":"…"` is the value
+     *       the runtime hands the button. */
+    const resolved = `"addLabel":"${SHOPVIEW.CTA_LABEL}"`;
+    if (!shop.includes(resolved)) {
+      failures.push(`shop.html: the resolved card button label is not ${resolved} — that is the value that renders`);
+    }
+    if (shop.includes(`"addLabel":"${SHOPVIEW.OLD_LABEL}"`)) {
+      failures.push(`shop.html: the resolved card button label is still "${SHOPVIEW.OLD_LABEL}"`);
+    }
+    /* And the renderVals fallback, so the two cannot drift into disagreeing
+       about what this button says if the prop is ever cleared. */
+    if (!shop.includes(SHOPVIEW.LABEL_NEW.trim())) {
+      failures.push(`shop.html: the card button renderVals fallback is not "${SHOPVIEW.CTA_LABEL}"`);
+    }
+    const labels = (shop.match(/>\{\{ addLabel \}\}</g) || []).length;
+    if (labels !== 4) {
+      failures.push(`shop.html: ${labels} card buttons render {{ addLabel }}, expected 4`);
+    }
 
-      /* 4j-ii the artboard's add() must be gone, not just uncalled. Left in
-               place it is a live method that writes to a cart this page is no
-               longer meant to write to, one binding away from coming back. */
-      if (shop.includes(SHOPBUY.ADD_METHOD_OLD)) {
-        failures.push('shop.html: the artboard add() method is still present');
+    /* 4j-ii each card repointed, and none left on the old handler. Both
+              directions per card, because a binding and its renderVals key can
+              drift apart independently. */
+    for (let i = 0; i < SHOPVIEW.ROUTES.length; i++) {
+      const r = SHOPVIEW.ROUTES[i];
+      /* Both of these are compared against the built page, not the rule's own
+         strings. The build rewrites the design-tool route to product.html and
+         compiles onClick="{{ x }}" into data-on="click:x", so matching what
+         the module emits finds nothing and the check passes vacuously — which
+         is exactly what happened on the first run of this assertion, and on
+         the first run of the product page's equivalent before it. */
+      const route = `location.assign('product.html?sku=${r.key}')`;
+      if (!shop.includes(route)) {
+        failures.push(`shop.html: view${i} does not navigate to ${route}`);
       }
-      if (/\bthis\.add\(/.test(shop)) {
-        failures.push('shop.html: something still calls this.add()');
+      if (!shop.includes(`data-on="click:view${i}"`)) {
+        failures.push(`shop.html: card ${i} is not bound to view${i}`);
       }
-
-      /* 4j-iii one handler, not four. Four copies would work and would be four
-                places to keep in step; the point of injecting a method is that
-                every card runs the same bytes. */
-      const copies = (shop.match(/var VARIANTS = \{/g) || []).length;
-      if (copies !== 1) {
-        failures.push(`shop.html: ${copies} copies of the checkout handler, expected 1`);
+      if (shop.includes(`{{ add${i} }}`) || shop.includes(`add${i}: () =>`)) {
+        failures.push(`shop.html: card ${i} still uses the old add${i} handler`);
       }
+    }
 
-      /* 4j-iv the handler itself, sliced out and checked like the product
-               page's. The gather is compared against the exact text
-               tools/checkout-wiring.js generates for this page, so a hand-edit
-               to the built page or a drift in the generator both fail. */
-      const open = shop.indexOf(`async ${SHOPBUY.METHOD}(${SHOPBUY.ARG})`);
-      const body = open < 0 ? null : sliceHandler(shop, open);
-      if (open < 0) {
-        failures.push(`shop.html: no ${SHOPBUY.METHOD}() method was injected`);
-      } else if (!body) {
-        failures.push(`shop.html: could not find the end of ${SHOPBUY.METHOD}()`);
-      } else if (!body.includes('out.cart.checkoutUrl')) {
-        failures.push(`shop.html: the ${SHOPBUY.METHOD}() slice does not contain the redirect — the handler boundary was mis-detected`);
-      } else {
-        const code = body
-          .replace(/\/\*[\s\S]*?\*\//g, ' ')
-          .replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+    /* 4j-iii the artboard's add() must be gone, not merely uncalled. Left in
+               place it is a live method that writes the cart and bumps the
+               badge, one binding away from coming back. */
+    if (shop.includes(SHOPVIEW.ADD_METHOD_OLD.trim())) {
+      failures.push('shop.html: the artboard add() method is still present');
+    }
+    if (/\bthis\.add\(/.test(shop)) {
+      failures.push('shop.html: something still calls this.add()');
+    }
 
-        /* One line, quantity one, from the card's own ITEMS entry. */
-        if (!body.includes(`var gid = VARIANTS[${SHOPBUY.ARG}.sku];`)) {
-          failures.push(`shop.html: ${SHOPBUY.METHOD}() does not resolve the variant from ${SHOPBUY.ARG}.sku`);
-        }
-        if (!body.includes('var lines = [{ merchandiseId: gid, quantity: 1 }];')) {
-          failures.push(`shop.html: ${SHOPBUY.METHOD}() does not send exactly one line at quantity 1`);
-        }
-        if (!body.includes(`var shown = ${SHOPBUY.ARG}.price;`)) {
-          failures.push(`shop.html: ${SHOPBUY.METHOD}() does not compare Shopify's subtotal against the card's own price`);
-        }
+    /* 4j-iv no click on this page may write the local cart or move the badge. */
+    const tpl = /<template id="dc-template">([\s\S]*)<\/template>/.exec(shop);
+    const logic = tpl
+      ? shop.slice(0, shop.indexOf(tpl[0])) + shop.slice(shop.indexOf(tpl[0]) + tpl[0].length)
+      : shop;
+    const writes = (logic.match(/localStorage\.setItem/g) || []).length;
+    if (writes) {
+      failures.push(`shop.html: ${writes} localStorage write(s) in the page logic — the cards must not touch the cart`);
+    }
 
-        /* The cart must survive: not read, so the checkout holds only the card
-           clicked, and not written, so neither the cart nor the badge moves. */
-        if (/localStorage|this\.read\(\)|this\.total\(\)/.test(code)) {
-          failures.push(`shop.html: ${SHOPBUY.METHOD}() touches the Calmlyte cart — ADD must neither read nor write it`);
-        }
-        if (/cart\.html|Cart\.dc\.html/.test(code)) {
-          failures.push(`shop.html: ${SHOPBUY.METHOD}() navigates to the cart page`);
-        }
-        if (!body.includes(CHECKOUT.MSG.pdpFailed)) {
-          failures.push(`shop.html: the ${SHOPBUY.METHOD}() failure message is not the expected text — a customer hitting an error may be left without a way to reach anyone`);
-        }
+    /* 4j-v  ...but a cart built on an earlier visit must still show in the
+              badge. Removing add() must not have taken the read path with it. */
+    if (!/componentDidMount\(\)\s*\{\s*this\.setState\(\{\s*count:\s*this\.total\(\)/.test(shop)) {
+      failures.push('shop.html: componentDidMount no longer sets the cart count — an existing cart would stop showing in the badge');
+    }
+    if (!/read\(\)\s*\{[\s\S]{0,120}localStorage\.getItem/.test(shop)) {
+      failures.push('shop.html: read() no longer reads the stored cart');
+    }
+
+    /* 4j-vi no commerce on this page. Assertion 3-vi already fails on a token
+              or a mutation reaching a page outside CHECKOUT_PAGES, which
+              shop.html no longer is; these name the rest of it, so a partially
+              reverted change cannot leave a variant map or a shop domain behind
+              on a page whose buttons only navigate. */
+    /* SHOP_DOMAIN is deliberately not in this list: the policy footer links to
+       the store's own policy pages on every page, so the bare domain is
+       expected here. These markers are the ones that only appear when checkout
+       code is present. */
+    /* Matched case-insensitively. A fault-injection run put
+       "mutation CartCreate" on this page and nothing fired, because the
+       operation name is capitalised and the marker was not — the mutation's
+       own name is the one spelling of it most likely to survive a partial
+       revert. */
+    const shopLower = shop.toLowerCase();
+    for (const marker of ['var variants = {', 'gid://shopify', 'graphql.json',
+                          'x-shopify-storefront-access-token', 'cartcreate']) {
+      if (shopLower.includes(marker)) {
+        failures.push(`shop.html: commerce leftover "${marker}" on a page that only navigates`);
       }
+    }
 
-      /* 4j-v  no click anywhere on this page may write the cart. The four keys
-               are checked above, but a fifth writer added later would not be,
-               and a Shop page that still increments the badge from a click is
-               exactly what the brief rules out. componentDidMount is the one
-               legitimate reader and is asserted present below. */
-      const tpl = /<template id="dc-template">([\s\S]*)<\/template>/.exec(shop);
-      const logic = tpl ? shop.slice(0, shop.indexOf(tpl[0])) + shop.slice(shop.indexOf(tpl[0]) + tpl[0].length) : shop;
-      const writes = (logic.match(/localStorage\.setItem/g) || []).length;
-      if (writes) {
-        failures.push(`shop.html: ${writes} localStorage write(s) in the page logic — ADD must not add to the local cart`);
+    /* 4j-vii every route the buttons emit must resolve to a product on the PDP.
+               This is the one that matters: the PDP falls back to a default when
+               a ?sku= misses, so a wrong or stale key does not error — it
+               quietly renders a different product than the card the customer
+               clicked. Checked against the built product page, and against the
+               alias rule that makes the Shopify SKUs resolve too. */
+    if (pages.includes('product.html')) {
+      const prod = read('product.html');
+      const ALIAS = require('./pdp-sku-aliases');
+      if (!prod.includes(ALIAS.NEW)) {
+        failures.push('product.html: ?sku= does not resolve Shopify SKUs — small-panel would fall through to the default');
       }
-
-      /* 4j-vi the badge must still show a cart that already exists. Removing
-               add() must not have taken the read path with it: a customer who
-               built a cart on an earlier visit should still see CART (n), it
-               just never increments from here. */
-      if (!/componentDidMount\(\)\s*\{\s*this\.setState\(\{\s*count:\s*this\.total\(\)/.test(shop)) {
-        failures.push('shop.html: componentDidMount no longer sets the cart count — an existing cart would stop showing in the badge');
-      }
-      if (!/read\(\)\s*\{[\s\S]{0,120}localStorage\.getItem/.test(shop)) {
-        failures.push('shop.html: read() no longer reads the stored cart');
-      }
-
-      /* 4j-vii the failure toast has to be readable from wherever the customer
-                clicked. It is the only notice that a checkout failed and the only
-                place the support address appears, so an off-screen toast means a
-                button that silently did nothing.
-                Asserted across every page that can start a checkout, not just
-                this one: the artboard anchored this page's toast to the page
-                rather than the viewport, and at 390x700 a failure on the last
-                card left ten pixels of a five-line message on screen. */
-      for (const f of CHECKOUT_PAGES.filter(x => pages.includes(x))) {
-        const m = /toastStyle: '([^']*)/.exec(read(f));
-        if (!m) {
-          failures.push(`${f}: no toast style found — a checkout failure would have nowhere to show`);
-        } else if (!/^position:fixed/.test(m[1])) {
-          failures.push(
-            `${f}: the toast is "${m[1].slice(0, 24)}…", not viewport-anchored — ` +
-            `a checkout failure can render off-screen from where the customer clicked`
-          );
+      for (const r of SHOPVIEW.ROUTES) {
+        const keyed = new RegExp(`^  '?${r.key}'?: \\{$`, 'm').test(prod);
+        if (!keyed) {
+          failures.push(`shop.html: a card navigates to ?sku=${r.key}, which is not a product key on product.html — it would render the fallback product`);
         }
       }
-
-      /* 4j-viii the ADD label is the artboard's, unchanged, on all four cards. */
-      const labels = (shop.match(/>\{\{ addLabel \}\}</g) || []).length;
-      if (labels !== 4) {
-        failures.push(`shop.html: ${labels} card buttons render {{ addLabel }}, expected 4`);
-      }
-      if (!/addLabel: \(this\.props\.addLabel \?\? 'Add'\)/.test(shop)) {
-        failures.push('shop.html: the ADD label default is no longer the artboard\'s');
+      /* And the SKU namespace, so the aliases resolve to something. */
+      for (const sku of Object.keys(PRODUCTS)) {
+        if (!prod.includes(`sku: '${sku}'`)) {
+          failures.push(`product.html: no product carries Shopify SKU "${sku}", so ?sku=${sku} would fall through to the default`);
+        }
       }
     }
   }
 
-  /* 4k — one checkout system, not three.
+  /* 4k — one checkout system, not two.
    *
-   *      Every string the handlers must have in common, compared across all
-   *      three built pages. This is what makes "do not introduce a second
+   *      Every string the handlers must have in common, compared across every
+   *      page in CHECKOUT_PAGES. This is what makes "do not introduce a second
    *      checkout system" an assertion rather than an intention: edit the
    *      mutation, the endpoint, the credential header or the parity check on
    *      one page only, and this fails.
@@ -1248,7 +1246,7 @@ function report(result) {
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP CTA to Shopify checkout ... ${has('bound to') || has('button') || has('diverged') || has('Buy Now') || has('quantity 1') || has('priceN') || has('priced ') || has('product entries') ? 'FAIL' : 'pass'}`);
-  console.log(`  Shop ADD to Shopify checkout .. ${has('shop.html') || has('checkouts have diverged') || has('checkout is missing') ? 'FAIL' : 'pass'}`);
+  console.log(`  Shop cards route to PDPs ...... ${has('shop.html') || has('checkouts have diverged') || has('checkout is missing') || has('?sku=') ? 'FAIL' : 'pass'}`);
   console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
   console.log(`  FAQ page retired .............. ${has('faq.html') || has('FAQ nav item') || has('reads "FAQ"') ? 'FAIL' : 'pass'}`);
   console.log(`  vercel.json redirect + robots . ${has('vercel.json') ? 'FAIL' : 'pass'}`);

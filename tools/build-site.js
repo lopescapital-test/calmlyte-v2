@@ -29,7 +29,8 @@ const HERO = require('./pdp-hero-copy');
 const FAQRETIRE = require('./faq-retire');
 const CONTACT = require('./contact-email');
 const BUYNOW = require('./pdp-buy-now');
-const SHOPBUY = require('./shop-buy-now');
+const SHOPVIEW = require('./shop-view-product');
+const SKUALIAS = require('./pdp-sku-aliases');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -45,9 +46,11 @@ function artboardRules() {
     /* Order is load-bearing. PDP.RULES after SWAP.RULES: two of them anchor on
        the Studio Panel entry SWAP injects. BUYNOW.rules() after HERO.RULES: its
        CTA rule matches the button after HERO has moved it into the price row.
-       SHOPBUY.rules() targets Shop.dc.html only, so its position is free. */
+       SHOPVIEW.RULES and SKUALIAS.RULES target strings the earlier sets do not
+       touch, so their position is free. */
     _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES).concat(CONTACT.RULES)
-      .concat(BUYNOW.rules()).concat(SHOPBUY.rules());
+      .concat(BUYNOW.rules())
+      .concat(SHOPVIEW.RULES).concat(SKUALIAS.RULES);
   }
   return _artboardRules;
 }
