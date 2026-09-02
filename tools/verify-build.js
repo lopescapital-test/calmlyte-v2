@@ -42,6 +42,54 @@ const COMMERCE_MARKERS = [
 
 const ROBOTS_TAG = '<meta name="robots" content="noindex,nofollow">';
 
+/* Slice one handler out of a built page, from `from` to the brace that closes
+   the first `{` after it, skipping strings and comments.
+ *
+ * Brace matching rather than a line-shape heuristic. "The first line that is
+ * only `},`" is the obvious rule and it is wrong: the fetch options inside the
+ * handler contain exactly that line, so the slice ended in the middle of the
+ * request. It also cannot be a fixed indent, because the build reindents the
+ * logic block. Both were tried; both cut in the wrong place, which silently
+ * changes what every check on the slice is looking at.
+ *
+ * Returns null if the braces do not balance, which callers must treat as a
+ * failure rather than as an empty handler. */
+function sliceHandler(src, from) {
+  const open = src.indexOf('{', from);
+  if (open < 0) return null;
+  let depth = 0;
+  for (let i = open; i < src.length; i++) {
+    const c = src[i];
+    if (c === '/' && src[i + 1] === '*') {
+      const e = src.indexOf('*/', i + 2);
+      if (e < 0) return null;
+      i = e + 1;
+      continue;
+    }
+    if (c === '/' && src[i + 1] === '/') {
+      const e = src.indexOf('\n', i);
+      if (e < 0) return null;
+      i = e;
+      continue;
+    }
+    if (c === '"' || c === "'" || c === '`') {
+      let closed = false;
+      for (i++; i < src.length; i++) {
+        if (src[i] === '\\') { i++; continue; }
+        if (src[i] === c) { closed = true; break; }
+      }
+      if (!closed) return null;
+      continue;
+    }
+    if (c === '{') depth++;
+    else if (c === '}') {
+      depth--;
+      if (depth === 0) return src.slice(from, i + 1);
+    }
+  }
+  return null;
+}
+
 function verify(outDir) {
   const OUT = outDir || OUT_DEFAULT;
   const failures = [];
@@ -125,6 +173,24 @@ function verify(outDir) {
     const cart = read('cart.html');
     const variants = JSON.parse(fs.readFileSync(path.join(__dirname, VARIANTS_FILE), 'utf8'));
 
+    /* Every page that may start a checkout. Two since 2026-09-02: the cart's
+       Checkout button and the product page's Buy Now.
+     *
+       Held as a set because the checks below have to hold on all of them, and
+       because 3-vi asserts membership in both directions. A page missing from
+       the set is as dangerous as an extra one: an extra means the token and the
+       mutation leaked somewhere they were not meant to be, while a missing one
+       means the substitution silently no-oped and a customer is looking at a
+       primary CTA that does nothing. Only the first of those looks like a
+       failure, so both are stated. */
+    const CHECKOUT_PAGES = ['cart.html', 'product.html'];
+    for (const f of CHECKOUT_PAGES) {
+      if (!pages.includes(f)) {
+        failures.push(`${f}: expected to carry checkout code but was not built`);
+      }
+    }
+    const checkoutPages = CHECKOUT_PAGES.filter(f => pages.includes(f));
+
     /* 3-i  the stub must be gone — otherwise the substitution silently no-oped
             and the button still does nothing. */
     if (cart.includes(CHECKOUT_STUB_MARKER)) {
@@ -137,15 +203,30 @@ function verify(outDir) {
     const REQUIRED = [
       ['cartCreate mutation',        'mutation CartCreate'],
       ['redirect to checkoutUrl',    'window.location.href = out.cart.checkoutUrl'],
-      ['empty-cart guard',           'if (!cart.length)'],
       ['double-submit guard',        'if (this._checkingOut) return;'],
       ['unknown-variant guard',      'if (!gid)'],
       ['subtotal parity check',      'subtotal mismatch:'],
       ['request timeout',            'abort.abort()'],
-      ['failure keeps the cart',     'checkout failed:']
+      ['failure leaves the cart alone', 'checkout failed:']
     ];
-    for (const [label, marker] of REQUIRED) {
-      if (!cart.includes(marker)) failures.push(`cart.html: ${label} missing from the checkout handler`);
+    for (const f of checkoutPages) {
+      const text = read(f);
+      for (const [label, marker] of REQUIRED) {
+        if (!text.includes(marker)) failures.push(`${f}: ${label} missing from the checkout handler`);
+      }
+    }
+    /* Cart page only: Buy Now has no empty case to guard, because the customer
+       is looking at the product being bought. */
+    if (!cart.includes('if (!cart.length)')) {
+      failures.push('cart.html: empty-cart guard missing from the checkout handler');
+    }
+
+    /* Each page's failure message, verbatim. The two differ deliberately — the
+       cart's says the cart is saved, which would be a lie on a Buy Now that
+       never wrote one — so they are checked separately rather than by looking
+       for the support address anywhere on the page. */
+    if (!cart.includes(CHECKOUT.MSG.failed)) {
+      failures.push('cart.html: the checkout failure message is not the expected text');
     }
 
     /* 3-iii the SKU -> variant map, compared pair by pair against the verified
@@ -159,27 +240,29 @@ function verify(outDir) {
      *       different product than the one they picked. Both were live holes here
      *       until a fault-injection run appended an X to a GID and nothing
      *       failed. */
-    const block = /var VARIANTS = \{([\s\S]*?)\n\s*\};/.exec(cart);
-    if (!block) {
-      failures.push('cart.html: no VARIANTS map found in the checkout handler');
-    } else {
+    for (const f of checkoutPages) {
+      const block = /var VARIANTS = \{([\s\S]*?)\n\s*\};/.exec(read(f));
+      if (!block) {
+        failures.push(`${f}: no VARIANTS map found in the checkout handler`);
+        continue;
+      }
       const pairs = new Map(
         [...block[1].matchAll(/"([^"]+)"\s*:\s*"([^"]*)"/g)].map(m => [m[1], m[2]])
       );
       const skus = Object.keys(PRODUCTS);
       if (pairs.size !== skus.length) {
-        failures.push(`cart.html: VARIANTS map has ${pairs.size} entries, expected ${skus.length}`);
+        failures.push(`${f}: VARIANTS map has ${pairs.size} entries, expected ${skus.length}`);
       }
       for (const sku of skus) {
         const want = variants.variants[sku].variantId;
         if (!pairs.has(sku)) {
-          failures.push(`cart.html: VARIANTS map has no entry for SKU "${sku}"`);
+          failures.push(`${f}: VARIANTS map has no entry for SKU "${sku}"`);
         } else if (pairs.get(sku) !== want) {
-          failures.push(`cart.html: SKU "${sku}" maps to "${pairs.get(sku)}", verified GID is "${want}"`);
+          failures.push(`${f}: SKU "${sku}" maps to "${pairs.get(sku)}", verified GID is "${want}"`);
         }
       }
       for (const sku of pairs.keys()) {
-        if (!skus.includes(sku)) failures.push(`cart.html: VARIANTS map sells unknown SKU "${sku}"`);
+        if (!skus.includes(sku)) failures.push(`${f}: VARIANTS map sells unknown SKU "${sku}"`);
       }
     }
 
@@ -193,11 +276,14 @@ function verify(outDir) {
     }
 
     /* 3-iv the request must go to this shop and no other host. */
-    if (!cart.includes(SHOP_DOMAIN)) {
-      failures.push(`cart.html: checkout does not reference ${SHOP_DOMAIN}`);
-    }
-    for (const m of cart.matchAll(/[A-Za-z0-9-]+\.myshopify\.com/g)) {
-      if (m[0] !== SHOP_DOMAIN) failures.push(`cart.html: checkout references a foreign shop "${m[0]}"`);
+    for (const f of checkoutPages) {
+      const text = read(f);
+      if (!text.includes(SHOP_DOMAIN)) {
+        failures.push(`${f}: checkout does not reference ${SHOP_DOMAIN}`);
+      }
+      for (const m of text.matchAll(/[A-Za-z0-9-]+\.myshopify\.com/g)) {
+        if (m[0] !== SHOP_DOMAIN) failures.push(`${f}: checkout references a foreign shop "${m[0]}"`);
+      }
     }
 
     /* 3-v  a Storefront public token is expected in the page — that is how the
@@ -210,25 +296,35 @@ function verify(outDir) {
         failures.push(`${f}: a privileged Shopify token (${m[0].slice(0, 6)}…) reached the build`);
       }
     }
-    if (!/'[0-9a-f]{32}'/.test(cart) && !/"[0-9a-f]{32}"/.test(cart)) {
-      failures.push('cart.html: no Storefront public token embedded — the Checkout button cannot work');
+    for (const f of checkoutPages) {
+      const text = read(f);
+      if (!/'[0-9a-f]{32}'/.test(text) && !/"[0-9a-f]{32}"/.test(text)) {
+        failures.push(`${f}: no Storefront public token embedded — its checkout button cannot work`);
+      }
     }
 
-    /* 3-vi checkout belongs on the cart page alone. A token or a mutation on
-            another page means the substitution leaked. */
+    /* 3-vi checkout belongs on exactly the pages listed above, no more and no
+            fewer. An extra page means the token and the mutation leaked
+            somewhere they were not meant to be; a missing one means a primary
+            CTA is bound to a handler that was never injected. */
     for (const f of all) {
-      if (f === 'cart.html') continue;
       const text = read(f);
-      if (text.includes('cartCreate') || /X-Shopify-Storefront-Access-Token/i.test(text)) {
-        failures.push(`${f}: checkout code leaked outside cart.html`);
+      const carries = text.includes('cartCreate') || /X-Shopify-Storefront-Access-Token/i.test(text);
+      if (carries && !CHECKOUT_PAGES.includes(f)) {
+        failures.push(`${f}: checkout code leaked onto a page that must not carry it`);
+      }
+      if (!carries && CHECKOUT_PAGES.includes(f)) {
+        failures.push(`${f}: no checkout code — the substitution did not apply, so its CTA is dead`);
       }
     }
 
     /* 3-vii no third-party payment processor. Shopify hosts the payment page;
              nothing else should be in here. */
-    const lower = cart.toLowerCase();
-    for (const marker of ['stripe', 'paypal', 'braintree', 'adyen', 'klarna', 'payment_intent', 'checkout.session']) {
-      if (lower.includes(marker)) failures.push(`cart.html: unexpected payment marker "${marker}"`);
+    for (const f of checkoutPages) {
+      const lower = read(f).toLowerCase();
+      for (const marker of ['stripe', 'paypal', 'braintree', 'adyen', 'klarna', 'payment_intent', 'checkout.session']) {
+        if (lower.includes(marker)) failures.push(`${f}: unexpected payment marker "${marker}"`);
+      }
     }
   }
 
@@ -302,6 +398,196 @@ function verify(outDir) {
     const carriers = pages.filter(f => read(f).includes(CONTACT.PUBLIC_EMAIL));
     if (!carriers.length) {
       failures.push(`no page carries the public contact address ${CONTACT.PUBLIC_EMAIL}`);
+    }
+  }
+
+  /* 4i — the product page's primary CTA goes straight to Shopify checkout.
+   *
+   *      Per Jake 2026-09-02. The button used to add to the local cart and leave
+   *      the customer to find the cart page; it now creates a one-line Shopify
+   *      cart and redirects.
+   *
+   *      Per Jake's revision the same day, the button keeps the artboard's
+   *      "Add to cart" wording. That removes the only visible symptom this
+   *      change would otherwise have had: the CTA looks identical whether or not
+   *      the rebinding applied, so these assertions are the only thing that can
+   *      tell the two apart.
+   *
+   *      Three things can go wrong here, and none of them looks broken:
+   *
+   *        - the rebinding silently stops applying, leaving a correct-looking
+   *          button that adds to the local cart and goes nowhere. Nothing about
+   *          the rendered page says so.
+   *        - the quantity, or the price the parity check compares against, stops
+   *          matching the product being viewed. This is the one failure mode
+   *          here that could charge an amount the customer never read.
+   *        - the two checkouts drift. Copying the handler was the obvious way to
+   *          build this and would have left two implementations to keep in step;
+   *          they are generated from one string in tools/checkout-wiring.js, and
+   *          the marker comparison below is what holds that true.
+   *
+   *      Both directions of the gate are asserted, because a closed gate that
+   *      still rewrote the label would ship a Buy Now button bound to a handler
+   *      that does not exist. */
+  if (pages.includes('product.html')) {
+    const BUYNOW = require('./pdp-buy-now');
+    const prod = read('product.html');
+    /* The compiled form, not the template form. The build turns
+       onClick="{{ buyNow }}" into data-on="click:buyNow", so matching the
+       template attribute finds nothing and the assertion passes vacuously —
+       which is exactly what happened on the first run of this check. */
+    const bound = needle =>
+      (prod.match(new RegExp('data-on="click:' + needle + '"', 'g')) || []).length;
+
+    /* Comments stripped, because the negative checks below look for mentions of
+       localStorage and of the cart route, and the handler's own comments say it
+       touches neither. A comment saying so is not the same as code doing so. */
+    const stripComments = src => src
+      .replace(/\/\*[\s\S]*?\*\//g, ' ')
+      .replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+
+    if (!SHOPIFY_CHECKOUT_ENABLED) {
+      /* Gate closed: the artboard's own button, untouched. */
+      if (bound(BUYNOW.HANDLER)) {
+        failures.push(`product.html: the CTA is bound to ${BUYNOW.HANDLER} while the commerce gate is closed — the button would do nothing`);
+      }
+      if (!bound(BUYNOW.OLD_HANDLER)) {
+        failures.push(`product.html: with the gate closed the CTA should still be bound to ${BUYNOW.OLD_HANDLER}`);
+      }
+      /* The label is the same either way, so it says nothing about the gate.
+         What must hold is that the button carrying it is bound to the artboard's
+         own handler and that nothing references the injected one. */
+      const closedTags = prod.match(new RegExp(`<button[^>]*>${BUYNOW.CTA_LABEL}</button>`, 'g')) || [];
+      if (closedTags.length !== 1) {
+        failures.push(`product.html: ${closedTags.length} button(s) read "${BUYNOW.CTA_LABEL}", expected 1`);
+      } else if (!closedTags[0].includes(`data-on="click:${BUYNOW.OLD_HANDLER}"`)) {
+        failures.push(`product.html: with the gate closed the "${BUYNOW.CTA_LABEL}" button should be bound to ${BUYNOW.OLD_HANDLER}`);
+      }
+      if (prod.includes(BUYNOW.HANDLER)) {
+        failures.push(`product.html: ${BUYNOW.HANDLER} is named on the page while the commerce gate is closed`);
+      }
+    } else {
+      /* 4i-i  the binding and the label move together. A button that says it
+               adds to a cart and instead leaves for a payment page is the
+               failure this pair exists to prevent. */
+      const buy = bound(BUYNOW.HANDLER);
+      if (buy !== 1) {
+        failures.push(`product.html: ${buy} element(s) bound to ${BUYNOW.HANDLER}, expected 1`);
+      }
+      const old = bound(BUYNOW.OLD_HANDLER);
+      if (old) {
+        failures.push(`product.html: ${old} element(s) still bound to ${BUYNOW.OLD_HANDLER} — a CTA still adds to the local cart`);
+      }
+      /* The label and the binding on the same element, which is the pairing that
+         carries the whole change now that the label is unchanged.
+       *
+         Two separate checks — a button reading "Add to cart" exists, and
+         something is bound to buyNow — both pass on a page where those are
+         different elements. And because the wording is the artboard's own, a
+         rule that silently stopped applying would leave a button that looks
+         exactly right and quietly does the old thing, so there is no visible
+         symptom for this to fall back on. */
+      const labelled = new RegExp(`<button[^>]*>${BUYNOW.CTA_LABEL}</button>`, 'g');
+      const tags = prod.match(labelled) || [];
+      if (tags.length !== 1) {
+        failures.push(`product.html: ${tags.length} button(s) read "${BUYNOW.CTA_LABEL}", expected 1`);
+      } else if (!tags[0].includes(`data-on="click:${BUYNOW.HANDLER}"`)) {
+        failures.push(`product.html: the "${BUYNOW.CTA_LABEL}" button is not bound to ${BUYNOW.HANDLER} — it reads "${BUYNOW.CTA_LABEL}" and adds to the local cart instead of opening checkout`);
+      }
+
+      /* 4i-ii the handler itself. Sliced out so the checks below cannot be
+               satisfied by text elsewhere on the page — the cart nav link and
+               the related-product links both name routes this handler must
+               never use. */
+      const open = prod.indexOf(`${BUYNOW.HANDLER}: async () => {`);
+      const body = open < 0 ? null : sliceHandler(prod, open);
+      if (open < 0) {
+        failures.push(`product.html: renderVals has no ${BUYNOW.HANDLER} handler`);
+      } else if (!body) {
+        failures.push(`product.html: could not find the end of the ${BUYNOW.HANDLER} handler`);
+      } else if (!body.includes('out.cart.checkoutUrl')) {
+        /* The slice is only worth checking if it actually contains the handler.
+           Without this, a mis-detected boundary makes every check below pass or
+           fail on unrelated text — which is how the two failed boundary rules
+           above were caught rather than shipped. */
+        failures.push(`product.html: the ${BUYNOW.HANDLER} slice does not contain the redirect — the handler boundary was mis-detected`);
+      } else {
+        const code = stripComments(body);
+
+        /* One variant, quantity fixed at one, read from this page's own table. */
+        if (!body.includes('var gid = VARIANTS[p.sku];')) {
+          failures.push(`product.html: ${BUYNOW.HANDLER} does not resolve the variant from p.sku`);
+        }
+        if (!body.includes('var lines = [{ merchandiseId: gid, quantity: 1 }];')) {
+          failures.push(`product.html: ${BUYNOW.HANDLER} does not send exactly one line at quantity 1`);
+        }
+
+        /* The parity check must compare against the price rendered beside the
+           button, which is p.priceN — the field {{ price }} is formatted from.
+           Anything else and the number checked is not the number read. */
+        if (!body.includes('var shown = p.priceN;')) {
+          failures.push(`product.html: ${BUYNOW.HANDLER} does not compare Shopify's subtotal against p.priceN`);
+        }
+
+        /* Buy Now must not touch the local cart in either direction: not read,
+           so the checkout holds only the product on screen, and not written, so
+           an abandoned Buy Now leaves nothing behind. */
+        if (/localStorage|this\.state\.cart/.test(code)) {
+          failures.push(`product.html: ${BUYNOW.HANDLER} touches the Calmlyte cart — Buy Now must neither read nor write it`);
+        }
+
+        /* And it must not route through the cart page, which is the change. */
+        if (/cart\.html|Cart\.dc\.html/.test(code)) {
+          failures.push(`product.html: ${BUYNOW.HANDLER} navigates to the cart page`);
+        }
+
+        /* The customer-facing failure, compared against the exact text rather
+           than by looking for the address somewhere in the handler.
+           "Does the handler mention the support address anywhere" passed with
+           the address stripped out of this message, because the
+           unknown-variant message carries it too — a fault-injection run is
+           what surfaced that. The message a customer actually sees when
+           checkout fails is the one that has to be right. */
+        if (!body.includes(CHECKOUT.MSG.pdpFailed)) {
+          failures.push(`product.html: the ${BUYNOW.HANDLER} failure message is not the expected text — a customer hitting an error may be left without a way to reach anyone`);
+        }
+      }
+
+      /* 4i-iii one checkout system, not two. Every string the two handlers must
+                share, compared across the two built pages. This is what makes
+                "do not introduce a second checkout system" an assertion rather
+                than an intention: edit the mutation, the endpoint, the
+                credential header or the parity check on one page only, and this
+                fails. */
+      for (const marker of CHECKOUT.SHARED_MARKERS) {
+        const inCart = read('cart.html').includes(marker);
+        const inProd = prod.includes(marker);
+        if (inCart !== inProd) {
+          failures.push(
+            `the two checkouts have diverged — "${marker.slice(0, 46)}…" is in ` +
+            `${inCart ? 'cart.html but not product.html' : 'product.html but not cart.html'}`
+          );
+        } else if (!inCart) {
+          failures.push(`both checkouts are missing "${marker.slice(0, 46)}…"`);
+        }
+      }
+
+      /* 4i-iv every price the CTA can quote must be the catalogue price, and
+               every SKU it can offer must have a resolved variant. The parity
+               check refuses the redirect on a mismatch, so a drift here shows up
+               as a Buy Now button that has stopped working rather than as a
+               wrong charge — a safe failure, but a silent one. */
+      const entries = [...prod.matchAll(/sku: '([a-z-]+)',[^\n]*?priceN: (\d+)/g)];
+      if (entries.length !== Object.keys(PRODUCTS).length) {
+        failures.push(`product.html: ${entries.length} priced product entries, expected ${Object.keys(PRODUCTS).length}`);
+      }
+      for (const [, sku, priceN] of entries) {
+        if (!PRODUCTS[sku]) {
+          failures.push(`product.html: Buy Now offers SKU "${sku}", which is not in the Shopify catalogue`);
+        } else if (Number(priceN) !== PRODUCTS[sku].price) {
+          failures.push(`product.html: "${sku}" priced ${priceN} on the page, ${PRODUCTS[sku].price} in the Shopify catalogue`);
+        }
+      }
     }
   }
 
@@ -498,8 +784,11 @@ function verify(outDir) {
     if (!row) {
       failures.push('product.html: no price/CTA row found');
     } else {
+      const BUYNOW = require('./pdp-buy-now');
       if (!row[1].includes('{{ price }}')) failures.push('product.html: the price is not in the CTA row');
-      if (!row[1].includes('Add to cart')) failures.push('product.html: Add to cart is not in the CTA row');
+      if (!row[1].includes(`>${BUYNOW.CTA_LABEL}</button>`)) {
+        failures.push(`product.html: the CTA row has no "${BUYNOW.CTA_LABEL}" button`);
+      }
     }
     if (prod.includes('More questions')) {
       failures.push('product.html: the outbound "More questions" link is still present');
@@ -733,6 +1022,7 @@ function report(result) {
   console.log(`  policy footer on every page ... ${has('policy') ? 'FAIL' : 'pass'}`);
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
+  console.log(`  PDP CTA to Shopify checkout ... ${has('bound to') || has('button') || has('diverged') || has('Buy Now') || has('quantity 1') || has('priceN') || has('priced ') || has('product entries') ? 'FAIL' : 'pass'}`);
   console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
   console.log(`  FAQ page retired .............. ${has('faq.html') || has('FAQ nav item') || has('reads "FAQ"') ? 'FAIL' : 'pass'}`);
   console.log(`  vercel.json redirect + robots . ${has('vercel.json') ? 'FAIL' : 'pass'}`);

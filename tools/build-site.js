@@ -28,6 +28,7 @@ const FAQFIX = require('./faq-corrections');
 const HERO = require('./pdp-hero-copy');
 const FAQRETIRE = require('./faq-retire');
 const CONTACT = require('./contact-email');
+const BUYNOW = require('./pdp-buy-now');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -40,9 +41,11 @@ const CONTACT = require('./contact-email');
 let _artboardRules = null;
 function artboardRules() {
   if (!_artboardRules) {
-    /* PDP.RULES last: two of them anchor on the Studio Panel entry that
-       SWAP.RULES injects, so they must run after it. */
-    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES).concat(CONTACT.RULES);
+    /* Order is load-bearing. PDP.RULES after SWAP.RULES: two of them anchor on
+       the Studio Panel entry SWAP injects. BUYNOW.rules() last: its CTA rule
+       matches the button after HERO.RULES has moved it into the price row. */
+    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES).concat(CONTACT.RULES)
+      .concat(BUYNOW.rules());
   }
   return _artboardRules;
 }

@@ -15,6 +15,21 @@
  * the Calmlyte cart stays in localStorage untouched, so abandoning checkout and
  * coming back finds the cart still there.
  *
+ * Two entry points, one implementation
+ * ------------------------------------
+ * From 2026-09-02 the product page's primary CTA goes straight to Shopify too,
+ * skipping the Calmlyte cart. That is a second place a customer can start a
+ * checkout, and the obvious way to build it — copy the handler and change two
+ * lines — would leave two checkouts to keep in step. Instead checkoutHandler()
+ * below emits the whole call from one string, and each caller supplies only the
+ * few lines that turn its own state into `lines` and `shown`. The request, the
+ * guards, the parity check and the redirect are the same bytes in both pages,
+ * and tools/verify-build.js compares them to prove it.
+ *
+ * tools/pdp-buy-now.js owns the product-page rules. It is gated on the same
+ * CHECKOUT_ENABLED flag, because a closed gate must leave the product CTA as the
+ * artboard's Add to cart rather than shipping a Buy Now button wired to nothing.
+ *
  * The token
  * ---------
  * Injected at build time from SHOPIFY_STOREFRONT_TOKEN. It is not in this repo
@@ -94,7 +109,15 @@ const MSG = {
   empty:      'Your cart is empty.',
   working:    'Opening secure checkout…',
   unavailable: ' is no longer available. Please remove it to continue.',
-  failed:     'Checkout is unavailable right now. Your cart is saved — please try again, or email ' + PUBLIC_EMAIL
+  failed:     'Checkout is unavailable right now. Your cart is saved — please try again, or email ' + PUBLIC_EMAIL,
+  /* The product page's equivalent of `unavailable`. It needs its own wording
+     because there is nothing to remove: the customer is looking at one product,
+     not editing a cart. Unreachable in a correct build — assertion 4i ties every
+     product-page SKU to a resolved variant — but a customer must still be told
+     something useful if it ever fires. */
+  pdpUnavailable: ' is not available right now. Please email ' + PUBLIC_EMAIL,
+  /* Buy Now creates no local cart, so "your cart is saved" would be a lie. */
+  pdpFailed: 'Checkout is unavailable right now — nothing has been charged. Please try again, or email ' + PUBLIC_EMAIL
 };
 
 function readVariants() {
@@ -150,31 +173,15 @@ function readToken() {
   return token;
 }
 
-/* The injected handler. Written to be readable in the built page: it ships to
-   the browser, so someone will eventually read it there rather than here. */
-function handlerSource(variants, token) {
-  const lines = Object.keys(PRODUCTS)
-    .map(sku => `    ${JSON.stringify(sku)}: ${JSON.stringify(variants.variants[sku].variantId)}`)
-    .join(',\n');
+/* What each caller supplies: the few lines that turn a page's own state into
+   `lines` and `shown`. Everything else — the mutation, the guards, the parity
+   check, the redirect, the failure message — comes from checkoutHandler below,
+   so both pages carry the same bytes and there is one checkout system rather
+   than two that drift apart.
+   ------------------------------------------------------------------ */
 
-  return `      checkout: async () => {
-        /* Lazy Shopify cart creation. Nothing has been sent to Shopify before
-           this click, and nothing is sent if any check below fails. */
-        var SHOP = ${JSON.stringify(variants.shopDomain)};
-        var API = ${JSON.stringify(variants.apiVersion)};
-        var TOKEN = ${JSON.stringify(token)};
-        var CURRENCY = ${JSON.stringify(CURRENCY)};
-        var VARIANTS = {
-${lines}
-        };
-
-        var say = (msg, ms) => {
-          clearTimeout(this._t);
-          this.setState({ toast: msg });
-          if (ms) this._t = setTimeout(() => this.setState({ toast: '' }), ms);
-        };
-
-        var cart = this.state.cart || [];
+/* The cart page: every line in localStorage, at its own quantity. */
+const CART_GATHER = `        var cart = this.state.cart || [];
 
         /* 1. Empty cart never reaches Shopify. */
         if (!cart.length) { say(${JSON.stringify(MSG.empty)}, 3200); return; }
@@ -201,7 +208,61 @@ ${lines}
 
         /* 4. The subtotal shown on this page, computed exactly as the summary
               panel computes it, so the comparison below is like for like. */
-        var shown = cart.reduce((a, it) => a + ((META[it.sku] || {}).price ?? it.price ?? 0) * it.qty, 0);
+        var shown = cart.reduce((a, it) => a + ((META[it.sku] || {}).price ?? it.price ?? 0) * it.qty, 0);`;
+
+/* A product page: this product, quantity one, and nothing else. There is no
+   empty case to guard — the customer is looking at the product — and the
+   Calmlyte cart is neither read nor written, so whatever is in it survives. */
+const PRODUCT_GATHER = `        /* 1. One click at a time. renderVals re-runs on every render, and again
+              on every product switch, so the in-flight flag lives on the
+              instance, not in this closure. Without it a second click creates a
+              second Shopify cart. */
+        if (this._checkingOut) return;
+
+        /* 2. The variant must be known. p.sku comes from this page's own product
+              table, so an unmapped value means the page and the resolved variant
+              map have drifted apart. Refuse rather than open a checkout that
+              cannot contain what the customer is looking at. */
+        var gid = VARIANTS[p.sku];
+        if (!gid) { say(p.name + ${JSON.stringify(MSG.pdpUnavailable)}, 8000); return; }
+
+        /* 3. One line, quantity fixed at 1. */
+        var lines = [{ merchandiseId: gid, quantity: 1 }];
+
+        /* 4. The price shown beside this button, for the parity check below. */
+        var shown = p.priceN;`;
+
+/* The injected handler. Written to be readable in the built page: it ships to
+   the browser, so someone will eventually read it there rather than here.
+ *
+ * opts.name    the renderVals key the button's onClick points at
+ * opts.intro   one line of comment at the top of the built handler
+ * opts.gather  the page-specific block above, which must set `lines` and
+ *              `shown` or return
+ * opts.failed  the customer-facing message when the call does not succeed
+ */
+function checkoutHandler(variants, token, opts) {
+  const lines = Object.keys(PRODUCTS)
+    .map(sku => `    ${JSON.stringify(sku)}: ${JSON.stringify(variants.variants[sku].variantId)}`)
+    .join(',\n');
+
+  return `      ${opts.name}: async () => {
+        /* ${opts.intro} */
+        var SHOP = ${JSON.stringify(variants.shopDomain)};
+        var API = ${JSON.stringify(variants.apiVersion)};
+        var TOKEN = ${JSON.stringify(token)};
+        var CURRENCY = ${JSON.stringify(CURRENCY)};
+        var VARIANTS = {
+${lines}
+        };
+
+        var say = (msg, ms) => {
+          clearTimeout(this._t);
+          this.setState({ toast: msg });
+          if (ms) this._t = setTimeout(() => this.setState({ toast: '' }), ms);
+        };
+
+${opts.gather}
 
         this._checkingOut = true;
         say(${JSON.stringify(MSG.working)});
@@ -250,17 +311,19 @@ ${lines}
           }
 
           clearTimeout(timer);
-          /* The cart stays in localStorage. Shopify owns the checkout from here;
-             an abandoned checkout comes back to a cart that is still intact. */
+          /* localStorage is untouched throughout. Shopify owns the checkout from
+             here; an abandoned checkout comes back to a cart that is still
+             exactly as the customer left it. */
           window.location.href = out.cart.checkoutUrl;
           return;
         } catch (err) {
           /* Detail to the console for whoever is debugging, one plain sentence
-             to the customer, and the cart untouched either way. */
+             to the customer, and localStorage untouched either way. The button
+             is released, so the customer can simply click again. */
           console.error('[calmlyte] checkout failed:', err);
           clearTimeout(timer);
           this._checkingOut = false;
-          say(${JSON.stringify(MSG.failed)}, 8000);
+          say(${JSON.stringify(opts.failed)}, 8000);
         }
       },`;
 }
@@ -276,13 +339,36 @@ function rules() {
       file: 'Cart.dc.html',
       label: 'inert Checkout stub -> lazy Shopify cartCreate',
       from: STUB,
-      to: handlerSource(variants, token),
+      to: cartHandler(variants, token),
       count: 1
     }
   ];
 }
 
+function cartHandler(variants, token) {
+  return checkoutHandler(variants, token, {
+    name: 'checkout',
+    intro: 'Lazy Shopify cart creation. Nothing has been sent to Shopify before\n           this click, and nothing is sent if any check below fails.',
+    gather: CART_GATHER,
+    failed: MSG.failed
+  });
+}
+
+/* Every string the two handlers must have in common. tools/verify-build.js
+   compares the built cart page against the built product page on these, which is
+   how "do not introduce a second checkout system" is asserted rather than
+   assumed: the endpoint, the credential, the mutation and the parity check have
+   to be identical in both. */
+const SHARED_MARKERS = [
+  "'https://' + SHOP + '/api/' + API + '/graphql.json'",
+  "'X-Shopify-Storefront-Access-Token': TOKEN",
+  'mutation CartCreate($lines:[CartLineInput!]!){cartCreate(input:{lines:$lines})',
+  'if (!cost || Number(cost.amount) !== shown || cost.currencyCode !== CURRENCY)',
+  'window.location.href = out.cart.checkoutUrl;'
+];
+
 module.exports = {
   CHECKOUT_ENABLED, TOKEN_ENV, PRIVILEGED_PREFIXES, STUB, MSG, TIMEOUT_MS,
-  rules, readVariants, readToken
+  rules, readVariants, readToken,
+  checkoutHandler, PRODUCT_GATHER, SHARED_MARKERS
 };

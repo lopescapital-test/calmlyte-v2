@@ -176,4 +176,4 @@ const RULES = [
   }))
 );
 
-module.exports = { RULES, COPY, CLAIM, BODY, PILL_TEXT };
+module.exports = { RULES, COPY, CLAIM, BODY, PILL_TEXT, BUTTON };
