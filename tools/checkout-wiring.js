@@ -15,20 +15,30 @@
  * the Calmlyte cart stays in localStorage untouched, so abandoning checkout and
  * coming back finds the cart still there.
  *
- * Two entry points, one implementation
- * ------------------------------------
- * From 2026-09-02 the product page's primary CTA goes straight to Shopify too,
- * skipping the Calmlyte cart. That is a second place a customer can start a
- * checkout, and the obvious way to build it — copy the handler and change two
- * lines — would leave two checkouts to keep in step. Instead checkoutHandler()
- * below emits the whole call from one string, and each caller supplies only the
- * few lines that turn its own state into `lines` and `shown`. The request, the
- * guards, the parity check and the redirect are the same bytes in both pages,
- * and tools/verify-build.js compares them to prove it.
+ * Three entry points, one implementation
+ * --------------------------------------
+ * From 2026-09-02 two more places start a checkout directly, both skipping the
+ * Calmlyte cart: the product page's primary CTA, and each of the four ADD
+ * buttons on the Shop page. The obvious way to build either — copy the handler
+ * and change a couple of lines — would leave three checkouts to keep in step.
+ * Instead checkoutHandler() below emits the whole call from one string, and each
+ * caller supplies only the few lines that turn its own state into `lines` and
+ * `shown`. The request, the guards, the parity check and the redirect are the
+ * same bytes on all three pages, and tools/verify-build.js compares them to
+ * prove it.
  *
- * tools/pdp-buy-now.js owns the product-page rules. It is gated on the same
- * CHECKOUT_ENABLED flag, because a closed gate must leave the product CTA as the
- * artboard's Add to cart rather than shipping a Buy Now button wired to nothing.
+ * The three differ in exactly two ways, both arguments rather than forks:
+ *
+ *   - what fills `lines` and `shown`: the whole localStorage cart on the cart
+ *     page, one product at quantity one on the other two (productGather)
+ *   - the shape emitted: a renderVals property on the cart and product pages,
+ *     an instance method on the Shop page, whose four buttons would otherwise
+ *     carry four identical copies of the same hundred lines
+ *
+ * tools/pdp-buy-now.js and tools/shop-buy-now.js own the two direct-checkout
+ * rule sets. Both are gated on the same CHECKOUT_ENABLED flag, because a closed
+ * gate must leave those buttons doing what the approved artboards say they do
+ * rather than shipping a button wired to a handler that does not exist.
  *
  * The token
  * ---------
@@ -213,41 +223,63 @@ const CART_GATHER = `        var cart = this.state.cart || [];
 /* A product page: this product, quantity one, and nothing else. There is no
    empty case to guard — the customer is looking at the product — and the
    Calmlyte cart is neither read nor written, so whatever is in it survives. */
-const PRODUCT_GATHER = `        /* 1. One click at a time. renderVals re-runs on every render, and again
-              on every product switch, so the in-flight flag lives on the
-              instance, not in this closure. Without it a second click creates a
-              second Shopify cart. */
+/* One product, quantity one. Used by the product page's CTA and by each of the
+   four Shop cards' ADD buttons.
+ *
+ * Parameterised over the expression that holds the product and the field its
+ * price sits in, because the two pages keep those in different shapes — the
+ * product page has one `p` for whatever is being viewed with the price in
+ * priceN, the Shop page has four ITEMS entries with the price in price. Those
+ * two facts are the only difference between the two, so they are arguments
+ * rather than a reason to write the block twice. */
+function productGather({ product, priceField }) {
+  return `        /* 1. One click at a time. renderVals re-runs on every render, so the
+              in-flight flag lives on the instance, not in this closure. Without
+              it a second click creates a second Shopify cart. */
         if (this._checkingOut) return;
 
-        /* 2. The variant must be known. p.sku comes from this page's own product
-              table, so an unmapped value means the page and the resolved variant
-              map have drifted apart. Refuse rather than open a checkout that
-              cannot contain what the customer is looking at. */
-        var gid = VARIANTS[p.sku];
-        if (!gid) { say(p.name + ${JSON.stringify(MSG.pdpUnavailable)}, 8000); return; }
+        /* 2. The variant must be known. The SKU comes from this page's own
+              product table, so an unmapped value means the page and the
+              resolved variant map have drifted apart. Refuse rather than open
+              a checkout that cannot contain what the customer asked for. */
+        var gid = VARIANTS[${product}.sku];
+        if (!gid) { say(${product}.name + ${JSON.stringify(MSG.pdpUnavailable)}, 8000); return; }
 
         /* 3. One line, quantity fixed at 1. */
         var lines = [{ merchandiseId: gid, quantity: 1 }];
 
         /* 4. The price shown beside this button, for the parity check below. */
-        var shown = p.priceN;`;
+        var shown = ${product}.${priceField};`;
+}
+
+/* The product page: one `p`, price in priceN. */
+const PRODUCT_GATHER = productGather({ product: 'p', priceField: 'priceN' });
+
+/* The Shop page: the card's ITEMS entry, price in price. */
+const SHOP_GATHER = productGather({ product: 'item', priceField: 'price' });
 
 /* The injected handler. Written to be readable in the built page: it ships to
    the browser, so someone will eventually read it there rather than here.
  *
- * opts.name    the renderVals key the button's onClick points at
+ * opts.name    the renderVals key, or the method name, the button reaches
  * opts.intro   one line of comment at the top of the built handler
  * opts.gather  the page-specific block above, which must set `lines` and
  *              `shown` or return
  * opts.failed  the customer-facing message when the call does not succeed
+ * opts.method  emit an instance method `async name(arg)` instead of a
+ *              renderVals property. The Shop page needs this: it has four
+ *              buttons, and four copies of this handler would be four hundred
+ *              lines of identical code in the shipped page. One method taking
+ *              the card's item, called from four one-line renderVals keys,
+ *              carries the same behaviour once.
+ * opts.arg     the method's parameter name, when opts.method is set
  */
 function checkoutHandler(variants, token, opts) {
   const lines = Object.keys(PRODUCTS)
     .map(sku => `    ${JSON.stringify(sku)}: ${JSON.stringify(variants.variants[sku].variantId)}`)
     .join(',\n');
 
-  return `      ${opts.name}: async () => {
-        /* ${opts.intro} */
+  const inner = `        /* ${opts.intro} */
         var SHOP = ${JSON.stringify(variants.shopDomain)};
         var API = ${JSON.stringify(variants.apiVersion)};
         var TOKEN = ${JSON.stringify(token)};
@@ -324,8 +356,18 @@ ${opts.gather}
           clearTimeout(timer);
           this._checkingOut = false;
           say(${JSON.stringify(opts.failed)}, 8000);
-        }
-      },`;
+        }`;
+
+  if (!opts.method) {
+    return `      ${opts.name}: async () => {\n${inner}\n      },`;
+  }
+
+  /* Same bytes, shifted left to sit at a class method's indentation. Only the
+     wrapper differs between the two forms — the body above is generated once,
+     which is what keeps the Shop page's checkout the same checkout as the
+     other two rather than a third implementation that looks like them. */
+  const shifted = inner.replace(/^ {4}/gm, '');
+  return `  async ${opts.name}(${opts.arg}) {\n${shifted}\n  }`;
 }
 
 /* Build-time substitution rules. Empty when the gate is closed, so a closed gate
@@ -354,11 +396,11 @@ function cartHandler(variants, token) {
   });
 }
 
-/* Every string the two handlers must have in common. tools/verify-build.js
-   compares the built cart page against the built product page on these, which is
-   how "do not introduce a second checkout system" is asserted rather than
-   assumed: the endpoint, the credential, the mutation and the parity check have
-   to be identical in both. */
+/* Every string all three handlers must have in common. tools/verify-build.js
+   compares the built cart, product and shop pages on these, which is how "do
+   not introduce a second checkout system" is asserted rather than assumed: the
+   endpoint, the credential, the mutation and the parity check have to be
+   identical in all of them. */
 const SHARED_MARKERS = [
   "'https://' + SHOP + '/api/' + API + '/graphql.json'",
   "'X-Shopify-Storefront-Access-Token': TOKEN",
@@ -370,5 +412,5 @@ const SHARED_MARKERS = [
 module.exports = {
   CHECKOUT_ENABLED, TOKEN_ENV, PRIVILEGED_PREFIXES, STUB, MSG, TIMEOUT_MS,
   rules, readVariants, readToken,
-  checkoutHandler, PRODUCT_GATHER, SHARED_MARKERS
+  checkoutHandler, productGather, PRODUCT_GATHER, SHOP_GATHER, SHARED_MARKERS
 };
