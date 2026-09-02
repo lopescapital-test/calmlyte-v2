@@ -57,6 +57,7 @@
 const fs = require('fs');
 const path = require('path');
 const { SHOP_DOMAIN, PRODUCTS, CURRENCY, VARIANTS_FILE } = require('./shopify-catalog');
+const { PUBLIC_EMAIL } = require('./contact-email');
 
 /* ------------------------------------------------------------------ *
  * The commerce gate.
@@ -93,7 +94,7 @@ const MSG = {
   empty:      'Your cart is empty.',
   working:    'Opening secure checkout…',
   unavailable: ' is no longer available. Please remove it to continue.',
-  failed:     'Checkout is unavailable right now. Your cart is saved — please try again, or email hello@calmlyte.com'
+  failed:     'Checkout is unavailable right now. Your cart is saved — please try again, or email ' + PUBLIC_EMAIL
 };
 
 function readVariants() {

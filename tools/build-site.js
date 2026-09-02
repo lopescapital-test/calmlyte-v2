@@ -27,6 +27,7 @@ const PDP = require('./pdp-conversion');
 const FAQFIX = require('./faq-corrections');
 const HERO = require('./pdp-hero-copy');
 const FAQRETIRE = require('./faq-retire');
+const CONTACT = require('./contact-email');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -41,7 +42,7 @@ function artboardRules() {
   if (!_artboardRules) {
     /* PDP.RULES last: two of them anchor on the Studio Panel entry that
        SWAP.RULES injects, so they must run after it. */
-    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES);
+    _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES).concat(CONTACT.RULES);
   }
   return _artboardRules;
 }

@@ -274,6 +274,37 @@ function verify(outDir) {
     if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
   }
 
+  /* 4h — the public contact address.
+   *
+   *      Customer email is meant to land in GoHighLevel Conversations, which
+   *      only happens for mail.calmlyte.com — the root address is a separate
+   *      GoDaddy mailbox the CRM cannot see. So an old address left anywhere on
+   *      a page silently routes that customer somewhere nobody is watching.
+   *
+   *      Both halves are checked, because they fail differently: an old address
+   *      in the visible text misleads the reader, and an old address in a mailto
+   *      href misroutes the click even when the text looks right. */
+  {
+    const CONTACT = require('./contact-email');
+    for (const f of all) {
+      const text = read(f);
+      /* Bounded so the new address, which contains the old as a substring after
+         the "mail." label, is not counted as an occurrence of it. */
+      const stale = (text.match(new RegExp(`(^|[^.\\w])${CONTACT.OLD_EMAIL.replace(/\./g, '\\.')}`, 'g')) || []).length;
+      if (stale) failures.push(`${f}: ${stale} reference(s) to the old contact address ${CONTACT.OLD_EMAIL}`);
+      for (const m of text.matchAll(/mailto:([^"'\s>]+)/g)) {
+        if (m[1] !== CONTACT.PUBLIC_EMAIL) {
+          failures.push(`${f}: mailto link points at "${m[1]}", expected ${CONTACT.PUBLIC_EMAIL}`);
+        }
+      }
+    }
+    /* The address has to actually be present, not merely not-wrong. */
+    const carriers = pages.filter(f => read(f).includes(CONTACT.PUBLIC_EMAIL));
+    if (!carriers.length) {
+      failures.push(`no page carries the public contact address ${CONTACT.PUBLIC_EMAIL}`);
+    }
+  }
+
   /* 4g — vercel.json: the retired route redirects, and noindex still applies.
    *
    *      Two things live in that file that nothing else can enforce. The
@@ -705,6 +736,7 @@ function report(result) {
   console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
   console.log(`  FAQ page retired .............. ${has('faq.html') || has('FAQ nav item') || has('reads "FAQ"') ? 'FAIL' : 'pass'}`);
   console.log(`  vercel.json redirect + robots . ${has('vercel.json') ? 'FAIL' : 'pass'}`);
+  console.log(`  public contact address ........ ${has('contact address') || has('mailto link') ? 'FAIL' : 'pass'}`);
   console.log(`  prices match Shopify catalogue  ${has('Shopify') || has('priced SKUs') ? 'FAIL' : 'pass'}`);
   console.log(`  variant GIDs .................. ${result.variantsResolved ? 'resolved' : 'not resolved yet (no token)'}`);
   console.log(`  SHOPIFY_CHECKOUT_ENABLED ...... ${result.gateOpen}`);
