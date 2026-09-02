@@ -12,6 +12,12 @@
   "headers": [
     {
       "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "calmlyte-v2.vercel.app"
+        }
+      ],
       "headers": [
         {
           "key": "X-Robots-Tag",

@@ -371,9 +371,36 @@ function verify(outDir) {
     }
   }
 
-  /* 4 — noindex on every page, every build. */
+  /* 4 — the public site is indexable, on every page, every build.
+   *
+   *      Inverted at launch, 2026-09-02. For the whole build-up this asserted
+   *      the opposite: noindex present on all seven pages, so an unfinished
+   *      store could not be found. Both directions matter, and the reason to
+   *      keep asserting it after launch is that the tag is one line in a
+   *      template — reintroduced by a copy-paste or a reverted commit, it would
+   *      quietly de-index the whole site, and nothing about the rendered page
+   *      would look wrong.
+   *
+   *      Any robots directive is caught, not just the exact old string: a
+   *      "none" or a bare "noindex" would suppress indexing just as
+   *      effectively as the literal that used to be here. `nofollow` on its own
+   *      is treated the same way — it is not what launch means either.
+   *
+   *      Scope is the Vercel build only. The Shopify storefront keeps its own
+   *      noindex deliberately, so that an unfinished duplicate storefront does
+   *      not compete with this site; nothing here touches or checks that, and
+   *      it is not served from this build. */
   for (const f of pages) {
-    if (!read(f).includes(ROBOTS_TAG)) failures.push(`${f}: missing ${ROBOTS_TAG}`);
+    const text = read(f);
+    if (text.includes(ROBOTS_TAG)) {
+      failures.push(`${f}: still carries ${ROBOTS_TAG} — the public site must be indexable`);
+      continue;
+    }
+    for (const m of text.matchAll(/<meta[^>]*name=["']robots["'][^>]*>/gi)) {
+      if (/noindex|nofollow|\bnone\b/i.test(m[0])) {
+        failures.push(`${f}: a robots meta tag suppresses indexing — ${m[0]}`);
+      }
+    }
   }
 
   /* 4h — the public contact address.
@@ -762,13 +789,22 @@ function verify(outDir) {
     }
   }
 
-  /* 4g — vercel.json: the retired route redirects, and noindex still applies.
+  /* 4g — vercel.json: the retired route redirects, and no header de-indexes
+   *      the public site.
    *
-   *      Two things live in that file that nothing else can enforce. The
-   *      X-Robots-Tag header is half of the noindex posture — the meta tags in
-   *      the pages are the other half, and a page-level check cannot see a
-   *      config-level deletion. And /faq.html now only resolves because of a
-   *      redirect; drop it and a URL that used to work starts 404ing silently.
+   *      Two things live in that file that nothing else can enforce. A header
+   *      is invisible to any page-level check, so an X-Robots-Tag reintroduced
+   *      here would de-index a site whose HTML looks perfectly correct — the
+   *      inverse of the hole this used to guard. And /faq.html now only
+   *      resolves because of a redirect; drop it and a URL that used to work
+   *      starts 404ing silently.
+   *
+   *      One header rule is allowed to carry noindex, and only one: the rule
+   *      scoped by `has: host` to the Vercel deployment domain, which serves
+   *      byte-identical content and would otherwise compete with
+   *      www.calmlyte.com in search results. That is the same reasoning that
+   *      keeps the Shopify storefront noindexed. A rule with no host condition
+   *      applies to the public site and fails.
    *
    *      The redirect is also checked for coherence: its destination must be a
    *      page that exists, and its source must not be, because a rebuilt
@@ -783,11 +819,29 @@ function verify(outDir) {
       catch (e) { failures.push(`vercel.json: not valid JSON (${e.message})`); }
 
       if (vj) {
-        const hdr = (vj.headers || []).find(h => h.source === '/(.*)');
-        const robots = hdr && (hdr.headers || []).find(
-          x => x.key === 'X-Robots-Tag' && /noindex/.test(x.value) && /nofollow/.test(x.value));
-        if (!robots) {
-          failures.push('vercel.json: the site-wide X-Robots-Tag noindex header is gone');
+        /* Every header rule that carries a robots directive must be scoped to
+           a host, and that host must not be the public site. An unscoped rule,
+           or one scoped to calmlyte.com, de-indexes what was just launched. */
+        for (const h of (vj.headers || [])) {
+          const robots = (h.headers || []).find(
+            x => /^x-robots-tag$/i.test(x.key) && /noindex|nofollow|\bnone\b/i.test(x.value));
+          if (!robots) continue;
+
+          const hostCond = (h.has || []).filter(c => c.type === 'host');
+          if (!hostCond.length) {
+            failures.push(
+              `vercel.json: an X-Robots-Tag "${robots.value}" header applies to every host, ` +
+              `including www.calmlyte.com — the public site would be de-indexed`
+            );
+          }
+          for (const c of hostCond) {
+            if (/(^|\.)calmlyte\.com$/.test(String(c.value))) {
+              failures.push(
+                `vercel.json: an X-Robots-Tag "${robots.value}" header is scoped to ` +
+                `"${c.value}" — that is the public site`
+              );
+            }
+          }
         }
 
         const r = (vj.redirects || []).find(x => x.source === '/faq.html');
@@ -1189,7 +1243,7 @@ function report(result) {
   console.log(`  checkout matches the gate ..... ${has('checkout') || has('commerce marker') || has('variant') || has('token') || has('shop') || has('payment marker') ? 'FAIL' : 'pass'}`);
   console.log(`  withdrawn Mask fully removed .. ${has('withdrawn Mask') ? 'FAIL' : 'pass'}`);
   console.log(`  no internal markers shipped ... ${has('internal marker') ? 'FAIL' : 'pass'}`);
-  console.log(`  noindex on every page ......... ${has('robots') ? 'FAIL' : 'pass'}`);
+  console.log(`  public site is indexable ...... ${has('robots') || has('indexable') || has('de-indexed') ? 'FAIL' : 'pass'}`);
   console.log(`  policy footer on every page ... ${has('policy') ? 'FAIL' : 'pass'}`);
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
