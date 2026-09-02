@@ -787,6 +787,82 @@ function verify(outDir) {
     }
   }
 
+  /* 4l — the Shop card's button cannot be clipped by its card.
+   *
+   *      Jake reported it as truncated text, 2026-09-02. It was not: the button
+   *      never clipped its own text at any width. The price/button row
+   *      overflowed the content column and the <article>'s overflow:hidden cut
+   *      the button's right edge off, showing "VIEW PRODUC". Measured overflow
+   *      before the fix: +43px at 1024, +19px at 1280, and +2px at 1440 on the
+   *      Studio Panel, whose "$6,000" is the widest price.
+   *
+   *      Three properties together make that impossible, and all three have to
+   *      hold or the guarantee is gone:
+   *
+   *        white-space:nowrap   the label stays on one line — Jake's requirement
+   *        flex:none            the button never compresses below that line
+   *        flex-wrap:wrap       so when the row runs out of room the button
+   *                             moves down instead of past the edge
+   *
+   *      Drop the wrap and nowrap+flex:none guarantees an overflow. Drop
+   *      flex:none and the button compresses and clips. Drop nowrap and the
+   *      label breaks across two lines. Each is checked per card, because a
+   *      substitution that reaches three cards and misses the fourth is exactly
+   *      the failure that shipped this bug in the first place.
+   *
+   *      Geometry is not asserted here — it depends on font metrics the build
+   *      cannot see. It is measured in-browser across 360px to 1920px, the same
+   *      way the product page's price/CTA row is. What this protects is the
+   *      arrangement that makes the geometry safe at any width. */
+  if (pages.includes('shop.html')) {
+    const FIT = require('./shop-card-fit');
+    const shop = read('shop.html');
+
+    const expect = [
+      ['image column widened',        FIT.IMG_NEW],
+      ['content padding tightened',   FIT.PAD_NEW],
+      ['row may wrap',                FIT.ROW_NEW],
+      ['button tightened + flex:none', FIT.BTN_NEW],
+      ['price floor',                 FIT.PRICE_NEW]
+    ];
+    for (const [what, needle] of expect) {
+      const n = shop.split(needle).length - 1;
+      if (n !== FIT.CARDS) {
+        failures.push(`shop.html: ${n} of ${FIT.CARDS} cards have the ${what} — a card left behind would clip its button`);
+      }
+    }
+
+    /* The properties that together make clipping impossible, read off each
+       built button rather than inferred from the rules above. */
+    const btnTags = shop.match(/<button[^>]*>\{\{ addLabel \}\}<\/button>/g) || [];
+    if (btnTags.length !== FIT.CARDS) {
+      failures.push(`shop.html: ${btnTags.length} card buttons found, expected ${FIT.CARDS}`);
+    }
+    for (const tag of btnTags) {
+      if (!/white-space:nowrap/.test(tag)) {
+        failures.push('shop.html: a card button lost white-space:nowrap — its label would break across lines');
+      }
+      if (!/flex:none/.test(tag)) {
+        failures.push('shop.html: a card button lost flex:none — it would compress and clip inside the card');
+      }
+    }
+    const wraps = (shop.match(/flex-wrap:wrap/g) || []).length;
+    if (wraps < FIT.CARDS) {
+      failures.push(`shop.html: ${wraps} rows can wrap, expected at least ${FIT.CARDS} — a row that cannot wrap overflows the card instead`);
+    }
+
+    /* And the values the fix replaced must not come back. */
+    for (const [what, stale] of [
+      ['46% image column', 'width:min(46%,100%)'],
+      ['17px button padding', 'padding:9px 17px'],
+      ['1.5px button tracking', 'letter-spacing:1.5px;text-transform:uppercase;padding']
+    ]) {
+      if (shop.includes(stale)) {
+        failures.push(`shop.html: the ${what} is back — the button overflowed the card at desktop widths with it`);
+      }
+    }
+  }
+
   /* 4g — vercel.json: the retired route redirects, and no header de-indexes
    *      the public site.
    *
@@ -1246,6 +1322,7 @@ function report(result) {
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP CTA to Shopify checkout ... ${has('bound to') || has('button') || has('diverged') || has('Buy Now') || has('quantity 1') || has('priceN') || has('priced ') || has('product entries') ? 'FAIL' : 'pass'}`);
+  console.log(`  Shop card button fits ......... ${has('clip') || has('cards have the') || has('card button') || has('rows can wrap') || has('is back') ? 'FAIL' : 'pass'}`);
   console.log(`  Shop cards route to PDPs ...... ${has('shop.html') || has('checkouts have diverged') || has('checkout is missing') || has('?sku=') ? 'FAIL' : 'pass'}`);
   console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
   console.log(`  FAQ page retired .............. ${has('faq.html') || has('FAQ nav item') || has('reads "FAQ"') ? 'FAIL' : 'pass'}`);

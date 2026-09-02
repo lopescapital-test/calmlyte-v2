@@ -31,6 +31,7 @@ const CONTACT = require('./contact-email');
 const BUYNOW = require('./pdp-buy-now');
 const SHOPVIEW = require('./shop-view-product');
 const SKUALIAS = require('./pdp-sku-aliases');
+const SHOPFIT = require('./shop-card-fit');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -50,7 +51,7 @@ function artboardRules() {
        touch, so their position is free. */
     _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES).concat(CONTACT.RULES)
       .concat(BUYNOW.rules())
-      .concat(SHOPVIEW.RULES).concat(SKUALIAS.RULES);
+      .concat(SHOPVIEW.RULES).concat(SKUALIAS.RULES).concat(SHOPFIT.RULES);
   }
   return _artboardRules;
 }
