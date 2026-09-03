@@ -83,6 +83,7 @@ const fs = require('fs');
 const path = require('path');
 const { SHOP_DOMAIN, PRODUCTS, CURRENCY, VARIANTS_FILE } = require('./shopify-catalog');
 const { PUBLIC_EMAIL } = require('./contact-email');
+const PIXEL = require('./meta-pixel');
 
 /* ------------------------------------------------------------------ *
  * The commerce gate.
@@ -266,6 +267,14 @@ const SHOP_GATHER = productGather({ product: 'item', priceField: 'price' });
  * opts.gather  the page-specific block above, which must set `lines` and
  *              `shown` or return
  * opts.failed  the customer-facing message when the call does not succeed
+ * opts.beforeRedirect
+ *              optional source emitted at the one point where the call has
+ *              certainly succeeded: userErrors clear, checkoutUrl present, and
+ *              Shopify's subtotal matched against the page. Used for the Meta
+ *              InitiateCheckout event, which must not fire on a failure and
+ *              must not fire before the URL exists. Anything here has to be
+ *              incapable of throwing — it sits between a confirmed checkout and
+ *              the redirect to it, so an exception would cost the sale.
  * opts.method  emit an instance method `async name(arg)` instead of a
  *              renderVals property. The Shop page needs this: it has four
  *              buttons, and four copies of this handler would be four hundred
@@ -343,6 +352,7 @@ ${opts.gather}
           }
 
           clearTimeout(timer);
+${opts.beforeRedirect || ''}
           /* localStorage is untouched throughout. Shopify owns the checkout from
              here; an abandoned checkout comes back to a cart that is still
              exactly as the customer left it. */
@@ -392,7 +402,11 @@ function cartHandler(variants, token) {
     name: 'checkout',
     intro: 'Lazy Shopify cart creation. Nothing has been sent to Shopify before\n           this click, and nothing is sent if any check below fails.',
     gather: CART_GATHER,
-    failed: MSG.failed
+    failed: MSG.failed,
+    /* Meta InitiateCheckout, cart-shaped: every SKU, the parity-checked
+       subtotal, and a real item count. Added 2026-09-02 — without it the
+       funnel showed no checkout starting for any multi-item order. */
+    beforeRedirect: PIXEL.PIXEL_ENABLED ? PIXEL.initiateCheckoutCart() : ''
   });
 }
 

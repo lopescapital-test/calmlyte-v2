@@ -68,6 +68,7 @@
 'use strict';
 
 const CHECKOUT = require('./checkout-wiring');
+const PIXEL = require('./meta-pixel');
 const HERO = require('./pdp-hero-copy');
 
 const FILE = 'Product.dc.html';
@@ -142,7 +143,11 @@ function renderValNew(variants, token) {
       '           sent if any check below fails, and the Calmlyte cart in localStorage\n' +
       '           is neither read nor written.',
     gather: CHECKOUT.PRODUCT_GATHER,
-    failed: CHECKOUT.MSG.pdpFailed
+    failed: CHECKOUT.MSG.pdpFailed,
+    /* Meta InitiateCheckout. Product-page flow only: the cart page's Checkout
+       button is a different shape (n items, a different total) and the brief
+       specifies num_items:1 here. */
+    beforeRedirect: PIXEL.PIXEL_ENABLED ? PIXEL.initiateCheckout('p') : ''
   });
 
   return (

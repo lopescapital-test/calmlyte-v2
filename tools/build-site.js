@@ -32,6 +32,7 @@ const BUYNOW = require('./pdp-buy-now');
 const SHOPVIEW = require('./shop-view-product');
 const SKUALIAS = require('./pdp-sku-aliases');
 const SHOPFIT = require('./shop-card-fit');
+const PIXEL = require('./meta-pixel');
 
 /* Artboard-level string rules, applied in order. Every set asserts its match
    counts, so a rule that stops matching fails the build.
@@ -41,6 +42,16 @@ const SHOPFIT = require('./shop-card-fit');
  * error when checkout is enabled without them — at require time that error
  * surfaces as a module-load stack trace with the explanation buried in it, which
  * is the opposite of useful to whoever is running the build. */
+/* The Meta Pixel ID, read once and memoised. Lazy for the same reason
+   artboardRules() is: with the pixel enabled and META_PIXEL_ID unset this
+   throws an explanatory error, and at require time that surfaces as a
+   module-load stack trace with the explanation buried in it. */
+let _pixelId = null;
+function pixelId() {
+  if (_pixelId === null) _pixelId = PIXEL.readPixelId();
+  return _pixelId;
+}
+
 let _artboardRules = null;
 function artboardRules() {
   if (!_artboardRules) {
@@ -51,7 +62,8 @@ function artboardRules() {
        touch, so their position is free. */
     _artboardRules = SWAP.RULES.concat(HOLDERS.RULES).concat(CHECKOUT.rules()).concat(PDP.RULES).concat(HERO.RULES).concat(FAQFIX.RULES).concat(FAQRETIRE.RULES).concat(CONTACT.RULES)
       .concat(BUYNOW.rules())
-      .concat(SHOPVIEW.RULES).concat(SKUALIAS.RULES).concat(SHOPFIT.RULES);
+      .concat(SHOPVIEW.RULES).concat(SKUALIAS.RULES).concat(SHOPFIT.RULES)
+      .concat(PIXEL.RULES);
   }
   return _artboardRules;
 }
@@ -650,6 +662,7 @@ function buildPage(file, route) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+${PIXEL.PIXEL_ENABLED ? PIXEL.baseCode(pixelId()) : ''}
 <title>${meta.title}</title>
 <meta name="description" content="${meta.desc.replace(/"/g, '&quot;')}">
 ${socialTags(route)}
@@ -774,8 +787,15 @@ function main() {
      wrong token fails while the previous output is still on disk. Called after
      the rm, a config error left no build/ at all — harmless on Vercel, where a
      failed build simply is not promoted, but locally it destroys the working
-     output to report a problem that was knowable first. */
+     output to report a problem that was knowable first.
+
+     pixelId() is here for exactly the same reason and was not, at first: it is
+     read while each page's head is emitted, which is after the rm, so a missing
+     META_PIXEL_ID wiped build/ before reporting itself. Every environment
+     input the build needs is resolved in these two lines, before anything on
+     disk is touched. */
   artboardRules();
+  if (PIXEL.PIXEL_ENABLED) pixelId();
 
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });

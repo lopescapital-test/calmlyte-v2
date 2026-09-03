@@ -863,6 +863,252 @@ function verify(outDir) {
     }
   }
 
+  /* 4m — Meta Pixel: the right events, in the right places, and no credential.
+   *
+   *      Jake's brief, 2026-09-02. The split is that this origin fires PageView,
+   *      ViewContent and InitiateCheckout, and Shopify fires Checkout and
+   *      Purchase with its own server-side copy and its own deduplication.
+   *
+   *      Three things here can go wrong quietly:
+   *
+   *        - a Purchase fired from this origin. Shopify already sends one from
+   *          checkout and another through the Conversions API, so a third would
+   *          inflate every conversion count and every ROAS figure computed from
+   *          it. Nothing about the site would look wrong.
+   *        - InitiateCheckout fired somewhere other than the one point where
+   *          the checkout is known to exist. Above the userErrors check it
+   *          reports checkouts that failed; above the parity check it reports
+   *          ones that were refused. Both inflate the top of the funnel with
+   *          events that never became carts.
+   *        - an access token in META_PIXEL_ID. tools/meta-pixel.js refuses a
+   *          non-numeric value before embedding it, and this is the check that
+   *          the refusal was not bypassed — a Conversions API token on seven
+   *          public pages is the worst outcome available here.
+   *
+   *      Both gate directions are asserted, because a page carrying pixel code
+   *      with the gate closed is as wrong as one missing it with the gate
+   *      open. */
+  {
+    const PIXEL = require('./meta-pixel');
+
+    /* A Meta access token, on any page. Checked first and unconditionally — it
+       does not depend on the gate, and it is the only failure here that leaks
+       something.
+     *
+       Bounded deliberately. The obvious pattern, /EAA[A-Za-z0-9]{20,}/, is
+       wrong: "EAA" occurs by chance inside base64, and the approved directory
+       already contains a design-tool export with base64 WebP data that it
+       matches fifty times over. None of those are credentials, but a build
+       that ever inlined image data would have failed on them. A real token is
+       always preceded by a boundary — a quote, an equals sign, whitespace, or
+       start of line — and base64 runs never are, so \b separates the two
+       cleanly: fifty false matches become zero, while a token after = or "
+       still matches. */
+    for (const f of all) {
+      const text = read(f);
+      for (const m of text.matchAll(/\bEAA[A-Za-z0-9_-]{40,}\b/g)) {
+        failures.push(`${f}: a Meta access token (${m[0].slice(0, 6)}…) reached the build`);
+      }
+      if (/access_token|app_secret|appsecret_proof/i.test(text)) {
+        failures.push(`${f}: a Meta credential field name appears in the page`);
+      }
+    }
+
+    if (!PIXEL.PIXEL_ENABLED) {
+      for (const f of all) {
+        if (/fbq\(|fbevents\.js|calmlyteTrack/.test(read(f))) {
+          failures.push(`${f}: pixel code present while the pixel is disabled`);
+        }
+      }
+    } else {
+      const id = process.env[PIXEL.PIXEL_ENV];
+
+      /* 4m-i  base code and PageView on every active page, once each. Twice
+                would double every PageView. */
+      for (const f of pages) {
+        const text = read(f);
+        const inits = (text.match(/fbq\('init',/g) || []).length;
+        if (inits !== 1) {
+          failures.push(`${f}: ${inits} fbq('init') calls, expected 1`);
+        }
+        const pv = (text.match(/fbq\('track', 'PageView'\)/g) || []).length;
+        if (pv !== 1) {
+          failures.push(`${f}: ${pv} PageView calls, expected 1`);
+        }
+        if (!text.includes('connect.facebook.net/en_US/fbevents.js')) {
+          failures.push(`${f}: the pixel loader is missing`);
+        }
+        if (!text.includes('window.calmlyteTrack = function')) {
+          failures.push(`${f}: the guarded event helper is missing`);
+        }
+        /* The helper must swallow its own errors. Everything else on the site
+           calls through it, including the line between a confirmed checkout and
+           the redirect to it, so an exception escaping it would cost a sale to
+           report an event. */
+        const helper = /window\.calmlyteTrack = function[\s\S]{0,400}?\n\};/.exec(text);
+        if (!helper) {
+          failures.push(`${f}: could not read the event helper to check it is failure-isolated`);
+        } else if (!/try\s*\{[\s\S]*catch/.test(helper[0])) {
+          failures.push(`${f}: the event helper is not wrapped in try/catch — a blocked pixel could throw into the page`);
+        }
+        if (!/typeof fbq === 'function'/.test(text)) {
+          failures.push(`${f}: the event helper does not check fbq exists — it would throw for any customer running an ad blocker`);
+        }
+
+        /* 4m-ii the ID, and only the ID. It belongs in exactly two places on
+                  each page: the init call and the noscript fallback. */
+        if (id) {
+          const hits = text.split(id).length - 1;
+          if (hits !== 2) {
+            failures.push(`${f}: the pixel ID appears ${hits} time(s), expected 2 (init and noscript)`);
+          }
+          if (!text.includes(`fbq('init', '${id}')`)) {
+            failures.push(`${f}: fbq('init') does not carry the configured pixel ID`);
+          }
+        }
+      }
+
+      /* 4m-iii events this origin must never fire. Shopify owns them. */
+      for (const f of all) {
+        const text = read(f);
+        for (const ev of PIXEL.FORBIDDEN_EVENTS) {
+          if (new RegExp(`['"]${ev}['"]`).test(text)) {
+            failures.push(`${f}: fires "${ev}" — Shopify owns that event and sends it server-side too, so this would double-count`);
+          }
+        }
+      }
+
+      /* 4m-iv ViewContent: the product page, and nowhere else. */
+      for (const f of pages) {
+        const n = (read(f).match(/'ViewContent'/g) || []).length;
+        if (f === 'product.html') {
+          if (n !== 1) failures.push(`product.html: ${n} ViewContent calls, expected 1`);
+        } else if (n) {
+          failures.push(`${f}: fires ViewContent, which belongs on the product page only`);
+        }
+      }
+      if (pages.includes('product.html')) {
+        const prod = read('product.html');
+
+        /* Its payload must come from the page's own product table — the same
+           one the build already asserts equal to the Shopify catalogue. A
+           second hard-coded catalogue here is what the brief rules out, and it
+           would drift silently the first time a price changed. */
+        for (const field of [
+          'content_ids: [vp.sku]',
+          'content_name: vp.title',
+          "content_type: 'product'",
+          'value: vp.priceN',
+          "currency: 'USD'"
+        ]) {
+          if (!prod.includes(field)) {
+            failures.push(`product.html: ViewContent is missing "${field}"`);
+          }
+        }
+        if (!prod.includes('})(PRODUCTS[key]);')) {
+          failures.push('product.html: ViewContent does not read the resolved product from PRODUCTS[key] — it could describe the fallback product rather than the one on screen');
+        }
+
+        /* 4m-v  InitiateCheckout, at the single point in each handler where
+                  the checkout is known to exist. Position is the whole
+                  assertion: "only after checkoutUrl" and "never on failure" are
+                  properties of where the call sits, not of any flag.
+         *
+                  Both instrumented handlers are checked the same way, because
+                  they are the same handler with different gather blocks — and
+                  because the cart's was added later, which is exactly when one
+                  of a matched pair gets forgotten. */
+        const INSTRUMENTED = [
+          ['product.html', 'buyNow: async () => {', 'num_items: 1', 'one product at quantity one'],
+          ['cart.html', 'checkout: async () => {', 'num_items: cart.reduce(', 'the whole cart']
+        ];
+        for (const [file, opener, itemsExpr, shape] of INSTRUMENTED) {
+          if (!pages.includes(file)) {
+            failures.push(`${file}: expected to fire InitiateCheckout but was not built`);
+            continue;
+          }
+          const text = read(file);
+          const at = text.indexOf(opener);
+          const handler = at < 0 ? null : sliceHandler(text, at);
+          if (!handler) {
+            failures.push(`${file}: could not slice its checkout handler to place InitiateCheckout`);
+            continue;
+          }
+          const ic = handler.indexOf("'InitiateCheckout'");
+          const redirect = handler.indexOf('window.location.href = out.cart.checkoutUrl');
+          const urlCheck = handler.indexOf('cartCreate returned no checkoutUrl');
+          const parity = handler.indexOf('subtotal mismatch:');
+          if (ic < 0) {
+            failures.push(`${file}: its checkout handler does not fire InitiateCheckout — the funnel would show no checkout starting from ${shape}`);
+            continue;
+          }
+          if (ic > redirect) {
+            failures.push(`${file}: InitiateCheckout fires after the redirect — it would rarely be delivered`);
+          }
+          if (ic < urlCheck) {
+            failures.push(`${file}: InitiateCheckout fires before checkoutUrl is verified — it would report checkouts that failed`);
+          }
+          if (ic < parity) {
+            failures.push(`${file}: InitiateCheckout fires before the subtotal parity check — it would report checkouts that were refused`);
+          }
+          if (!handler.slice(ic - 200, ic).includes('window.calmlyteTrack &&')) {
+            failures.push(`${file}: InitiateCheckout is not called through the guarded helper — a blocked pixel could throw between a confirmed checkout and the redirect`);
+          }
+
+          /* The payload has to match the event. The failure worth naming is the
+             cart carrying the product page's num_items:1 — a copy-paste that
+             reports every multi-item order as a single item, and looks correct
+             in every other respect. */
+          const payload = handler.slice(ic, ic + 600);
+          if (!payload.includes(itemsExpr)) {
+            failures.push(`${file}: InitiateCheckout does not count items as "${itemsExpr}" — its payload describes ${shape}`);
+          }
+          if (!payload.includes("currency: 'USD'")) {
+            failures.push(`${file}: InitiateCheckout is missing currency: 'USD'`);
+          }
+          if (!/value: (shown|p\.priceN)/.test(payload)) {
+            failures.push(`${file}: InitiateCheckout does not report the parity-checked value`);
+          }
+        }
+
+        /* The cart's payload must be derived from the cart, not hard-coded, and
+           must carry per-line quantities that content_ids alone cannot express. */
+        if (pages.includes('cart.html')) {
+          const cartText = read('cart.html');
+          if (cartText.includes('num_items: 1')) {
+            failures.push('cart.html: InitiateCheckout reports num_items: 1 — every multi-item order would be counted as one item');
+          }
+          for (const needed of [
+            'content_ids: cart.map(',
+            'contents: cart.map(',
+            'num_items: cart.reduce('
+          ]) {
+            if (!cartText.includes(needed)) {
+              failures.push(`cart.html: InitiateCheckout is missing "${needed}" — its payload is not derived from the cart`);
+            }
+          }
+        }
+      }
+
+      /* 4m-vi InitiateCheckout belongs to the two pages where a checkout can
+                start, and nowhere else. The Shop page is named explicitly
+                because its cards used to create checkouts themselves, so it is
+                the page most likely to acquire the event again by accident.
+                AddToCart is fired by nothing on this site: no page adds to a
+                cart any more. */
+      const MAY_INITIATE = ['product.html', 'cart.html'];
+      for (const f of pages) {
+        const text = read(f);
+        if (/'InitiateCheckout'/.test(text) && !MAY_INITIATE.includes(f)) {
+          failures.push(`${f}: fires InitiateCheckout, but no checkout starts on this page`);
+        }
+        if (/'AddToCart'/.test(text)) {
+          failures.push(`${f}: fires AddToCart, which nothing on this site does — no page writes a cart`);
+        }
+      }
+    }
+  }
+
   /* 4g — vercel.json: the retired route redirects, and no header de-indexes
    *      the public site.
    *
@@ -1322,6 +1568,7 @@ function report(result) {
   console.log(`  favicon + social tags ......... ${has('head is missing') || has('og:') || has('twitter:') || has('not in the build') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP conversion changes ........ ${has('hero paragraph') || has('More questions') || has('questions module') || has('question') || has('approved text') || has('faqs') ? 'FAIL' : 'pass'}`);
   console.log(`  PDP CTA to Shopify checkout ... ${has('bound to') || has('button') || has('diverged') || has('Buy Now') || has('quantity 1') || has('priceN') || has('priced ') || has('product entries') ? 'FAIL' : 'pass'}`);
+  console.log(`  Meta Pixel events ............. ${has('pixel') || has('PageView') || has('ViewContent') || has('InitiateCheckout') || has('Meta ') || has('fbq') || has('event helper') ? 'FAIL' : 'pass'}`);
   console.log(`  Shop card button fits ......... ${has('clip') || has('cards have the') || has('card button') || has('rows can wrap') || has('is back') ? 'FAIL' : 'pass'}`);
   console.log(`  Shop cards route to PDPs ...... ${has('shop.html') || has('checkouts have diverged') || has('checkout is missing') || has('?sku=') ? 'FAIL' : 'pass'}`);
   console.log(`  US-only holds site-wide ....... ${has('international shipping') || has('US-only text') ? 'FAIL' : 'pass'}`);
